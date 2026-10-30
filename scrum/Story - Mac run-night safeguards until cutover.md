@@ -11,6 +11,9 @@ size: S
 ---
 # Story: Mac run-night safeguards until cutover
 
+> [!todo] Michelle — action needed
+> - [ ] Run the container recreate command on the Mac and set the wake/no-sleep schedule.
+
 ## User Story
 **As** the pipeline owner, **I want** the scheduled container on the Mac to point at the renamed project folder and the Mac to stay awake on run nights, **so that** the monthly runs keep landing in the right place until the job moves to the ITServer.
 

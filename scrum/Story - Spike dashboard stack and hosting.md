@@ -10,6 +10,9 @@ size: S
 ---
 # Story: Spike dashboard stack and hosting
 
+> [!todo] Michelle — action needed
+> - [ ] Decide the dashboard stack and host after the spike.
+
 ## User Story
 **As** the development team, **I want** a time-boxed exploration of dashboard technology and hosting options, **so that** we choose a stack that fits the project's constraints (Docker runtime, PostgreSQL data source, may need to host on ITServer or `autobot`) without over-committing before we understand the trade-offs.
 

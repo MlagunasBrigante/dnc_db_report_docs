@@ -10,6 +10,9 @@ size: S
 ---
 # Story: Retention policy for lead data
 
+> [!todo] Michelle — action needed
+> - [ ] Schedule the retention conversation with compliance/Legal.
+
 ## User Story
 **As** compliance and legal, **I want** a documented retention policy defining how long lead PII is kept live, archived, and when it is permanently deleted, **so that** the organization has a defensible position if audited and we're not keeping data longer than legally required or shorter than legally safe.
 

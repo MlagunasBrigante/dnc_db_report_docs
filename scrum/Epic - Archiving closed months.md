@@ -50,6 +50,9 @@ Legal traceability requirements: archived data must have **checksums** (SHA-256)
 ### Split evaluation
 Three stories is appropriate. If Story 1 reveals **multiple retention tiers** (e.g., "keep 12 months live, 24 months archived on disk, 7 years archived in cold cloud, then delete"), split Story 2 by tier: "archive to disk" + "archive to cloud" + "purge after 7 years." If the cloud provider decision is contentious, extract a spike ("evaluate S3 vs Azure Blob vs Backblaze B2 for archived lead data").
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Schedule the retention conversation with compliance/Legal. — [[Story - Retention policy for lead data]]
+
 ## Child user stories
 - [[Story - Retention policy for lead data]]
 - [[Story - Archive and restore one closed month]]

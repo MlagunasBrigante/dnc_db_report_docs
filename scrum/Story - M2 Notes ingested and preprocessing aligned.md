@@ -11,6 +11,9 @@ size: S
 ---
 # Story: M2 Notes ingested and preprocessing aligned
 
+> [!todo] Michelle — action needed
+> - [ ] Feed your notes on preprocessing into the project.
+
 ## User Story
 **As** Michelle, **I want** the preprocessing logic in the pipeline aligned with the statistical assumptions I'm documenting in my notes, **so that** the data transformations don't invalidate the model before I even start building it.
 

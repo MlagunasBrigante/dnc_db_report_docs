@@ -11,6 +11,10 @@ size: M
 ---
 # Story: Backups and restore drill for the dnc database
 
+> [!todo] Michelle — action needed
+> - [ ] Choose the backup target (cloud and/or external SSD).
+> - [ ] Store the backup encryption key in the team password manager, with a second copy.
+
 ## User Story
 **As** the compliance/legal owner, **I want** the DNC database (the legal record: raw monthly snapshots, lineage, run records) backed up off the ITServer every night, with at least one real restore performed, **so that** losing the server, its disk or the database doesn't lose the legal record.
 

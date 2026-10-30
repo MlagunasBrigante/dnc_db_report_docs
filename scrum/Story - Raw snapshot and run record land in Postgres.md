@@ -10,6 +10,10 @@ jira: ""
 size: M
 ---
 # Story: Raw snapshot and run record land in Postgres
+> [!todo] Michelle — action needed
+> - [ ] Answer the two database questions in the epic and settle the dedicated-DB decision.
+> - [ ] Create the database objects on the ITServer using the DDL guide.
+
 ## User Story
 **As** Michelle (pipeline owner), **I want** each monthly run's raw LawRuler snapshot and its metadata stored in PostgreSQL with a SHA-256 checksum, **so that** I have an immutable legal record of what was ingested and can trace every downstream result back to the original data.
 

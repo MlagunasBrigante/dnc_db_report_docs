@@ -10,6 +10,9 @@ jira: ""
 size: S
 ---
 # Story: Define cutover acceptance criteria
+> [!todo] Michelle — action needed
+> - [ ] Decide the cutover acceptance criteria.
+
 ## User Story
 **As** Michelle (pipeline owner), **I want** to agree on the acceptance criteria for cutover before moving the job to the ITServer, **so that** the cutover is deliberate and reversible if the criteria aren't met.
 

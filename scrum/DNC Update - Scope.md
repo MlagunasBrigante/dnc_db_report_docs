@@ -3,7 +3,7 @@ type: scope
 project: dnc-cron-scrub
 jira: DNCUP
 owner: Michelle Lagunas
-status: accepted 2026-10-29 — Captures Requirements? = TRUE
+status: static — source of truth (2026-10-29)
 created: 2026-10-29
 tags: [project/dnc-cron-scrub, scope, scrum]
 ---

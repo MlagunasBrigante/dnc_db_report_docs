@@ -61,6 +61,10 @@ Each milestone is independently valuable as a learning checkpoint in a **high-un
 ### Split evaluation
 Five stories is appropriate for a Complex sprint with go/no-go gates. If M3 fails, S3 may halt or loop back to data cleanup (which would spawn new stories). If stories feel too large during execution, split by **data subset** (e.g., M4 tests one metric category first) or **decision scope** (e.g., M3 splits into separate quality gates per stage table).
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Feed your notes on preprocessing into the project. — [[Story - M2 Notes ingested and preprocessing aligned]]
+> - [ ] Define the M3 quality criteria ("is the data clean enough?"). — [[Story - M3 Data quality gate]]
+
 ## Child user stories
 - [[Story - M1 Data and pipeline audit]]
 - [[Story - M2 Notes ingested and preprocessing aligned]]

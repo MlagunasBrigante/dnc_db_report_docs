@@ -53,6 +53,9 @@ The dashboard reads directly from PostgreSQL (same machine as the process if hos
 ### Split evaluation
 Three stories is light for an epic. If the spike reveals significant hosting complexity (e.g., `autobot` networking, SSL, auth), split Story 2 into "dashboard running locally in Docker" + "dashboard deployed and accessible." If Story 3 grows (8+ metrics), split by metric category or add a fourth story for polish (error states, loading indicators, responsive layout).
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Decide the dashboard stack and host after the spike. — [[Story - Spike dashboard stack and hosting]]
+
 ## Child user stories
 - [[Story - Spike dashboard stack and hosting]]
 - [[Story - First dashboard page from validated metrics]]

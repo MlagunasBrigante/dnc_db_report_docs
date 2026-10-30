@@ -11,6 +11,9 @@ size: S
 ---
 # Story: Scrub secrets from historic run logs
 
+> [!todo] Michelle — action needed
+> - [ ] Approve the summary report before any original log is deleted.
+
 ## User Story
 **As** the compliance/legal owner, **I want** every historic run log replaced by a small, secret-free INFO-level copy, **so that** no OAuth client secret, bearer token or password remains in files stored in OneDrive, while we still keep a record of what each run did.
 

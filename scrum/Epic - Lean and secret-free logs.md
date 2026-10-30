@@ -45,6 +45,12 @@ Earlier patterns rejected:
 ### Split evaluation
 Each story delivers value to the compliance/legal owner: INFO logs are lean and safe, hardcoded secrets are gone, historic exposure is remediated, rotated credentials work. Sizes vary (S to L) because git-history purge and rotation are inherently larger, but all are vertical (each closes a security exposure end-to-end).
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app). — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `MlagunasBrigante`, after the `git bundle` backup is verified. — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [ ] Set the recurring reminders for any credential that can't be rotated yet. — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [ ] Approve the summary report before any original log is deleted. — [[Story - Scrub secrets from historic run logs]]
+
 ## Child user stories
 - [[Story - INFO logs with secret masking]]
 - [[Story - Remove the hardcoded LawRuler session cookie]]

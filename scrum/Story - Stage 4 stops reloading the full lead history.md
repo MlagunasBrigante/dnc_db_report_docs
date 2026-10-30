@@ -11,6 +11,9 @@ size: M
 ---
 # Story: Stage 4 stops reloading the full lead history
 
+> [!todo] Michelle — action needed
+> - [ ] Decide which memory figure governs the target (per hour per thousand leads, or plain MiB).
+
 ## User Story
 **As** the IT & Data lead, **I want** Stage 4 (LawRuler tagging) to hold only the leads it will tag, not the full lead history, during its long API loop, **so that** its mean memory drops while the tagging stays exactly as reliable as today.
 

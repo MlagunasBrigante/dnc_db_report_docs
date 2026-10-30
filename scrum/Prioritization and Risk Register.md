@@ -1,4 +1,5 @@
 ---
+status: static — source of truth (2026-10-29)
 type: prioritization-risk
 project: dnc-cron-scrub
 phase: "scrum-scoping Phase 4 — Prioritize & De-risk"

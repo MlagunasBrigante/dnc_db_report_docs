@@ -12,6 +12,11 @@ size: M
 ---
 # Story: Rotate exposed credentials and retire the old repo
 
+> [!todo] Michelle — action needed
+> - [ ] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app).
+> - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `MlagunasBrigante`, after the `git bundle` backup is verified.
+> - [ ] Set the recurring reminders for any credential that can't be rotated yet.
+
 ## User Story
 **As** the compliance/legal owner, **I want** every credential that appeared in git, logs or legacy files rotated, and the deprecated `DNC_LOCALSERVER` GitHub repo deleted after a local backup, **so that** the exposed secrets are useless and no copy of them stays online.
 

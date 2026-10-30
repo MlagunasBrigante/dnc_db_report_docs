@@ -40,6 +40,11 @@ Earlier patterns rejected:
 - **Does it reveal low-value work?** No — cutover is the point of S2.
 - **Are the sizes roughly equal?** Story 1 is XS (a meeting + a doc update), Story 2 is Small-to-Medium (cutover + verification); imbalance is acceptable given Story 1's nature.
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Choose the backup target (cloud and/or external SSD). — [[Story - Backups and restore drill for the dnc database]]
+> - [ ] Store the backup encryption key in the team password manager, with a second copy. — [[Story - Backups and restore drill for the dnc database]]
+> - [ ] Decide the cutover acceptance criteria. — [[Story - Define cutover acceptance criteria]]
+
 ## Child user stories
 - [[Story - Backups and restore drill for the dnc database]] (added 2026-10-29, pre-mortem R6; before the cutover)
 - [[Story - Define cutover acceptance criteria]]

@@ -53,6 +53,10 @@ Earlier patterns rejected:
 - **Does it reveal low-value work?** No — legal traceability and queryability across runs are both requirements; no story is optional.
 - **Are the sizes roughly equal?** Stories 1–2 are Medium, 3–4 are Small; acceptable imbalance driven by the first story's bootstrap cost (DDL + guide for Michelle).
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Answer the two database questions in the epic and settle the dedicated-DB decision. — [[Story - Raw snapshot and run record land in Postgres]]
+> - [ ] Create the database objects on the ITServer using the DDL guide. — [[Story - Raw snapshot and run record land in Postgres]]
+
 ## Child user stories
 - [[Story - Raw snapshot and run record land in Postgres]]
 - [[Story - All stages write to Postgres with lineage]]

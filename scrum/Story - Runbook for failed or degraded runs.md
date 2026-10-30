@@ -11,6 +11,9 @@ size: S
 ---
 # Story: Runbook for failed or degraded runs
 
+> [!todo] Michelle — action needed
+> - [ ] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out.
+
 ## User Story
 **As** the IT on-call, **I want** a written runbook stating who acts on each alert type, through which channel, and the steps to take, **so that** I know immediately what to do when a DNC alert arrives.
 

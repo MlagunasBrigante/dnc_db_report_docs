@@ -11,6 +11,9 @@ size: S
 ---
 # Story: Spike Teams posting through Graph
 
+> [!todo] Michelle — action needed
+> - [ ] If the spike needs admin consent for a Graph permission, request it from j.fernandez (M365 admin).
+
 ## User Story
 **As** the IT & Data lead, **I want** a time-boxed investigation into which Microsoft Graph permission and target (channel vs chat) the existing app registration can use to post Teams messages, **so that** the Teams alert channel story knows which Graph API to call and whether any permission changes are needed.
 

@@ -12,6 +12,10 @@ size: M
 ---
 # Story: Soft-deletion request to the LawRuler team
 
+> [!todo] Michelle — action needed
+> - [ ] Identify our LawRuler account manager (name, address, domain).
+> - [ ] Until then, forward each monthly request yourself.
+
 ## User Story
 **As** our LawRuler account manager, the person who carries out soft-deletes in LawRuler on our request, **I want** one internal email each month listing the leads to remove (DNC leads without opt-in, plus litigators to soft-delete) and the deadline, **so that** the removals promised in the report ("Will be removed by the 7th of <month>") actually happen on time without anyone compiling the list by hand.
 

@@ -11,6 +11,9 @@ size: M
 ---
 # Story: README, Jira and vault references re-scoped
 
+> [!todo] Michelle — action needed
+> - [ ] Approve the Jira DNCUP re-scope and the Jira↔vault sync mapping fix (then run `reset sync baseline`).
+
 ## User Story
 **As** a new contributor or backlog consumer, **I want** the project README, Dev/README, Jira tickets, and vault references to reflect the Container→Dev and DNC-Update→dnc-cron-scrub renames, **so that** docs are current and the Jira↔vault sync works.
 

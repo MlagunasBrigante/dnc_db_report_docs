@@ -12,6 +12,9 @@ size: S
 ---
 # Story: Monthly report email as a summary table
 
+> [!todo] Michelle — action needed
+> - [ ] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`.
+
 ## User Story
 **As** a report recipient (management and the team), **I want** the monthly report email to show the run's summary table (counts and actions) in the email body, with no attachments, **so that** I can read the month's DNC outcome at a glance, and the email can never fail because of its size.
 

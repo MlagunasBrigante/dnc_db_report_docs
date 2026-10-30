@@ -42,6 +42,15 @@ Earlier patterns rejected:
 ### Split evaluation
 Each story delivers observable value to the IT & Data lead: emails without oversized attachments arrive, Teams channel exists, any alert-delivery failure raises a visible alarm, runbook exists for who acts on what. Sizes are reasonably equal (1-4 AC each); no pure infrastructure stories.
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Create the dedicated Teams channel and share its team and channel IDs (needed before this story starts). — [[Story - Teams alert channel]]
+> - [ ] If the spike needs admin consent for a Graph permission, request it from j.fernandez (M365 admin). — [[Story - Spike Teams posting through Graph]]
+> - [ ] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out. — [[Story - Runbook for failed or degraded runs]]
+> - [ ] Identify our LawRuler account manager (name, address, domain). — [[Story - Soft-deletion request to the LawRuler team]]
+> - [ ] Until then, forward each monthly request yourself. — [[Story - Soft-deletion request to the LawRuler team]]
+> - [ ] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. — [[Story - Monthly report email as a summary table]]
+> - [ ] Run the container recreate command on the Mac and set the wake/no-sleep schedule. — [[Story - Mac run-night safeguards until cutover]]
+
 ## Child user stories
 - [[Story - Mac run-night safeguards until cutover]] (Could; added 2026-10-29)
 - [[Story - Warning and error emails always arrive]]

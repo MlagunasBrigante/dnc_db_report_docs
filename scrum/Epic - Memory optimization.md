@@ -41,6 +41,9 @@ Lower the job's **mean** memory use, one stage at a time, **always favoring resi
 - **Reveals low-value work?** Yes: Stage 1 streaming was dropped as low value (lowest mean).
 - **Equal sizes?** Roughly: Stage 4 is M, Stage 2 is M, and the memory log is S.
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Decide which memory figure governs the target (per hour per thousand leads, or plain MiB). — [[Story - Stage 4 stops reloading the full lead history]]
+
 ## Child user stories
 1. [[Story - Stage 4 stops reloading the full lead history]] — priority 1
 2. [[Story - Memory log with quarterly review]] — ships with priority 1 so Stage 4's result is recorded

@@ -11,6 +11,9 @@ size: S
 ---
 # Story: Spike LawRuler soft-delete via API
 
+> [!todo] Michelle — action needed
+> - [ ] Agree a test lead with the LawRuler account manager; decide D-07 after the spike.
+
 ## User Story
 **As** Michelle, **I want** a time-boxed investigation (max 2 days) into whether and how the LawRuler API can soft-delete leads, **so that** I can decide (D-07) whether to automate the monthly removals or keep the email request to the LawRuler team.
 

@@ -1,4 +1,5 @@
 ---
+status: static — source of truth (2026-10-29)
 type: backlog
 project: dnc-cron-scrub
 jira: DNCUP

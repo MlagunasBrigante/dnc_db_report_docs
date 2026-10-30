@@ -11,6 +11,9 @@ size: M
 ---
 # Story: M3 Data quality gate
 
+> [!todo] Michelle — action needed
+> - [ ] Define the M3 quality criteria ("is the data clean enough?").
+
 ## User Story
 **As** compliance and Michelle, **I want** explicit quality criteria defining "clean enough to model," **so that** we can decide whether to proceed with statistical modeling or halt and clean the data first.
 

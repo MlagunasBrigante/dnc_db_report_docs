@@ -38,6 +38,9 @@ Today, and through S5, leads to remove (DNC without opt-in, plus litigators) are
 - **Reveals low-value work?** Yes. If the spike finds no API support, the epic closes with "stay manual".
 - **Equal sizes?** N/A until after the spike.
 
+> [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] Agree a test lead with the LawRuler account manager; decide D-07 after the spike. — [[Story - Spike LawRuler soft-delete via API]]
+
 ## Child user stories
 - [[Story - Spike LawRuler soft-delete via API]]
 

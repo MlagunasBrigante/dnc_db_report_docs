@@ -11,6 +11,9 @@ size: M
 ---
 # Story: Teams alert channel
 
+> [!todo] Michelle — action needed
+> - [ ] Create the dedicated Teams channel and share its team and channel IDs (needed before this story starts).
+
 ## User Story
 **As** the IT & Data lead and IT on-call, **I want** success, warning, error and unresolved-failure alerts posted to a Teams channel, **so that** I have a second alert channel and a visible timeline of run outcomes in the team workspace.
 
