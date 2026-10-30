@@ -1,0 +1,8 @@
+- Total
+- Opt in & (NOT) Opt in
+- +6 months, +90 days, -90 days
+- DNC
+	- Litigator
+		- Not case
+- Blocked
+- Invalid Number (?)
