@@ -5,7 +5,7 @@ epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: must
 s1_order: 3
-status: merged — pending Mac verification (after the dry-run fix)
+status: done
 gaps: [GAP-26, GAP-09, GAP-10, GAP-08]
 jira: ""
 size: M
@@ -30,6 +30,7 @@ size: M
   - The token call stays fatal and has no breaker.
 
 ## Notes
+- **Verified 2026-11-02** with the dry-run `data/_dryrun/2026-11-02T194943Z/` (image built from `main` @ `b3b5a85`): the run completed with no failed items; retry, failed-item and outage-breaker behaviour is covered by 40 unit tests (injected 5xx, timeouts, connection errors, 4xx, token 503, breaker pauses and open). It hasn't yet been seen against a real LawRuler failure; the next real run will show that. Small follow-up: the failed-items summary should log even when the count is 0 (now: silent).
 - **Why the outage pause:** with LawRuler's patient retry settings, a full outage costs about 225 s per lead (about 97 s before this story), so a 7.7k-lead month would run for weeks. The breaker caps an outage at roughly an hour per stage. Deferred items go to the S2 patch pass on the 3rd.
 - **Branch:** `s1/patch/one-retry-policy`. Michelle renamed the branches on 2026-10-30. The other two are `s1/fix/info-logs-secret-masking` and `s1/fix/remove-session-cookie`.
 - **Today, three separately coded loops with different rules, plus one call with none (GAP-26):**

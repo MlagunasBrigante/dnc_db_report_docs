@@ -5,7 +5,7 @@ epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: must
 s1_order: 0
-status: in-review
+status: done
 gaps: [GAP-27, GAP-28]
 jira: ""
 size: M
@@ -24,6 +24,7 @@ size: M
 - [ ] Verified: unit tests pass, plus one dry-run on Michelle's Mac. **The dncscrub account shows no new usage**, and `data/<today>/` is untouched.
 
 ## Notes
+- **Verified 2026-11-02** with the dry-run `data/_dryrun/2026-11-02T194943Z/` (image built from `main` @ `b3b5a85`): 2 synthetic batches, 0 real scrub calls, 0 `dncscrub` mentions in the log; artifacts only under `data/_dryrun/`; SQLite DBs cleaned up (2), log and report kept; emails skipped (`DRYRUN_EMAIL_RECIPIENTS` unset); trigger labelled `dry-run`. Michelle to confirm the dncscrub account shows no new usage.
 - **Decided 2026-11-02 (Michelle):** option B (dummy responses), and test runs must not poison stored data. The fix combines isolating and flagging test runs with cleaning up after them.
 - **Found 2026-11-02:** today's `--dry-run` only skips the LawRuler *updates* (`run.py:1015`, `:1510`). It still pays for every dncscrub scrub (GAP-27). It also writes into the same `data/<date>/` folder as a real run, including the Stage 2 `batch_status` checkpoints (`run.py:489-506`). A dry-run followed by a real run on the same day would skip those batches and keep the synthetic results (GAP-28). It also emails the real recipients.
 - **General rule (applies to every later story):** in dry-run, paid APIs are never called. The free calls (LawRuler token, Custom Report download) keep running.

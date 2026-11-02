@@ -5,7 +5,7 @@ epic: "[[Epic - Lean and secret-free logs]]"
 sprint: S1
 moscow: must
 s1_order: 2
-status: merged — pending Mac verification (after the dry-run fix)
+status: done
 gaps: [GAP-06, GAP-07]
 jira: ""
 size: M
@@ -23,6 +23,7 @@ size: M
 - [ ] Verified by grepping the new `run.log` for known secret patterns and confirming none appear.
 
 ## Notes
+- **Verified 2026-11-02** with the dry-run `data/_dryrun/2026-11-02T194943Z/` (image built from `main` @ `b3b5a85`): run log **84 KB** (vs 473 MB on 2026-10-28), 913 INFO lines, no DEBUG lines, 0 secret-pattern matches.
 - **Code references** (verified against `Dev/run.py`):
   - Root logger level: `run.py:113-114` — currently `logging.DEBUG`
   - File handler level: `run.py:119-121` — currently `logging.DEBUG`
