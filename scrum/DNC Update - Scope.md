@@ -194,6 +194,8 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | GAP-23 | Stale README and Jira (DNCUP-2/3/6 superseded); docs still say `Container/` | — | S1 |
 | GAP-24 | Secrets committed to `github.com/MlagunasBrigante/DNC_LOCALSERVER` (`.env`, token in `notebooks/manual_lead_creation.ipynb`); inline passwords in `Dev/Archive/notebooks/*.ipynb` | Scrub_API inspection 2026-10-29 | S1: **credential rotation + delete the deprecated GitHub repo after a local `git bundle` backup** (extends GAP-07; GitHub action as `MlagunasBrigante` per vault `CLAUDE.md` §15) |
 | GAP-26 | Three separately coded retry loops with different rules (page: timeouts only; batch and lead: 429/5xx at 1/2/4 s); the LawRuler token call has none | `run.py:282-304`, `513-535`, `866-909`, `146` | S1: shared retry policy emitting failed-item events (S2 persists them) |
+| GAP-27 | `--dry-run` still calls the paid dncscrub API for every phone | `run.py:1015`, `1510` | S1 (dry-run story) |
+| GAP-28 | Dry-runs write into the real `data/<date>/` folder, including Stage 2 checkpoints (synthetic results could be reused by a same-day real run), and email real recipients | `run.py:1418-1464`, `489-506`, `1265-1400` | S1 (dry-run story) |
 | GAP-25 | About 4.1 GB of lead PII sits in OneDrive (`data/legacy/`) with no retention policy | Scrub_API inspection | S2 (moves to the ITServer at cutover) / S5 (retention) |
 
 ## Decision items (not sprint work until decided)

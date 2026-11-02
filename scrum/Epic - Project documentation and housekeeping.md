@@ -39,7 +39,7 @@ Earlier patterns rejected:
 Each story delivers value to a different persona: the per-stage reference doc serves the S2 schema designer and future maintainers; the README updates serve new contributors; the Jira re-scoping serves the backlog consumer (Michelle); the sync fix serves the Jira↔vault automation. Sizes are S to M; all are vertical (each closes one documentation gap end-to-end).
 
 > [!check] Before closing this epic, verify Michelle's actions were actually done
-> - [ ] Approve the Jira DNCUP re-scope and the Jira↔vault sync mapping fix (then run `reset sync baseline`). — [[Story - README, Jira and vault references re-scoped]]
+> - [ ] Review the README rewrite. — [[Story - README, Jira and vault references re-scoped]]
 
 ## Child user stories
 - [[Story - Per-stage inputs and outputs reference]]

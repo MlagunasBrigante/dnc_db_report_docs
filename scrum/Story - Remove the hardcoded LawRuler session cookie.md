@@ -5,7 +5,7 @@ epic: "[[Epic - Lean and secret-free logs]]"
 sprint: S1
 moscow: must
 s1_order: 2
-status: to-do
+status: merged — pending Mac verification (after the dry-run fix)
 gaps: [GAP-07]
 jira: ""
 size: S

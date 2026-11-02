@@ -12,7 +12,7 @@ size: M
 # Story: README, Jira and vault references re-scoped
 
 > [!todo] Michelle — action needed
-> - [ ] Approve the Jira DNCUP re-scope and the Jira↔vault sync mapping fix (then run `reset sync baseline`).
+> - [ ] Review the README rewrite.
 
 ## User Story
 **As** a new contributor or backlog consumer, **I want** the project README, Dev/README, Jira tickets, and vault references to reflect the Container→Dev and DNC-Update→dnc-cron-scrub renames, **so that** docs are current and the Jira↔vault sync works.
@@ -26,6 +26,8 @@ size: M
 - [ ] **Given** the vault CLAUDE.md §16, **when** stale references to removed `.cursor` folders are found, **then** they are deleted or updated to reflect the current project structure.
 
 ## Notes
+- **Progress 2026-11-02 (doc maintenance pass):** project `README.md` rewritten in SPEAR format for the re-scope; `Dev/README.md` paths moved to `dnc-cron-scrub/`, env-var table completed (dry-run, logging, retry, outage), dry-run section unified, `/output`/`/logs` mounts dropped; `Dev/.env.example` `OUTPUT_DIR`/`LOG_DIR` commented out and retry vars added. **Remaining:** Michelle's review (todo above), and vault-wide references outside this project that still say `DNC-Update` (vault `CLAUDE.md` §8.7 example, `Knowledge/Project Management/Jira-Vault-Sync-SOP.md`, `Knowledge/Reference/Jira-Mirror.md`) plus the §16 `.cursor` cleanup.
+- **Jira is fully deprecated (Michelle, 2026-10-29).** Scrum lives in the vault (`Docs/scrum/`). Ignore any acceptance criteria or notes below about re-scoping DNCUP tickets or fixing the Jira↔vault sync mapping; there's no risk of losing tracking. What remains: rewrite the project `README.md`, update `Dev/README.md` for the renames, and clean up stale vault references (e.g. vault `CLAUDE.md` §16 `.cursor` paths). The vault-wide Jira sync (vault `CLAUDE.md` §9/§12, scheduled `jira-sync-*` tasks) is outside this project; flag it to Michelle separately.
 - **Gap reference**: GAP-23 — "Stale README and Jira (DNCUP-2/3/6 superseded); docs still say `Container/`; Jira↔vault sync broken for the renamed folder; stale vault CLAUDE.md §16 references to removed .cursor folders"
 - **Rename history** (from scope open item 2):
   - `Container/` → `Dev/` (directory rename)

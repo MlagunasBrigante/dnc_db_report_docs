@@ -45,6 +45,7 @@ Earlier patterns rejected:
 Each story delivers value to the IT & Data lead: page errors can't truncate downloads, batch errors can't be skipped, invalid config fails before any API call, report labels are honest, per-stage metrics feed the memory epic. Sizes are reasonably equal (S to M); all are vertical (each closes one silent-failure mode end-to-end).
 
 ## Child user stories
+- [[Story - Dry-run never calls paid APIs or touches real data]] ← first (s1_order 0)
 - [[Story - One retry policy for every API call]]
 - [[Story - Lead download never truncates silently]]
 - [[Story - Failed scrub batches are retried and reported]]

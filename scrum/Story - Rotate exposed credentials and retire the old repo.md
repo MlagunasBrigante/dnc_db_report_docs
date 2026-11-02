@@ -32,6 +32,7 @@ size: M
 - [ ] A short log at `Docs/Reference/Credential Rotation Log.md` records what was rotated (names only, never values), when, by whom, and how it was verified.
 
 ## Notes
+- **LawRuler session cookie (found 2026-10-30):** the value that was hardcoded in `run.py` is in the `dnc_db_report` git history (pushed). It is a session ID, probably long expired; confirm with LawRuler that it is no longer valid, or treat it as rotated once the cookie-free run succeeds.
 - **Decided 2026-10-29 (stories interview Q5): option A.** Delete the GitHub repo instead of rewriting its history. The project is deprecated and its full history survives in the local archive and the bundle. **Rotation happens first:** deleting the repo doesn't undo past exposure.
 - **Exposure inventory** (names only):
   - **LawRuler:** OAuth client secret, API username/password and account key. These were in the committed `.env` of `DNC_LOCALSERVER`, and the client secret is in DEBUG run logs.

@@ -24,6 +24,7 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 ### S1 — Gap-closing
 | Order | Must (12) |
 |---|---|
+| 0 | [[Story - Dry-run never calls paid APIs or touches real data]] (dry-runs currently pay for scrubs and can poison real run data) |
 | 1 | [[Story - Rotate exposed credentials and retire the old repo]] (exposure is live; dependent flows → reminders) |
 | 2 | [[Story - INFO logs with secret masking]] · [[Story - Remove the hardcoded LawRuler session cookie]] |
 | 3 | [[Story - One retry policy for every API call]] |
@@ -55,7 +56,7 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 - [ ] Brief **e.cervera** that they're the backup and will receive error alerts → [[Story - Runbook for failed or degraded runs]]
 - [ ] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app) → [[Story - Rotate exposed credentials and retire the old repo]]
 - [ ] Approve the historic-log summary report before originals are deleted → [[Story - Scrub secrets from historic run logs]]
-- [ ] Approve the Jira DNCUP re-scope and the Jira↔vault sync mapping fix → [[Story - README, Jira and vault references re-scoped]]
+- [ ] Review the README rewrite → [[Story - README, Jira and vault references re-scoped]] (Jira deprecated 2026-10-29)
 - [ ] Identify the **LawRuler account manager** → [[Story - Soft-deletion request to the LawRuler team]]
 
 ## 3. Risk register (pre-mortem, 2026-10-29)
@@ -113,7 +114,7 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 - **Residual:** 4×2 = 8.
 
 **R5 — "Removed by the 7th" | 12**
-- **Owner:** Michelle + LawRuler account manager [TBD]
+- **Owner:** Michelle + LawRuler account manager [TBD] #open-question (who is the LawRuler account manager for the soft-deletion request?)
 - **Trigger:** request not acknowledged by the 5th.
 - **Mitigation:** identify the account manager before the first automated request; the watchdog checks the request was sent; Michelle forwards it until then.
 - **Contingency:** escalate through Matt or Brad; soften the wording to "Removal requested" until delivery is reliable.
