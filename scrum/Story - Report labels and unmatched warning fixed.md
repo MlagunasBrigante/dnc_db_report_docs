@@ -5,7 +5,7 @@ epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: must
 s1_order: 5
-status: to-do
+status: done
 gaps: [GAP-16, GAP-14]
 jira: ""
 size: S
@@ -32,6 +32,7 @@ size: S
 - [ ] **Given** one real run, **when** the report email arrives, **then** the table matches the table above, its counts match the run log's `Summary:` block, and no "unmatched records" warning appears in the log.
 
 ## Notes
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T190951Z/`, `DRYRUN_INJECT_FAILURES=page:5,batch:1`; all five S1 branches merged and pushed, `main` @ `33558a0`): the report Summary shows the new labels ("Total leads in LawRuler 423,266 — (snapshot)" and the rest, ending with "Raw snapshot complete"). The old labels are gone, and no "unmatched records" warning appeared (1 WARNING in the run, the injected page). The email-table part of the AC moves to [[Story - Monthly report email as a summary table]]: the email has no table until that story ships.
 - **Code references** (verified against `Dev/run.py`):
   - Report summary: `run.py:1072-1094` — "Total Leads Scrubbed" label; count from `run.py:1061` (`total_leads` from `raw_data`)
   - Misleading labels: GAP-16 — "Misleading report labels (\"Total Leads Scrubbed\" = all `raw_data`)" at `generate_report`

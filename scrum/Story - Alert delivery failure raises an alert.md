@@ -5,7 +5,7 @@ epic: "[[Epic - Reliable alerts]]"
 sprint: S1
 moscow: must
 s1_order: 6
-status: to-do
+status: in-review
 gaps: [GAP-05]
 jira: ""
 size: M
@@ -23,6 +23,16 @@ size: M
 - [ ] Verified by temporarily breaking one channel (e.g. invalid recipient, wrong Teams channel ID) and confirming the other channel reports it.
 
 ## Notes
+- **Mac dry-runs 2026-11-05:** Teams fails, so an email reports it: verified (`teams:fail`, exit 0). Still to verify: `email:fail` (Teams reports the email failure) and `email:fail,teams:fail` (all channels failed, exit 3).
+- **In review 2026-11-05** (5 commits `c69bffc`…`d4d0797` + review fix `05df099`, stacked on `s1/feat/teams-alert-channel`). Each alert's email and Teams sends return `sent` / `failed` / `skipped` (not configured or dry-run without a target; skipped isn't a failure). Order: email first, then Teams.
+  - A failed email adds a note to the Teams card.
+  - A failed Teams post sends a short follow-up email.
+  - If every configured channel of a due alert fails: CRITICAL "Alert delivery failed on all channels" and **exit 3** after cleanup. A pipeline error stays exit 1, and its CRITICAL line is still logged.
+  - `scheduler.py` logs exit 3 at ERROR and keeps running.
+  - Dry-run tokens `email:fail` / `teams:fail` (`teams:fail` counts Teams as configured even without a test URL).
+  - **Until `TEAMS_WEBHOOK_URL` is set, a failed email has no second channel, so the run exits 3.** That's intended: nobody was alerted.
+  - Review fix: the alert senders re-logged the injection banner six times per dry-run.
+- Started 2026-11-05 on `s1/fix/alert-delivery-failure`, stacked on the Teams branch. If both channels fail, the run exits with code 3 (distinct from 1 = pipeline error).
 - **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th.
 - **Code reference** (verified against `Dev/run.py`):
   - Current behavior: `run.py:1423-1446` — email failures are caught and logged as WARNING, never re-raised; run still reports success

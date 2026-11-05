@@ -5,7 +5,7 @@ epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: must
 s1_order: 4
-status: to-do
+status: done
 gaps: [GAP-10]
 jira: ""
 size: M
@@ -23,6 +23,16 @@ size: M
 - [ ] Verified by injecting a batch failure (e.g. mocking the scrub API to fail for batch 3) and confirming the retry happens and the alert lists unresolved failures.
 
 ## Notes
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T222929Z/`, `main` @ `ea3d03c`, `DRYRUN_INJECT_FAILURES=batch:0`): batch 0 failed after 3 attempts. The CRITICAL "no scrub results: all 1 batch(es) failed/deferred" line was logged, Stages 3–4 were skipped, and the report was written with zero scrubbed. "Failed items: 1" and the Stage 2 block listing batch 0 came before the warning email (4 warnings collected). Exit 0, SQLite DBs cleaned up. Follow-ups: a degraded run still prints "✅ Pipeline completed successfully", and the duplicate ERROR "[Batch 0] Injected failure processed" is noise.
+- **In review 2026-11-04** (`a2ca346` + review fixes `ea3d03c`). The review found three more crash paths, now fixed:
+  - A run with **zero phones to scrub** (every lead recently scrubbed) also crashed in Stage 3. It now skips Stages 3–4 with a WARNING.
+  - The degraded report re-read an empty CSV, which would have raised `EmptyDataError`.
+  - The batch count in the CRITICAL line included Stage 1 page failures.
+
+  The report code (pandas) can't run in the sandbox, so the Mac `batch:0` dry-run is the real check.
+- **Decided 2026-11-04 (Michelle, option A, GAP-29):** when every batch fails or is deferred, the run **finishes as degraded**. It logs CRITICAL "no scrub results: all N batch(es) failed/deferred" and skips Stages 3–4. The report still runs with zero scrubbed counts, and the warning email lists the failed batches. Exit 0, no error email. The S2 patch pass retries the batches. Branch: `s1/fix/all-batches-failed-degraded`, stacked on the email branches. Verify with `DRYRUN_INJECT_FAILURES=batch:0` (a dry-run with < 1,000 phones has only batch 0).
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T201311Z/`, `DRYRUN_INJECT_FAILURES=batch:0`): **bug found (GAP-29).** When *every* batch fails (here the only batch: 863 phones means one batch), Stage 3 raises `ValueError: No scrub results found. Run ScrubbingPipeline first.` The run then crashes with a misleading traceback, the failed-items summary is never logged, and the error email doesn't list the failed batches. In a real run, a dncscrub outage that defers every batch would end the same way. Partial failure (some batches OK) is still unverified on the Mac: dry-runs currently have fewer than 1,000 phones, so there's only one batch. The fix needs Michelle's decision (all-failed behaviour) before the story can close.
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T190951Z/`, `DRYRUN_INJECT_FAILURES=page:5,batch:1`; all five S1 branches merged and pushed, `main` @ `33558a0`): "Failed items: 1" and the per-stage WARNING block (page 5) reached the warning email. **The batch path was not exercised:** this dry-run had only 739 phones, so there was a single batch, and batch IDs start at **0**, so `batch:1` never existed. Re-check with `DRYRUN_INJECT_FAILURES=batch:0`. Unit tests already cover the batch path.
 - **Code reference** (verified against `Dev/run.py`):
   - Batch scrub: `run.py:506-508` — exception caught, logged as ERROR, but batch is not marked done and not retried within the run
   - Comment: `run.py:509` — "Do NOT mark as done — next run will retry this batch" is false; the next run re-fetches Stage 1 data and re-determines batches, so a failed batch is only retried if the same phones appear again

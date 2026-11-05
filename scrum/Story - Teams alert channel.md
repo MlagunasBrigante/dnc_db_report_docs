@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Reliable alerts]]"
 sprint: S1
 moscow: should
-status: to-do
+status: in-review
 gaps: []
 jira: ""
 size: M
@@ -25,6 +25,15 @@ size: M
 - [ ] Verified with one `--dry-run` that injects a failure and confirms both email and Teams alerts arrive.
 
 ## Notes
+- **Mac dry-runs 2026-11-05:** with `DRYRUN_TEAMS_WEBHOOK_URL` set, the log shows "Teams alert posted successfully" (`data/_dryrun/2026-11-05T230036Z/`). With `teams:fail`, the success email still went and a follow-up email reported the Teams failure (exit 0). Still to confirm: the card renders in the channel (Michelle). Warning and error cards haven't been seen yet; they'll show in the `email:fail` / `email:fail,teams:fail` runs.
+- **In review 2026-11-05** (`405d125` + review fix `df36e69`). Adaptive Card to `TEAMS_WEBHOOK_URL` (dry-run: `DRYRUN_TEAMS_WEBHOOK_URL` only) for success, warning and error; aggregate counts only. Shared retry policy (`TEAMS_POLICY`: 3 attempts); never fails the run. Review fixes:
+  - Webhook signatures were **not masked** in request-error messages, because `requests` prints the path without `https://`. `sig=` is now masked on its own.
+  - The three webhook masking tests never ran: they sat after `if __name__`.
+  - Unrelated edits to the existing masking patterns were reverted.
+
+  AC 4 (cross-channel reporting) is delivered with [[Story - Alert delivery failure raises an alert]].
+- Started 2026-11-05 on `s1/feat/teams-alert-channel`, using the webhook design.
+- **Spike outcome 2026-11-05 ([[teams-graph-spike]]):** use a Teams **Workflows webhook** (`TEAMS_WEBHOOK_URL`, Adaptive Card POST), not Graph and not `_get_o365_account`. Team and channel IDs are no longer needed, only the webhook URL. Dry-run posts only to `DRYRUN_TEAMS_WEBHOOK_URL`.
 - **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th. Story is blocked until Michelle has created the channel and shared its team and channel identifiers for config.
 - **Code reference** (verified against `Dev/run.py`):
   - Existing Graph connector: `_get_o365_account` at `run.py:1120` — already used for email
@@ -35,7 +44,7 @@ size: M
 - **Never fail the run** because Teams posting failed — log the failure and continue. The project rule is "flaky APIs → never 'fail the run if N items fail'".
 
 ## Open questions
-- [ ] #open-question Team and channel identifiers of the dedicated channel (Michelle creates it).
+- [ ] #open-question Webhook URL of the dedicated channel's "Send webhook alerts to a channel" workflow (Michelle creates the channel and the workflow, and stores the URL in `Dev/.env` as `TEAMS_WEBHOOK_URL`).
 
 ## Dependencies
 - [[Story - Spike Teams posting through Graph]] — must complete first.

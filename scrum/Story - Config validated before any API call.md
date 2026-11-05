@@ -5,7 +5,7 @@ epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: must
 s1_order: 5
-status: to-do
+status: done
 gaps: [GAP-15]
 jira: ""
 size: S
@@ -22,6 +22,8 @@ size: S
 - [ ] Verified by removing one key from `.env` (e.g. `LAWRULER_URL`) and confirming the run fails immediately with a clear message.
 
 ## Notes
+- **Verified on the Mac 2026-11-05** (`-e LAWRULER_URL=`, dry-run): the run stopped within a second with CRITICAL "Missing required env vars", sent the error email (excerpt: 1 CRITICAL), and exited with code 1. No LawRuler or dncscrub call was made. Follow-up: the message shows the internal key `lawruler_url` instead of the env var name `LAWRULER_URL`.
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T190951Z/`, `DRYRUN_INJECT_FAILURES=page:5,batch:1`; all five S1 branches merged and pushed, `main` @ `33558a0`): all settings passed validation and the run proceeded. Still to check: the failure path. Run with one setting blanked, e.g. `-e LAWRULER_URL=`; it should exit within seconds with "Missing required env vars: ['LAWRULER_URL']" and make no API call.
 - **Code reference** (verified against `Dev/run.py`):
   - Config dict: `run.py:1342-1361` — built from `os.getenv()` calls
   - Current validation: `run.py:1363-1368` — checks `auth_url`, `law_ruler_username`, `law_ruler_password`, `scrub_url`, `login_id`, `custom_report_url`, but **not** `LAWRULER_URL` or `LAW_RULER_ACCOUNT_KEY`

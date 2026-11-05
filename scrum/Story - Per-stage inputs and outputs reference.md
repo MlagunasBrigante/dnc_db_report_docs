@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Project documentation and housekeeping]]"
 sprint: S1
 moscow: should
-status: to-do
+status: in-review
 gaps: [GAP-22]
 jira: "DNCUP-5"
 size: M
@@ -26,6 +26,7 @@ size: M
 - [ ] Jira DNCUP-5 (originally "Document each stage's data contract") is closed when this story is done.
 
 ## Notes
+- **Scope trimmed 2026-11-05 (Michelle):** sprints aren't mixed, so the doc describes the **current S1 pipeline only**. The S2 table-mapping proposal was removed; S2 schema design starts from this doc when S2 begins.
 - **Gap reference**: GAP-22 — "No per-stage inputs/outputs document (DNCUP-5)"
 - **Jira**: DNCUP-5 maps to this story; close DNCUP-5 when this story is done.
 - **Scope**: this is the input contract for the S2 Postgres schema. It documents the current SQLite-based design; S2 will translate it to partitioned Postgres tables with `run_id` and surrogate keys.
@@ -33,6 +34,7 @@ size: M
   - Code: `Dev/run.py` (each stage class and function)
   - Run report: `Docs/Run Reports/DNC Run Report 2026-10-28.md` (per-stage timeline, volumes, keys)
   - Scope: `DNC Update - Scope.md` (business rules, ACTIVE_PROCESS_STATUSES, DNC_CODES)
+- **Written 2026-11-05**: [[pipeline-stages-reference]]
 - **Stage outline** (not prescriptive; adjust during writing):
   1. **Stage 1: Data Ingestion** — inputs: LawRuler Custom Report API (LayoutId 139, 2022-01-01 → report_date); outputs: `raw_data` (ODS), `cleaned_phone_numbers` (staging); keys: `(Lead ID, Phone)`; rules: filter recently scrubbed (< 90 days), remove bad numbers; failures: page error → truncate (GAP-09, fixed in S1)
   2. **Stage 2: DNC Scrubbing** — inputs: `cleaned_phone_numbers`; outputs: `scrub_results` (batch JSON); keys: `batch_id`; rules: 1,000-phone batches; failures: batch error → skip (GAP-10, fixed in S1)

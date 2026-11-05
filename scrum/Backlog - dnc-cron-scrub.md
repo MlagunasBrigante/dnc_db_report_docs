@@ -7,7 +7,7 @@ created: 2026-10-29
 ---
 # Backlog — dnc-cron-scrub
 
-14 epics, 52 stories. Priorities (MoSCoW, in each story's `moscow` property) and risks: [[Prioritization and Risk Register]]. Scope, gap register (GAP-01…28) and decisions (D-01…07) live in [[DNC Update - Scope]].
+14 epics, 53 stories. Priorities (MoSCoW, in each story's `moscow` property) and risks: [[Prioritization and Risk Register]]. Scope, gap register (GAP-01…29) and decisions (D-01…09) live in [[DNC Update - Scope]].
 
 Sprints are sequential. Each one starts only when the previous one is stable. All code is developed as if it already runs on the AlmaLinux ITServer (Docker, systemd, local PostgreSQL), even though the job stays on the Mac until the S2 cutover.
 
@@ -19,26 +19,27 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
 
 ## S1 — Gap-closing
 - [ ] [[Epic - Reliable alerts]]
-    - [ ] [[Story - Warning and error emails always arrive]]
+    - [x] [[Story - Warning and error emails always arrive]]
     - [ ] [[Story - Monthly report email as a summary table]]
-    - [ ] [[Story - Soft-deletion request to the LawRuler team]]
-    - [ ] [[Story - Spike Teams posting through Graph]]
+    - [x] [[Story - Soft-deletion request to the LawRuler team]]
+    - [x] [[Story - Spike Teams posting through Graph]]
     - [ ] [[Story - Teams alert channel]]
     - [ ] [[Story - Alert delivery failure raises an alert]]
     - [ ] [[Story - Mac run-night safeguards until cutover]]  (Could)
     - [ ] [[Story - Runbook for failed or degraded runs]]
 - [ ] [[Epic - Lean and secret-free logs]]
-    - [ ] [[Story - INFO logs with secret masking]]
-    - [ ] [[Story - Remove the hardcoded LawRuler session cookie]]
+    - [x] [[Story - INFO logs with secret masking]]
+    - [x] [[Story - Remove the hardcoded LawRuler session cookie]]
     - [ ] [[Story - Scrub secrets from historic run logs]]
     - [ ] [[Story - Rotate exposed credentials and retire the old repo]]
 - [ ] [[Epic - No silent data loss]]
-    - [ ] [[Story - Dry-run never calls paid APIs or touches real data]]  ← before any dry-run
-    - [ ] [[Story - One retry policy for every API call]]  ← do first
-    - [ ] [[Story - Lead download never truncates silently]]
-    - [ ] [[Story - Failed scrub batches are retried and reported]]
-    - [ ] [[Story - Config validated before any API call]]
-    - [ ] [[Story - Report labels and unmatched warning fixed]]
+    - [x] [[Story - Dry-run never calls paid APIs or touches real data]]  ← before any dry-run
+    - [x] [[Story - One retry policy for every API call]]  ← do first
+    - [x] [[Story - Lead download never truncates silently]]
+    - [x] [[Story - Failed scrub batches are retried and reported]]
+    - [x] [[Story - Dry-run failure injection]]  (Should; verification tool)
+    - [x] [[Story - Config validated before any API call]]
+    - [x] [[Story - Report labels and unmatched warning fixed]]
     - [ ] [[Story - Per-stage duration and memory in every run]]
 - [ ] [[Epic - Project documentation and housekeeping]]
     - [ ] [[Story - Per-stage inputs and outputs reference]]

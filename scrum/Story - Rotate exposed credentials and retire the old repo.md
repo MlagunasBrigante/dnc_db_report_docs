@@ -32,6 +32,7 @@ size: M
 - [ ] A short log at `Docs/Reference/Credential Rotation Log.md` records what was rotated (names only, never values), when, by whom, and how it was verified.
 
 ## Notes
+- **Deferred 2026-11-02 (Michelle, D-08):** the credentials stay as they are for now, because rotating them would break the other flows that share them. Options for later: rotate and update every flow, or create a dedicated account for this pipeline. Michelle gets a nudge when [[Epic - No silent data loss]] closes.
 - **LawRuler session cookie (found 2026-10-30):** the value that was hardcoded in `run.py` is in the `dnc_db_report` git history (pushed). It is a session ID, probably long expired; confirm with LawRuler that it is no longer valid, or treat it as rotated once the cookie-free run succeeds.
 - **Decided 2026-10-29 (stories interview Q5): option A.** Delete the GitHub repo instead of rewriting its history. The project is deprecated and its full history survives in the local archive and the bundle. **Rotation happens first:** deleting the repo doesn't undo past exposure.
 - **Exposure inventory** (names only):
@@ -44,8 +45,9 @@ size: M
 - Renamed from "Rotate exposed credentials and purge git history" (2026-10-29). The git-history rewrite and force-push are no longer needed.
 
 ## Open questions
-- [ ] #open-question Which other flows and systems use each credential? Rotating can break them (Michelle, 2026-10-29).
-- [ ] #open-question Who can rotate each credential (LawRuler admin, dncscrub account, Entra app registration)?
+- [x] Which other flows and systems use each credential? Answered 2026-11-02: many other flows use the current credentials, so rotating means updating all of them. The alternative is a new dedicated account for this pipeline. (Michelle)
+- [x] Who can rotate each credential? Answered 2026-11-02: Michelle can rotate them.
+- [ ] #open-question Rotate the shared credentials and update every flow that uses them, or create a dedicated account for this pipeline? Deferred (D-08); revisit when [[Epic - No silent data loss]] closes.
 
 ## Dependencies
 - Rotate before [[Story - Scrub secrets from historic run logs]] deletes the originals, and count the secret matches first so the inventory above is confirmed.

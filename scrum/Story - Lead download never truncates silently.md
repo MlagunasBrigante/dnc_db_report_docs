@@ -5,7 +5,7 @@ epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: must
 s1_order: 4
-status: to-do
+status: done
 gaps: [GAP-09]
 jira: ""
 size: M
@@ -23,6 +23,7 @@ size: M
 - [ ] Verified with one `--dry-run` that injects a page error and confirms the loud alert.
 
 ## Notes
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T190951Z/`, `DRYRUN_INJECT_FAILURES=page:5,batch:1`; all five S1 branches merged and pushed, `main` @ `33558a0`): page 5 failed after 5 attempts with no waits, and the run carried on. A CRITICAL "raw snapshot INCOMPLETE — 1 page(s) failed/deferred: page 5; lead count may be understated" line was logged. The `INCOMPLETE` marker was written, and the report Summary said "Raw snapshot complete: NO". The warning email was built (skipped because no test recipient is set). The run still exited OK. Teams wording moves to the Teams alert channel story.
 - **Code reference** (verified against `Dev/run.py`):
   - Page fetch: `run.py:306-308` — `if response.status_code != 200: … break` — exits the loop without retrying the page or alerting
   - Retry logic: `run.py:288-300` — already retries each page up to 3 times for Timeout/ConnectionError

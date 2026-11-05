@@ -5,7 +5,7 @@ epic: "[[Epic - Reliable alerts]]"
 sprint: S1
 moscow: must
 s1_order: 6
-status: to-do
+status: merged — awaiting first real run with business recipients
 gaps: [GAP-02, GAP-03]
 jira: ""
 size: S
@@ -26,6 +26,12 @@ size: S
 - [ ] **Given** a real run, **when** delivery is checked, **then** an internal recipient (Michelle, CC) confirms it arrived, and the external recipient's copy isn't bounced (no NDR in the `it.admin@` sender mailbox).
 
 ## Notes
+- **Mailbox confirmed by Michelle 2026-11-05**: the report email arrived as an HTML table with no attachments. Still open: set `REPORT_RECIPIENTS_TO`/`_CC` once j.fernandez confirms external sending, then check delivery on the next real run (December 1) with no NDR.
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T232423Z/`, `DRYRUN_EMAIL_RECIPIENTS` set to Michelle): the report email was sent (TO Michelle, no CC) and Graph accepted it. **Waiting on Michelle's mailbox check**: HTML table renders and there are no attachments. The real-run checks (business recipients, external delivery) stay open until `REPORT_RECIPIENTS_TO` is set.
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T222929Z/`, `main` @ `ea3d03c`, `DRYRUN_INJECT_FAILURES=batch:0`): both emails were built, but sending was skipped because `DRYRUN_EMAIL_RECIPIENTS` is unset. Delivery, attachment size and HTML rendering still need one dry-run with it set.
+- **In review 2026-11-04** (`94ca49d` + `c433d66` removing the now-unused zip helper): the body is an HTML table built from `build_summary_rows`, plus the date and run duration. No attachments; xlsx and csv are still written. Recipients come from `REPORT_RECIPIENTS_TO`/`_CC`, falling back to today's recipients. No business address is in the code or `.env.example`.
+- Branch: `s1/fix/report-email-summary-table`, stacked on `s1/fix/alert-emails-compact-excerpt`. **Safety default:** if `REPORT_RECIPIENTS_TO` isn't set, the report keeps going to today's recipients, so business recipients only start receiving it once Michelle adds them to `.env`.
+- Carries over from [[Story - Report labels and unmatched warning fixed]] (2026-11-04): the email table must use the same rows as the xlsx Summary, built by `dnc/report_summary.build_summary_rows`, including "Raw snapshot complete". Its counts must match the run log's Summary block.
 - **Decided 2026-10-29 (stories interview Q2):** the report email carries **no files**. It focuses on the actual report: a succinct table of counts and actions. The report format may change after S3 statistical modeling; until then it stays as it is (Summary sheet content).
 - **This email and the alert emails are separate audiences.** Warning, error, unresolved-item and watchdog alerts go to `it.admin@` + Michelle, CC j.fernandez and e.cervera, plus the Teams channel (interview Q1). The report email goes to the business recipients above.
 - **External recipient:** `matt.hirschberg@jordanbelfort.com` is outside the tenant. Implications:
@@ -36,7 +42,7 @@ size: S
 - Renamed from "Success email carries only the report" (2026-10-29).
 
 ## Open questions
-- [ ] #open-question Does the tenant allow external sending from `it.admin@` to `jordanbelfort.com`? Check with j.fernandez / microsoft-learn before the first real send.
+- [ ] #open-question Can `it.admin@briganteimmigration.com` send to the external domain **`jordanbelfort.com`** (`matt.hirschberg@`)? Ask j.fernandez to check Exchange transport rules, outbound policy and any app access policy on the Graph app. This is the only external recipient in the project, now that the soft-deletion email is internal-only (D-10).
 
 ## Dependencies
 - [[Story - Report labels and unmatched warning fixed]] (the corrected labels appear in this email).

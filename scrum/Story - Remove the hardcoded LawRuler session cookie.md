@@ -5,7 +5,7 @@ epic: "[[Epic - Lean and secret-free logs]]"
 sprint: S1
 moscow: must
 s1_order: 2
-status: merged — awaiting a real (non-dry-run) run
+status: done
 gaps: [GAP-07]
 jira: ""
 size: S
@@ -22,6 +22,7 @@ size: S
 - [ ] Verified by grepping the codebase for `ASP.NET_SessionId` and confirming it appears only in comments or docs, not in live code.
 
 ## Notes
+- **Verified 2026-11-02 with the real November run** (`data/2026-11-02/`, started 20:29 UTC, trigger `manual`): Stage 4 tagged **1,875 leads with 0 errors and 0 skipped**, without the cookie. 2 real scrub batches, 0 warnings, 0 secret-pattern matches, success email delivered.
 - **Verified 2026-11-02** with the dry-run `data/_dryrun/2026-11-02T194943Z/` (image built from `main` @ `b3b5a85`): the dry-run skips LawRuler updates, so the cookie removal is still unverified. It gets verified on the next real run.
 - **Code reference** (verified against `Dev/run.py`):
   - Hardcoded cookie: `run.py:681` — `'Cookie': 'ASP.NET_SessionId=vsmlthcod0f4nkjea22vtpa3'` in `lawruler_headers`

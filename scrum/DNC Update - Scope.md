@@ -196,6 +196,7 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | GAP-26 | Three separately coded retry loops with different rules (page: timeouts only; batch and lead: 429/5xx at 1/2/4 s); the LawRuler token call has none | `run.py:282-304`, `513-535`, `866-909`, `146` | S1: shared retry policy emitting failed-item events (S2 persists them) |
 | GAP-27 | `--dry-run` still calls the paid dncscrub API for every phone | `run.py:1015`, `1510` | S1 (dry-run story) |
 | GAP-28 | Dry-runs write into the real `data/<date>/` folder, including Stage 2 checkpoints (synthetic results could be reused by a same-day real run), and email real recipients | `run.py:1418-1464`, `489-506`, `1265-1400` | S1 (dry-run story) |
+| GAP-29 | When every Stage 2 batch fails or is deferred, Stage 3 crashes with "No scrub results found"; the failed-items summary is skipped and the error email doesn't list the failed batches | `run.py:682`, `1750-1760`, `1805` | S1 ([[Story - Failed scrub batches are retried and reported]]) |
 | GAP-25 | About 4.1 GB of lead PII sits in OneDrive (`data/legacy/`) with no retention policy | Scrub_API inspection | S2 (moves to the ITServer at cutover) / S5 (retention) |
 
 ## Decision items (not sprint work until decided)
@@ -208,6 +209,9 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | D-05 | Keep the 2 s/page LawRuler throttle? | The full snapshot is legally required, so only the throttle is in question |
 | D-06 | Parallelize Stage 4 tagging? | Limited by LawRuler's flakiness and rate limits |
 | D-07 | Automate the monthly soft-deletion through the LawRuler API (S6), or keep the email request to the LawRuler team? | Decided 2026-10-29: email request until at least after S5 |
+| D-08 | Rotate the exposed credentials now? | Decided 2026-11-02: defer. Many other flows share them. Later options: rotate and update every flow, or create a dedicated account for this pipeline. Revisit when the *No silent data loss* epic closes |
+| D-09 | What does a run do when every Stage 2 batch fails? | Decided 2026-11-04: finish as degraded. Skip Stages 3–4, report zero counts, warning email lists failed batches, exit 0 (GAP-29) |
+| D-10 | Does the job email the soft-deletion request to LawRuler directly? | Decided 2026-11-05: no. The job sends an internal `[For review]` email (Michelle, CC e.cervera) with both lists. Michelle reviews and forwards it to the LawRuler team manually. The allowlist stays internal-only |
 
 ## Open items (to resolve before or during backlog scaffolding)
 1. **Cutover acceptance criteria.** Deferred by Michelle; handled during S2.

@@ -25,7 +25,7 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 | Order | Must (12) |
 |---|---|
 | 0 | [[Story - Dry-run never calls paid APIs or touches real data]] (dry-runs currently pay for scrubs and can poison real run data) |
-| 1 | [[Story - Rotate exposed credentials and retire the old repo]] (exposure is live; dependent flows → reminders) |
+| 1 | [[Story - Rotate exposed credentials and retire the old repo]] (exposure is live; dependent flows → reminders) — **deferred 2026-11-02 (D-08)**, revisit at the close of *No silent data loss* |
 | 2 | [[Story - INFO logs with secret masking]] · [[Story - Remove the hardcoded LawRuler session cookie]] |
 | 3 | [[Story - One retry policy for every API call]] |
 | 4 | [[Story - Lead download never truncates silently]] · [[Story - Failed scrub batches are retried and reported]] |
@@ -54,10 +54,10 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 Resources the Should items need from Michelle. Claude nudges for these at S1 kickoff and before each dependent story starts.
 - [ ] Create the **dedicated Teams channel** and share its team and channel identifiers → [[Story - Teams alert channel]]
 - [ ] Brief **e.cervera** that they're the backup and will receive error alerts → [[Story - Runbook for failed or degraded runs]]
-- [ ] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app) → [[Story - Rotate exposed credentials and retire the old repo]]
+- [x] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app): Michelle can (2026-11-02); rotation deferred, D-08 → [[Story - Rotate exposed credentials and retire the old repo]]
 - [ ] Approve the historic-log summary report before originals are deleted → [[Story - Scrub secrets from historic run logs]]
 - [ ] Review the README rewrite → [[Story - README, Jira and vault references re-scoped]] (Jira deprecated 2026-10-29)
-- [ ] Identify the **LawRuler account manager** → [[Story - Soft-deletion request to the LawRuler team]]
+- [x] Identify the **LawRuler account manager**: Lindsey Humphreys (2026-11-05) → [[Story - Soft-deletion request to the LawRuler team]]
 
 ## 3. Risk register (pre-mortem, 2026-10-29)
 *These scores are relative estimates to help prioritize; they are not actuarial predictions.* P = probability, I = impact (1–5).
@@ -66,9 +66,9 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 |---|---|---|---|---|---|---|---|---|
 | R16 | **Michelle gets stuck or overwhelmed in S3–S4** (statistics plus dashboard on her own) | People | 4 | 4 | **16** | Michelle | A milestone has no progress for 2 weeks, or a soft date slides twice | Active |
 | R1 | One person owns pipeline, development and statistics across 6 sprints | People | 4 | 4 | **16** | Michelle | S1 not done by the Jan 1 run, or Michelle out more than a week | Active |
-| R2 | Exposed credentials are misused before rotation | Technical | 3 | 5 | **15** | Michelle | Unknown LawRuler/Graph activity; rotation not done by mid-Nov | Active |
+| R2 | Exposed credentials are misused before rotation | Technical | 3 | 5 | **15** | Michelle | Unknown LawRuler/Graph activity; rotation not done by mid-Nov | Accepted for now (D-08: rotation deferred 2026-11-02, revisit at the close of *No silent data loss*) |
 | R3 | LawRuler API flakiness or changes break a stage | External | 4 | 3 | **12** | Michelle | Unresolved items rise; new error types | Monitoring |
-| R5 | The "removed by the 7th" promise isn't kept | External | 4 | 3 | **12** | Michelle + LawRuler account manager [TBD] | Request not acknowledged by the 5th; requested leads present in the next snapshot | Active |
+| R5 | The "removed by the 7th" promise isn't kept | External | 4 | 3 | **12** | Michelle + LawRuler account manager (Lindsey Humphreys) | Request not acknowledged by the 5th; requested leads present in the next snapshot | Active |
 | R6 | Legal record has no off-machine backup | Technical | 2 | 5 | 10 | Michelle | No backup before cutover | Mitigated by story (S2 Must) |
 | R7 | Backfill or migration corrupts the legal record | Technical | 2 | 5 | 10 | Michelle | Row-count or checksum mismatch | Monitoring |
 | R8 | Lead-level data reaches an external recipient | Process | 2 | 5 | 10 | Michelle | Allowlist error logged; external recipient added | Monitoring |
@@ -114,7 +114,7 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 - **Residual:** 4×2 = 8.
 
 **R5 — "Removed by the 7th" | 12**
-- **Owner:** Michelle + LawRuler account manager [TBD] #open-question (who is the LawRuler account manager for the soft-deletion request?)
+- **Owner:** Michelle + LawRuler account manager (Lindsey Humphreys) #open-question (who is the LawRuler account manager for the soft-deletion request?)
 - **Trigger:** request not acknowledged by the 5th.
 - **Mitigation:** identify the account manager before the first automated request; the watchdog checks the request was sent; Michelle forwards it until then.
 - **Contingency:** escalate through Matt or Brad; soften the wording to "Removal requested" until delivery is reliable.

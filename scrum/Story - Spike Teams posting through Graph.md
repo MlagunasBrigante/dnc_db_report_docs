@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Reliable alerts]]"
 sprint: S1
 moscow: should
-status: to-do
+status: done
 gaps: []
 jira: ""
 size: S
@@ -26,6 +26,8 @@ size: S
 - [ ] Time-boxed to 1 day; if Graph API access is blocked or requires a tenant-wide permission the app cannot get, the recommendation states "use email only" and the Teams alert channel story is dropped.
 
 ## Notes
+- **Approved by Michelle 2026-11-05:** Teams goes through a Workflows webhook (`TEAMS_WEBHOOK_URL`).
+- **Spike written 2026-11-05:** [[teams-graph-spike]]. Graph **can't** post channel or chat messages with our app-only (client-credentials) token: `ChannelMessage.Send` is delegated-only, and the application permission is for migration only (verified on Microsoft Learn). Office 365 Connectors were retired in May 2026. Recommendation: a **Teams Workflows webhook** (`TEAMS_WEBHOOK_URL` in `.env`, Adaptive Card POST). It needs no Graph permission or admin consent. Waiting on Michelle's approval and the webhook URL.
 - **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th. The target is a **channel**, so the spike answers which Graph permission lets the app post to a channel, verified with the microsoft-learn MCP.
 - **Code reference** (verified against `Dev/run.py`):
   - `_get_o365_account`: `run.py:1120` — existing Graph connector using O365 library and client credentials flow
@@ -35,7 +37,7 @@ size: S
 - The existing O365 library and credentials already work for sending email via Graph (`Mail.Send` delegated or app permission). The question is whether the same connector can post to Teams, and if so, to what target.
 
 ## Open questions
-- [ ] #open-question Which Graph permission lets the existing app registration post to Michelle's dedicated channel? Answered by this spike; verify with microsoft-learn.
+- [x] Which Graph permission lets the existing app registration post to the channel? **None**: app-only posting isn't supported. Use a Teams Workflows webhook instead ([[teams-graph-spike]], 2026-11-05).
 
 ## Dependencies
 None — can start immediately.

@@ -45,6 +45,7 @@ Earlier patterns rejected:
 Each story delivers value to the IT & Data lead: page errors can't truncate downloads, batch errors can't be skipped, invalid config fails before any API call, report labels are honest, per-stage metrics feed the memory epic. Sizes are reasonably equal (S to M); all are vertical (each closes one silent-failure mode end-to-end).
 
 ## Child user stories
+- [[Story - Dry-run failure injection]] (Should; test tooling, added 2026-11-02)
 - [[Story - Dry-run never calls paid APIs or touches real data]] ← first (s1_order 0)
 - [[Story - One retry policy for every API call]]
 - [[Story - Lead download never truncates silently]]
@@ -52,6 +53,9 @@ Each story delivers value to the IT & Data lead: page errors can't truncate down
 - [[Story - Config validated before any API call]]
 - [[Story - Report labels and unmatched warning fixed]]
 - [[Story - Per-stage duration and memory in every run]]
+
+> [!check] Before closing this epic
+> - [ ] Nudge Michelle about [[Story - Rotate exposed credentials and retire the old repo]] (deferred, D-08): rotate the shared credentials and update every flow, or create a dedicated account for this pipeline.
 
 ## Dependencies / sequencing
 **Start with [[Story - One retry policy for every API call]]** (added 2026-10-29 at Michelle's request). The page and batch stories build on its failed-item event.
