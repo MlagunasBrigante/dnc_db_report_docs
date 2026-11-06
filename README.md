@@ -20,7 +20,7 @@ The code lives in a separate repo, [`dnc_db_report`](https://github.com/Mlagunas
 
 ## Start here
 
-1. [DNC Update - Scope](scrum/DNC%20Update%20-%20Scope.md) covers scope by sprint, out of scope, Definition of Done, the **gap register (GAP-01…29)** and **decision items (D-01…09)**.
+1. [DNC Update - Scope](scrum/DNC%20Update%20-%20Scope.md) covers scope by sprint, out of scope, Definition of Done, the **gap register (GAP-01…29)** and **decision items (D-01…10)**.
 2. [Backlog - dnc-cron-scrub](scrum/Backlog%20-%20dnc-cron-scrub.md) lists sprints S1–S6 with their epics and stories as a checkbox list (ticked only when the item's `status` is `done`).
 3. [Prioritization and Risk Register](scrum/Prioritization%20and%20Risk%20Register.md) has the MoSCoW ranking and pre-mortem risks.
 4. [DNC Run Report 2026-10-28](Run%20Reports/DNC%20Run%20Report%202026-10-28.md) is the baseline run used for gap-closure and migration scoping.

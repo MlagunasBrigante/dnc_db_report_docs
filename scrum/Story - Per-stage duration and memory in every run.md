@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: should
-status: to-do
+status: in-review
 gaps: [GAP-17]
 jira: ""
 size: M
@@ -34,6 +34,7 @@ size: M
   - Include the metrics in the Teams run-summary message, formatted as a table or bullets. **Not** in the business report email ([[Story - Monthly report email as a summary table]]), which goes to management and an external recipient. Aligned 2026-10-29.
 - **Scope**: this story instruments Stages 1-5 (Ingest, Scrub, Interpret, Update, Report). Stage 6 (Email) metrics are less useful (the email-sending itself is fast; memory spikes are from attachment encoding, which [[Story - Monthly report email as a summary table]] fixes). Still log Stage 6 for completeness.
 - **Feeds the memory epic** (GAP-18): the memory-optimization stories ([[Story - Stage 4 stops reloading the full lead history]], [[Story - Stage 2 mean memory reduced]]) depend on this instrumentation to measure before/after.
+- **Implementation (2026-11-06)**: Branch `s1/feat/per-stage-metrics`, commit a3ca7c5. Per-stage peak memory is measured by **sampling current memory usage** (not cgroup memory.peak, which is monotonic across the whole run). A lightweight daemon thread samples cgroup v2 `memory.current` (or v1 / VmRSS / ru_maxrss fallback) every `STAGE_MEMORY_SAMPLE_SECONDS` (default 1.0 s) and takes the max. This gives per-stage peaks instead of a run-wide high-water mark. The run-wide peak from `memory.peak` is logged separately at the end. Measurement errors never break a run (log DEBUG, continue with 'n/a').
 
 ## Dependencies
 None — can start immediately. Should complete before the memory-optimization epic starts.

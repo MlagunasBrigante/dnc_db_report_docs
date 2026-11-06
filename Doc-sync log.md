@@ -1,7 +1,7 @@
 ---
 type: log
 project: dnc-cron-scrub
-last_synced_dev_commit: ea3d03c08bc690df462ee767e5e1938f46b7cc8c
+last_synced_dev_commit: 05df0990774a08a138e64c530263e659b3fdb50e
 tags: [project/dnc-cron-scrub, doc-sync]
 ---
 # Doc-sync log
@@ -40,6 +40,23 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 > Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs Michelle** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
 
 <!-- entries below, newest first -->
+
+## 2026-11-06: Dev main 05df099
+**Commits since last sync:** 16 (378e54a…05df099): degraded-run polish, soft-deletion review email (D-10), Teams Workflows webhook channel + masking, alert-delivery tracking/exit code 3, README exit codes. 21 files, +2182/−180.
+**Auto-fixed:**
+- `Dev/README.md`: re-fixed 12 broken `||` env rows; re-added env vars missing on main: `*_RETRY_*` ×9 (`dnc/retry.py:73-95`), `OUTAGE_*` ×3 (`retry.py:245-247`), `LOG_LEVEL`/`LOG_LIBRARY_DEBUG` (`dnc/log_setup.py:35,39`), `TEAMS_WEBHOOK_URL`, `DRYRUN_TEAMS_WEBHOOK_URL`, `DRYRUN_RETENTION_DAYS` (`run.py:2155`); `DATA_DIR` code default `./data`, container sets `/data` via `.env` (`run.py:2046`, `.env.example:57`).
+- `Dev/.env.example`: commented retry-policy defaults block; commented `SCHEDULE_CRON` default (`Dockerfile:10`).
+- `README.md` (project): Current Status table synced to story `status` (+6 rows: 3 done, 3 in-review; report email now "awaiting first real run with business recipients"); Point line updated.
+- `Docs/README.md:23`, Backlog intro line 10: D-01…09 → D-01…10 (`Docs/scrum/DNC Update - Scope.md:214`).
+**Needs Michelle:**
+- Yesterday's `Dev/README.md`/`.env.example` fixes were never committed and are gone from the working tree (redone above). Commit them on main this time.
+- `CLAUDE.md:34,36` (edit blocked, protected file): `dnc/` helper list stale (add alert delivery, Teams, soft-delete request, run status/outcome, config check, log excerpt, report email/summary); `Docs/Reference/` row says runbook and I/O spec "not written yet", but `DNC-runbook.md` and `pipeline-stages-reference.md` exist. Edit by hand.
+- Teams alert channel + Alert delivery failure stories are `in-review` but merged on main (405d125, 0bc3dd5, 05df099). Move to `merged — pending Mac verification` if review is done.
+- Project `README.md:83` Open Gaps + `Dev/README.md` `LAWRULER_SESSION_COOKIE` row still say "unconfirmed / verify on real run" though the cookie story is `done`; reword or close.
+- `Dev/README.md`: 6 paths still `Projects/DNC-Update/...`; confirm the live `dnc-scrub` mount, then update.
+- `law_ruler_client_id/secret` marked required but not in `dnc/config_check.py`; add to the check or mark optional.
+- `Docs/README.md:37` S6 "only if D-07 = automate" vs D-07 decided; check wording.
+- Dev working tree has uncommitted README/.env.example edits from this run.
 
 ## 2026-11-05: Dev main ea3d03c
 **Commits since last sync:** 20 (528f6b6…ea3d03c): lead-download truncation, failed batches reported, dry-run failure injection, config check before API, report labels, compact log excerpt on alerts, HTML summary report email, `_zip_output` removed, GAP-29 degraded run + review fixes. 22 files, +2804/−188.

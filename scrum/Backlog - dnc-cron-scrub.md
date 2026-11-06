@@ -7,7 +7,7 @@ created: 2026-10-29
 ---
 # Backlog — dnc-cron-scrub
 
-14 epics, 53 stories. Priorities (MoSCoW, in each story's `moscow` property) and risks: [[Prioritization and Risk Register]]. Scope, gap register (GAP-01…29) and decisions (D-01…09) live in [[DNC Update - Scope]].
+14 epics, 53 stories. Priorities (MoSCoW, in each story's `moscow` property) and risks: [[Prioritization and Risk Register]]. Scope, gap register (GAP-01…29) and decisions (D-01…10) live in [[DNC Update - Scope]].
 
 Sprints are sequential. Each one starts only when the previous one is stable. All code is developed as if it already runs on the AlmaLinux ITServer (Docker, systemd, local PostgreSQL), even though the job stays on the Mac until the S2 cutover.
 
