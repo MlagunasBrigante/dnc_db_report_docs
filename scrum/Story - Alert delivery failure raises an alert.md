@@ -23,6 +23,7 @@ size: M
 - [ ] Verified by temporarily breaking one channel (e.g. invalid recipient, wrong Teams channel ID) and confirming the other channel reports it.
 
 ## Notes
+- **`email:fail` dry-run 2026-11-06 00:16 UTC** (`data/_dryrun/2026-11-05T234847Z/`): success email failed (injected), Teams posted, exit 0. The card should carry "Success email failed to send; run succeeded but report delivery failed" (`dnc/alert_delivery.py`, `run.py:2336-2350`); Michelle to confirm on the card. Still to run: `email:fail,teams:fail`, expecting exit 3.
 - **Mac dry-runs 2026-11-05:** Teams fails, so an email reports it: verified (`teams:fail`, exit 0). Still to verify: `email:fail` (Teams reports the email failure) and `email:fail,teams:fail` (all channels failed, exit 3).
 - **In review 2026-11-05** (5 commits `c69bffc`…`d4d0797` + review fix `05df099`, stacked on `s1/feat/teams-alert-channel`). Each alert's email and Teams sends return `sent` / `failed` / `skipped` (not configured or dry-run without a target; skipped isn't a failure). Order: email first, then Teams.
   - A failed email adds a note to the Teams card.

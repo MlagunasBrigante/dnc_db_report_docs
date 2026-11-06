@@ -26,7 +26,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [ ] [[Story - Teams alert channel]]
     - [ ] [[Story - Alert delivery failure raises an alert]]
     - [ ] [[Story - Mac run-night safeguards until cutover]]  (Could)
-    - [ ] [[Story - Runbook for failed or degraded runs]]
+    - [x] [[Story - Runbook for failed or degraded runs]]
 - [ ] [[Epic - Lean and secret-free logs]]
     - [x] [[Story - INFO logs with secret masking]]
     - [x] [[Story - Remove the hardcoded LawRuler session cookie]]
