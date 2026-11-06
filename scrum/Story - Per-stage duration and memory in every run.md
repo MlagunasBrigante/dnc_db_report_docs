@@ -21,6 +21,7 @@ size: M
 - [ ] **Given** one real run completes, **when** I review the log and the Teams summary, **then** the per-stage metrics are present and match expected values (cross-check with the 2026-10-28 run report for sanity).
 
 ## Notes
+- **Mac dry-run 2026-11-06 19:58 UTC** (merged `efe2647`): source cgroup v2; Stage 1 28m 23s / 821 MiB, Stage 2 0s / 710, Stage 3 0s / 709, Stage 4 1s / 1269, Stage 5 0s / 1085, Stage 6 2s / 1073; run-wide peak 1297 MiB, exit 0. The 1 s sampler missed ~28 MiB of the run-wide peak (acceptable). Soft-deletion email (between Stages 5 and 6) is not timed. Teams success card shows the per-stage list (Michelle, 2026-11-06); container recreated from `efe2647`. Dec 1 real-run comparison with the 2026-10-28 baseline still open.
 - **Gap reference**: GAP-17 — "No per-stage duration or memory instrumentation" at `main()` (`run.py:1318-1445`)
 - **Root cause from run report 2026-10-28**: the per-stage timeline and memory table in the run report was built from external `docker stats` samples and manual log inspection because the pipeline itself does not instrument stages. This story adds that instrumentation into the pipeline.
 - **Memory measurement** (from 2026-10-28 run report):
