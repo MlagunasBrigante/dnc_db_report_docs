@@ -31,7 +31,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [x] [[Story - INFO logs with secret masking]]
     - [x] [[Story - Remove the hardcoded LawRuler session cookie]]
     - [x] [[Story - Scrub secrets from historic run logs]]
-    - [ ] [[Story - Rotate exposed credentials and retire the old repo]]
+    - → [[Story - Rotate exposed credentials and retire the old repo]] carried to S2 (D-08, 2026-11-09)
 - [ ] [[Epic - No silent data loss]]
     - [x] [[Story - Dry-run never calls paid APIs or touches real data]]  ← before any dry-run
     - [x] [[Story - One retry policy for every API call]]  ← do first
@@ -50,6 +50,8 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [ ] [[Story - Stage 2 mean memory reduced]]  ← only after Stage 4 is stable
 
 ## S2 — Technical migration
+- Carried from S1:
+    - [ ] [[Story - Rotate exposed credentials and retire the old repo]]  (Must, D-08)
 > Key decision: [[Decision - Dedicated PostgreSQL database]]
 - [ ] [[Epic - PostgreSQL system of record]]
     - [ ] [[Story - Raw snapshot and run record land in Postgres]]

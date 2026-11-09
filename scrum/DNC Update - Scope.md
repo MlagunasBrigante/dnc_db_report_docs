@@ -207,9 +207,9 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | D-03 | Reassigned-number check (6-month refresh)? | Never built |
 | D-04 | Rewrite the process in pure n8n? | To discuss 2026-10-29. Measured ~1.1 GiB working set and ~360k per-lead calls on a full pass argue against it. |
 | D-05 | Keep the 2 s/page LawRuler throttle? | The full snapshot is legally required, so only the throttle is in question |
-| D-06 | Parallelize Stage 4 tagging? | Limited by LawRuler's flakiness and rate limits |
+| D-06 | Parallelize Stage 4 tagging? | Decided 2026-11-09: no, Stage 4 stays sequential (stability first; LawRuler's flakiness and rate limits) |
 | D-07 | Automate the monthly soft-deletion through the LawRuler API (S6), or keep the email request to the LawRuler team? | Decided 2026-10-29: email request until at least after S5 |
-| D-08 | Rotate the exposed credentials now? | Decided 2026-11-02: defer. Many other flows share them. Later options: rotate and update every flow, or create a dedicated account for this pipeline. Revisit when the *No silent data loss* epic closes |
+| D-08 | Rotate the exposed credentials now? | Decided 2026-11-02: defer. Many other flows share them. Later options: rotate and update every flow, or create a dedicated account for this pipeline. Revisit when the *No silent data loss* epic closes. 2026-11-09: carried to S2; S1 closes without it, with a recurring reminder |
 | D-09 | What does a run do when every Stage 2 batch fails? | Decided 2026-11-04: finish as degraded. Skip Stages 3–4, report zero counts, warning email lists failed batches, exit 0 (GAP-29) |
 | D-10 | Does the job email the soft-deletion request to LawRuler directly? | Decided 2026-11-05: no. The job sends an internal `[For review]` email (Michelle, CC e.cervera) with both lists. Michelle reviews and forwards it to the LawRuler team manually. The allowlist stays internal-only |
 

@@ -15,6 +15,7 @@ Lower the job's **mean** memory use, one stage at a time, **always favoring resi
 - **The Stage 6 email peak (2.77 GiB) is removed by design**, not by this epic: no report attachments and no full-log attachments ([[Story - Monthly report email as a summary table]], [[Story - Warning and error emails always arrive]]).
 - **Resilience first.** A memory change that makes the run less robust (e.g. weaker checkpointing or retries) is rejected even if it saves memory.
 - **Metrics are indicative and will be adjusted along the way.** The initial Stage 4 target (≈0.06 GB per hour per thousand leads) only gives an order of magnitude and breaks down at extreme volumes. Preferred design outcome: an atomized, chunked process whose memory doesn't depend on lead count or run time.
+- **Governing figure (Michelle, 2026-11-09):** plain stage mean MiB from `data/metrics/memory_log.csv`. Stage 4 target: mean ≤ ~900 MiB (20% below the 2026-10-28 baseline of 1,120.6 MiB), indicative. D-06 parallel tagging rejected; Stage 4 stays sequential.
 - Stage 1 (mean 409 MiB, the lowest) is **not** prioritized. It's revisited only if the quarterly review shows it growing.
 
 ## Gaps closed
@@ -42,7 +43,7 @@ Lower the job's **mean** memory use, one stage at a time, **always favoring resi
 - **Equal sizes?** Roughly: Stage 4 is M, Stage 2 is M, and the memory log is S.
 
 > [!check] Before closing this epic, verify Michelle's actions were actually done
-> - [ ] Decide which memory figure governs the target (per hour per thousand leads, or plain MiB). — [[Story - Stage 4 stops reloading the full lead history]]
+> - [x] Decide which memory figure governs the target (per hour per thousand leads, or plain MiB). — [[Story - Stage 4 stops reloading the full lead history]]
 
 ## Child user stories
 1. [[Story - Stage 4 stops reloading the full lead history]] — priority 1

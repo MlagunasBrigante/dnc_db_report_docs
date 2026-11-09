@@ -2,7 +2,7 @@
 type: story
 project: dnc-cron-scrub
 epic: "[[Epic - Lean and secret-free logs]]"
-sprint: S1
+sprint: S2
 moscow: must
 s1_order: 1
 status: to-do
@@ -16,6 +16,7 @@ size: M
 > - [ ] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app).
 > - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `MlagunasBrigante`, after the `git bundle` backup is verified.
 > - [ ] Set the recurring reminders for any credential that can't be rotated yet.
+> - [ ] Create a recurring Outlook reminder (monthly, until done) to revisit D-08.
 
 ## User Story
 **As** the compliance/legal owner, **I want** every credential that appeared in git, logs or legacy files rotated, and the deprecated `DNC_LOCALSERVER` GitHub repo deleted after a local backup, **so that** the exposed secrets are useless and no copy of them stays online.
@@ -32,6 +33,7 @@ size: M
 - [ ] A short log at `Docs/Reference/Credential Rotation Log.md` records what was rotated (names only, never values), when, by whom, and how it was verified.
 
 ## Notes
+- **Carried to S2 (Michelle, 2026-11-09):** S1 closes without it (D-08 stays deferred). The rotation still has to cover everything the historic logs exposed, even though the log originals were deleted on 2026-11-09, because they had already synced to OneDrive and some were emailed. Also covers `data/legacy/Scrub_API-2026-11-05/DNC_db_report/.env` (GAP-24).
 - **Deferred 2026-11-02 (Michelle, D-08):** the credentials stay as they are for now, because rotating them would break the other flows that share them. Options for later: rotate and update every flow, or create a dedicated account for this pipeline. Michelle gets a nudge when [[Epic - No silent data loss]] closes.
 - **LawRuler session cookie (found 2026-10-30):** the value that was hardcoded in `run.py` is in the `dnc_db_report` git history (pushed). It is a session ID, probably long expired; confirm with LawRuler that it is no longer valid, or treat it as rotated once the cookie-free run succeeds.
 - **Decided 2026-10-29 (stories interview Q5): option A.** Delete the GitHub repo instead of rewriting its history. The project is deprecated and its full history survives in the local archive and the bundle. **Rotation happens first:** deleting the repo doesn't undo past exposure.
