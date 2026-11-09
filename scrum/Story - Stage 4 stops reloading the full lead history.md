@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Memory optimization]]"
 sprint: S1
 moscow: could
-status: to-do
+status: in-review
 gaps: [GAP-18]
 jira: ""
 size: M
@@ -26,6 +26,7 @@ size: M
 
 ## Notes
 - **Decided 2026-11-09 (Michelle):** (1) the governing figure is the **plain Stage 4 mean MiB** from the memory log, not GB per hour per thousand leads (not distorted by speed or volume). Baseline 2026-10-28: mean 1,120.6 MiB; dry-run 2026-11-09: mean 1,103 / peak 1,207 MiB. The 20% target becomes **mean ≤ ~900 MiB** (indicative; the AC 3 ratio is superseded). (2) D-06: **no parallel tagging**, Stage 4 stays sequential (stability first, LawRuler is flaky). (3) Build now; merge only after a Mac dry-run with matching outputs and a kill/restart test. The Dec 1 real run is the 'after', Oct 28 the 'before'.
+- **Implemented and reviewed 2026-11-09 (branch `s1/perf/stage4-lean-working-set`, tip `a03e293`).** Stage 1 releases its full DataFrames once persisted; `main()` releases the cleaned leads after Stage 2; Stage 4 builds its working set with one SQL join (`raw_data` × `scrub_results_translated` on `'+1'||Phone`, 10 columns) instead of loading all of `raw_data`. Tagging, sort order and the resume checkpoint (`update_status`, `_is_lead_done`) are unchanged; the update loops weren't touched. **Equivalence on real data (sandbox, read-only, counts only):** the new join reproduces the stored `leads_with_tags` of the old code exactly on 3 real runs: 2026-08-12 (359,879 rows), 2026-10-28 (7,713), 2026-11-02 (1,875); 0 rows differ, tag counts identical. Review removed: a compare tool and README edits that misdescribed the scrub tool, a sandbox-path ATTACH (now parameterized), dead `_translate_tags`. Sandbox ran 306 tests; the 4 new pandas tests (`tests/test_stage4_lean_working_set.py`) can't run in the sandbox (no executable tmp for numpy) and run on the Mac. **Kill/restart:** a dry-run can't resume (each dry-run gets a new timestamped folder), so a live kill/restart test would need a real run; the checkpoint code is untouched and covered by a unit test. Pending Michelle's call. Remaining: Mac pytest + one dry-run (Stage 4 mean/peak in the memory log), then merge; Dec 1 is the 'after' real run.
 - **Target set by Michelle (stories interview Q10, 2026-10-29):** 10-28 ≈ (1 GB / 1.5 h) / 8 kLeads ≈ 0.083 → −20% (optimistic) ≈ 0.06. It's an **initial** target only.
 - **Caveat on the formula (flagged for Michelle):** dividing memory by **hours** means a *faster* Stage 4 at the same memory scores *worse* (e.g. if D-06 parallel tagging is ever adopted). Stage 4's memory is also mostly a **fixed cost** of loading the full history, not a per-lead cost. The memory log therefore also records the plain **Stage 4 mean in MiB** (10-28 baseline 1,121 MiB; −20% ≈ 900 MiB) so either view can be used. Michelle chooses which one governs.
 - **The metric is indicative, not final (Michelle, 2026-10-29):** GB per hour per thousand leads reads more like a rate of change and doesn't fully capture every situation. Very large runs, e.g. a ~200k-lead pass, distort it badly. **The real measurable metrics will be adjusted along the way**, informed by the memory log. The figure exists to give an order of magnitude, not a pass/fail gate.
