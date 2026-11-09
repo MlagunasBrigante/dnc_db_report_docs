@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Reliable alerts]]"
 sprint: S1
 moscow: should
-status: in-review
+status: done
 gaps: []
 jira: ""
 size: M
@@ -12,19 +12,20 @@ size: M
 # Story: Teams alert channel
 
 > [!todo] Michelle — action needed
-> - [ ] Create the dedicated Teams channel and share its team and channel IDs (needed before this story starts).
+> - [x] Create the dedicated Teams channel and share its team and channel IDs (needed before this story starts).
 
 ## User Story
 **As** the IT & Data lead and IT on-call, **I want** success, warning, error and unresolved-failure alerts posted to a Teams channel, **so that** I have a second alert channel and a visible timeline of run outcomes in the team workspace.
 
 ## Acceptance Criteria
-- [ ] **Given** the existing Graph connector (`_get_o365_account`, `run.py:1120`) and the spike's recommendation, **when** a run completes successfully, **then** a success message is posted to the configured Teams channel or chat with the report date and a summary (leads tagged, DNC count).
-- [ ] **Given** a run emits warnings but succeeds, **when** the run completes, **then** a warning message is posted with the count of warnings and a link or excerpt.
-- [ ] **Given** a run fails, **when** the error is caught, **then** an error message is posted with the exception type and a compact traceback excerpt.
-- [ ] **Given** one alert channel fails (email or Teams), **when** the other channel succeeds, **then** the working channel reports the failure of the other (e.g. "Warning email failed to send; see logs").
-- [ ] Verified with one `--dry-run` that injects a failure and confirms both email and Teams alerts arrive.
+- [x] **Given** the existing Graph connector (`_get_o365_account`, `run.py:1120`) and the spike's recommendation, **when** a run completes successfully, **then** a success message is posted to the configured Teams channel or chat with the report date and a summary (leads tagged, DNC count).
+- [x] **Given** a run emits warnings but succeeds, **when** the run completes, **then** a warning message is posted with the count of warnings and a link or excerpt.
+- [x] **Given** a run fails, **when** the error is caught, **then** an error message is posted with the exception type and a compact traceback excerpt.
+- [x] **Given** one alert channel fails (email or Teams), **when** the other channel succeeds, **then** the working channel reports the failure of the other (e.g. "Warning email failed to send; see logs").
+- [x] Verified with one `--dry-run` that injects a failure and confirms both email and Teams alerts arrive.
 
 ## Notes
+- **Closed 2026-11-06 (Michelle).** Mac evidence: success card (with per-stage metrics), success card with the failed-email note, warning card (page 5 injected, failed-email note, log excerpt), error card (auth 404 + failed email, exit 1), all-channels-failed exit 3. Config-error path (missing env var → Teams card, exit 1) accepted on unit tests (`tests/test_config_failure_alerts.py`), not run on the Mac.
 - **Fix branch `s1/fix/alert-delivery-gaps` (`9afc77b`, `f006357`, 2026-11-06), reviewed, 246 tests pass:** (a) when every alert channel fails, the CRITICAL line now comes first and the end line reads `⚠️ Pipeline completed but alert delivery failed on all channels (exit 3)`, followed by `Report: <path>`; (b) a config-validation failure now posts the Teams error card too, with the same cross-reporting (new `dnc/config_failure_alerts.py`); exit code stays 1. Awaiting merge, rebuild and a Mac re-check.
 - **Error-path dry-run 2026-11-06 17:24 UTC** (`auth_url` broken + `email:fail`, `data/_dryrun/2026-11-06T172427Z/`): auth 404 not retried, `CRITICAL Pipeline failed`, error email failed (injected), Teams error card posted, exit 1 ✅. Card content (exception + failed-email note) to be confirmed by Michelle. Warning-path run still to do (the 17:29 run kept the broken `auth_url`, so it repeated the error path).
 - **`email:fail,teams:fail` dry-run 2026-11-06 01:05 UTC** (`data/_dryrun/2026-11-06T003829Z/`): both failed, `CRITICAL Alert delivery failed on all channels`, exit 3 ✅. Michelle confirmed the Teams card from the `email:fail` run carried the failed-email note ✅. Not yet seen on the Mac: warning/error cards and warning/error email cross-reports (unit-tested only). Found 2026-11-06: (a) the end line still says `✅ Pipeline completed successfully` right before the all-channels CRITICAL; (b) a config-validation failure (exit 1) sends only the error email, not Teams, so missing O365 keys alert nobody.
@@ -47,7 +48,7 @@ size: M
 - **Never fail the run** because Teams posting failed — log the failure and continue. The project rule is "flaky APIs → never 'fail the run if N items fail'".
 
 ## Open questions
-- [ ] #open-question Webhook URL of the dedicated channel's "Send webhook alerts to a channel" workflow (Michelle creates the channel and the workflow, and stores the URL in `Dev/.env` as `TEAMS_WEBHOOK_URL`).
+- [x] #open-question Webhook URL of the dedicated channel's "Send webhook alerts to a channel" workflow (Michelle creates the channel and the workflow, and stores the URL in `Dev/.env` as `TEAMS_WEBHOOK_URL`).
 
 ## Dependencies
 - [[Story - Spike Teams posting through Graph]] — must complete first.

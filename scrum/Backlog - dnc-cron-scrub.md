@@ -23,8 +23,8 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [ ] [[Story - Monthly report email as a summary table]]
     - [x] [[Story - Soft-deletion request to the LawRuler team]]
     - [x] [[Story - Spike Teams posting through Graph]]
-    - [ ] [[Story - Teams alert channel]]
-    - [ ] [[Story - Alert delivery failure raises an alert]]
+    - [x] [[Story - Teams alert channel]]
+    - [x] [[Story - Alert delivery failure raises an alert]]
     - [ ] [[Story - Mac run-night safeguards until cutover]]  (Could)
     - [x] [[Story - Runbook for failed or degraded runs]]
 - [ ] [[Epic - Lean and secret-free logs]]

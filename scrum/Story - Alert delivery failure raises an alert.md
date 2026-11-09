@@ -5,7 +5,7 @@ epic: "[[Epic - Reliable alerts]]"
 sprint: S1
 moscow: must
 s1_order: 6
-status: in-review
+status: done
 gaps: [GAP-05]
 jira: ""
 size: M
@@ -16,13 +16,14 @@ size: M
 **As** the IT & Data lead, **I want** a failure in one alert channel (email or Teams) to raise a loud alarm through the other channel, **so that** I never have a silent alert loss when something critical happens.
 
 ## Acceptance Criteria
-- [ ] **Given** the success email fails to send, **when** the Teams channel is available, **then** the Teams message states "Success email failed to send; run succeeded but report delivery failed" and logs the error.
-- [ ] **Given** the Teams message fails to post, **when** the email channel is available, **then** the email body states "Teams alert failed to post; see logs for details".
-- [ ] **Given** both channels fail, **when** the run completes, **then** the failure is logged as CRITICAL (not swallowed as WARNING), the run exits with a non-zero code, and the watchdog (S2) will catch it.
-- [ ] **Given** a warning or error email fails, **when** the other channel is available, **then** the working channel reports the failure (same pattern as AC 1-2).
-- [ ] Verified by temporarily breaking one channel (e.g. invalid recipient, wrong Teams channel ID) and confirming the other channel reports it.
+- [x] **Given** the success email fails to send, **when** the Teams channel is available, **then** the Teams message states "Success email failed to send; run succeeded but report delivery failed" and logs the error.
+- [x] **Given** the Teams message fails to post, **when** the email channel is available, **then** the email body states "Teams alert failed to post; see logs for details".
+- [x] **Given** both channels fail, **when** the run completes, **then** the failure is logged as CRITICAL (not swallowed as WARNING), the run exits with a non-zero code, and the watchdog (S2) will catch it.
+- [x] **Given** a warning or error email fails, **when** the other channel is available, **then** the working channel reports the failure (same pattern as AC 1-2).
+- [x] Verified by temporarily breaking one channel (e.g. invalid recipient, wrong Teams channel ID) and confirming the other channel reports it.
 
 ## Notes
+- **Closed 2026-11-06 (Michelle).** Warning run (`page:5,email:fail`, 2026-11-06 ~17:30 UTC): warning card carried "⚠️ Warning email failed to send". Error run: error card carried the failed-email note. Both-fail: exit 3. Config-error path accepted on unit tests.
 - **Fix branch `s1/fix/alert-delivery-gaps` (`9afc77b`, `f006357`, 2026-11-06), reviewed, 246 tests pass:** (a) when every alert channel fails, the CRITICAL line now comes first and the end line reads `⚠️ Pipeline completed but alert delivery failed on all channels (exit 3)`, followed by `Report: <path>`; (b) a config-validation failure now posts the Teams error card too, with the same cross-reporting (new `dnc/config_failure_alerts.py`); exit code stays 1. Awaiting merge, rebuild and a Mac re-check.
 - **Error-path dry-run 2026-11-06 17:24 UTC** (`auth_url` broken + `email:fail`, `data/_dryrun/2026-11-06T172427Z/`): auth 404 not retried, `CRITICAL Pipeline failed`, error email failed (injected), Teams error card posted, exit 1 ✅. Card content (exception + failed-email note) to be confirmed by Michelle. Warning-path run still to do (the 17:29 run kept the broken `auth_url`, so it repeated the error path).
 - **`email:fail,teams:fail` dry-run 2026-11-06 01:05 UTC** (`data/_dryrun/2026-11-06T003829Z/`): both failed, `CRITICAL Alert delivery failed on all channels`, exit 3 ✅. Michelle confirmed the Teams card from the `email:fail` run carried the failed-email note ✅. Not yet seen on the Mac: warning/error cards and warning/error email cross-reports (unit-tested only). Found 2026-11-06: (a) the end line still says `✅ Pipeline completed successfully` right before the all-channels CRITICAL; (b) a config-validation failure (exit 1) sends only the error email, not Teams, so missing O365 keys alert nobody.

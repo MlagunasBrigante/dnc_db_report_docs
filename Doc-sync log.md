@@ -1,7 +1,7 @@
 ---
 type: log
 project: dnc-cron-scrub
-last_synced_dev_commit: 05df0990774a08a138e64c530263e659b3fdb50e
+last_synced_dev_commit: efe26472877bc5ab14b7d942551106937f05056c
 tags: [project/dnc-cron-scrub, doc-sync]
 ---
 # Doc-sync log
@@ -40,6 +40,25 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 > Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs Michelle** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
 
 <!-- entries below, newest first -->
+
+## 2026-11-09: Dev main efe2647
+**Commits since last sync:** 6 (9afc77b…efe2647): alert-delivery gaps (success message, config-failure Teams alert, `dnc/config_failure_alerts.py`), per-stage duration/memory tracking (`dnc/stage_metrics.py`), review fixes. 10 files, +1456/−175. The 2026-11-06 README/.env.example fixes are now on main.
+**Auto-fixed:**
+- `Dev/README.md:235-240`: 6 broken `||` env rows repaired (again).
+- `Dev/README.md:179`: dropped stale "`cron.log` from the host" (no host cron; `Dockerfile` CMD `schedule`).
+- `Dev/README.md:242,260`: "email failures never change the exit code" → exit 3 when every channel fails (README Exit Codes, `run.py` alert outcomes).
+- `Dev/README.md:345`: per-stage metrics are on the Teams **success** card only, not warning (`run.py:2355` passes `metrics`; `send_warning_teams_alert` `run.py:1908` has no metrics arg).
+- `Dev/README.md` Local Development: added test command (`pytest.ini`, `requirements-dev.txt`).
+- `README.md` (project): Current Status +1 row, [[Story - Per-stage duration and memory in every run]] 🔍 In Review; Point line updated.
+**Needs Michelle:**
+- Stories `in-review` but merged on main: Per-stage duration and memory (a3ca7c5, efe2647; container recreated, story line 24), Alert delivery failure (fa17869), Teams alert channel (405d125). Move to `merged — pending Mac verification` if review is done.
+- `CLAUDE.md:34,36` (edit blocked again, protected file): `dnc/` helper list stale (add alert delivery, config check/failure alerts, Teams, soft-delete request, run status/outcome, stage metrics, log excerpt, report email/summary); `Docs/Reference/` row says runbook + I/O spec "not written yet" but `DNC-runbook.md`, `pipeline-stages-reference.md` exist. Edit by hand.
+- `Dev/README.md:62,69,104,106,114,169`: paths still `Projects/DNC-Update/...`; confirm the live `dnc-scrub` mount, then update.
+- `Dev/README.md:197` + project `README.md:84`: session cookie still "verify on a real run" though the cookie story is `done`; reword or close.
+- `law_ruler_client_id/secret` marked required but absent from `dnc/config_check.py:10-17`; add to the check or mark optional.
+- `Docs/README.md:37`, Backlog:98 "only if D-07 = automate" vs D-07 decided; check wording.
+- Soft-deletion email (between Stages 5 and 6) is not timed by stage metrics (story line 24); no GAP. Accept or log a gap.
+- Uncommitted: `Dev/README.md` (this run, on main); project `README.md` is outside both repos.
 
 ## 2026-11-06: Dev main 05df099
 **Commits since last sync:** 16 (378e54a…05df099): degraded-run polish, soft-deletion review email (D-10), Teams Workflows webhook channel + masking, alert-delivery tracking/exit code 3, README exit codes. 21 files, +2182/−180.
