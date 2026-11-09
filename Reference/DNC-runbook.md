@@ -398,7 +398,75 @@ The following are **not available in S1** but will be added in S2:
 
 ---
 
-## 10. Never Do This Without m.lagunas
+## 10. Quarterly Memory Review
+
+### What it is
+Every quarter (first week of January, April, July, October), review the pipeline's memory consumption from the persistent memory log to catch regressions or growth trends early.
+
+### Who acts
+**Owner:** m.lagunas
+
+### When
+**First week of each quarter** (recurring Outlook event owned by m.lagunas)
+
+### What to do
+
+1. **Open the memory log CSV:**
+   ```bash
+   open data/metrics/memory_log.csv
+   # Or: cd data/metrics && python3 -c "import pandas as pd; print(pd.read_csv('memory_log.csv').tail(20))"
+   ```
+
+2. **Compare the current quarter's per-stage mean MiB against:**
+   - **Previous quarter** (same stages, normalized per thousand leads if lead count changed)
+   - **Epic targets** ([[Epic - Memory optimization]]): the initial Stage 4 target is ≈0.06 GB per hour per thousand leads. Targets are indicative, and which figure governs (per hour per thousand leads, or plain mean MiB) is still an open decision in the epic.
+
+3. **Write a quarterly review report:**
+   - Path: `Docs/Run Reports/Memory Review <YYYY>-Q<n>.md`
+   - Template:
+     ```markdown
+     ---
+     type: run-report
+     project: dnc-cron-scrub
+     epic: "[[Epic - Memory optimization]]"
+     quarter: <YYYY>-Q<n>
+     created: <YYYY-MM-DD>
+     ---
+     # Memory Review — <YYYY> Q<n>
+
+     ## Summary
+     - **Runs reviewed:** <count> runs from <start-date> to <end-date>
+     - **Mean memory per stage:** [table comparing this quarter vs last quarter]
+     - **Memory per thousand leads:** [normalized mean MiB/1000 leads for Stage 1–5]
+     - **Regressions:** [any stage showing >10% increase vs last quarter]
+     - **Target status:** [on track / needs attention / exceeded]
+
+     ## Findings
+     [Observations, trends, anomalies]
+
+     ## Actions
+     [Any follow-up stories, tuning changes, or memory profiling tasks]
+     ```
+
+4. **Flag regressions** as new stories in the backlog if a stage exceeds targets or shows sustained growth.
+
+5. **Optional tool:** Run `Dev/tools/memory_review.py` (if implemented) to auto-generate the quarter-over-quarter comparison table:
+   ```bash
+   cd Dev && python tools/memory_review.py
+   ```
+
+### Memory log location
+- **Production runs:** `data/metrics/memory_log.csv`
+- **Dry-runs:** `data/_dryrun/<timestamp>/metrics/memory_log.csv` (isolated, auto-purged)
+
+### Notes
+- The log is small (KB per run) and contains no secrets or lead-level data — safe to version-control if needed (currently untracked).
+- S2 will write the same rows to a PostgreSQL `run_stage_metrics` table; the CSV can be retired then.
+- The 2026-10-28 run is backfilled as the baseline (trigger: `manual-baseline`, code version: `notebook-era`).
+
+---
+
+## 11. Never Do This Without m.lagunas
 
 - **Delete or recreate the `dnc-scrub` container** — it runs the scheduler; stopping it stops the monthly cadence.
 - **Move or remove `data/`** — it holds the run history and is bind-mounted into the container; moving it breaks the mount.
@@ -407,7 +475,7 @@ The following are **not available in S1** but will be added in S2:
 
 ---
 
-## 11. Quick Reference Card
+## 12. Quick Reference Card
 
 | Alert | Who | When | What |
 |-------|-----|------|------|
