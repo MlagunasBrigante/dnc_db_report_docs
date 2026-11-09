@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Lean and secret-free logs]]"
 sprint: S1
 moscow: should
-status: in-review
+status: done
 gaps: [GAP-07]
 jira: ""
 size: S
@@ -12,19 +12,20 @@ size: S
 # Story: Scrub secrets from historic run logs
 
 > [!todo] Michelle — action needed
-> - [ ] Approve the summary report before any original log is deleted.
+> - [x] Approve the summary report before any original log is deleted.
 
 ## User Story
 **As** the compliance/legal owner, **I want** every historic run log replaced by a small, secret-free INFO-level copy, **so that** no OAuth client secret, bearer token or password remains in files stored in OneDrive, while we still keep a record of what each run did.
 
 ## Acceptance Criteria
-- [ ] **Given** each historic run log (container era: `data/2026-08-12`, `09-01`, `10-01`, `10-28` under `logs/run.log`; legacy: every log under `data/legacy/**`), **when** the clean-up runs, **then** a `run.info.log` is written next to it containing only INFO and higher lines, with secrets masked by the same masking filter as [[Story - INFO logs with secret masking]].
-- [ ] **Given** the `run.info.log` has been written and checked, **when** the original is deleted, **then** only the trimmed copy remains. The original is deleted only after the check passes (non-empty copy, stage markers present, zero secret-pattern matches).
-- [ ] **Given** the clean-up is complete, **when** all of `data/` is grepped for the secret patterns, **then** there are zero matches. The report records counts only and never prints the values.
-- [ ] **Given** the clean-up is complete, **when** the summary report is written, **then** it lists each run: original size, trimmed size, lines kept, and the result of the secret check. The total is expected to free about 2.5 GB.
-- [ ] Michelle confirms the summary report before any original is deleted (deletion is irreversible).
+- [x] **Given** each historic run log (container era: `data/2026-08-12`, `09-01`, `10-01`, `10-28` under `logs/run.log`; legacy: every log under `data/legacy/**`), **when** the clean-up runs, **then** a `run.info.log` is written next to it containing only INFO and higher lines, with secrets masked by the same masking filter as [[Story - INFO logs with secret masking]].
+- [x] **Given** the `run.info.log` has been written and checked, **when** the original is deleted, **then** only the trimmed copy remains. The original is deleted only after the check passes (non-empty copy, stage markers present, zero secret-pattern matches).
+- [x] **Given** the clean-up is complete, **when** all of `data/` is grepped for the secret patterns, **then** there are zero matches. The report records counts only and never prints the values.
+- [x] **Given** the clean-up is complete, **when** the summary report is written, **then** it lists each run: original size, trimmed size, lines kept, and the result of the secret check. The total is expected to free about 2.5 GB.
+- [x] Michelle confirms the summary report before any original is deleted (deletion is irreversible).
 
 ## Notes
+- **Closed 2026-11-09 (Michelle).** Report approved; delete mode on the Mac: `Deleted: 19  Skipped: 0`. Checked afterwards: no original `*.log` left outside `data/_dryrun/`, 19 `*.info.log` copies remain, secret-pattern count across every `*.log` under `data/` (dry-runs included) = 0. Merged to `main` at `17e5cf3`.
 - **Reviewed 2026-11-09 (branch `s1/feat/scrub-historic-logs`, tip `29dfdee`, 298 tests).** Review found and fixed: the first run re-read its own copies and truncated 9 legacy copies to 0 bytes; two originals in one folder collided on one copy name (copies are now `<stem>.info.log`); legacy `Access Token: <hex>` / `Token: <hex>` lines were not masked (patterns added to `dnc/log_masking.py`, so live logs are covered too); delete mode was not implemented (now: deletes only originals listed in the approved report whose copy re-passes every check at that moment); the secret count loaded whole files and was OOM-killed (now streamed, split copies vs originals). Report regenerated: 19 originals, 19/19 pass, 2.41 GB to free, **0 secret matches in copies**, all counted mechanically. Awaiting Michelle's approval and the Mac delete run.
 - **Decided 2026-10-29 (stories interview Q4): option A.** Keep an INFO-level, secrets-masked `run.info.log` per run and delete the full DEBUG original. Applies to every run, legacy included. Credentials still have to be rotated regardless ([[Story - Rotate exposed credentials and retire the old repo]]), because the originals already synced to OneDrive and some were emailed.
 - **Gap reference**: GAP-07 — "Secrets exposed: OAuth secret and tokens in logs, hardcoded cookie, token/PEMs in legacy files; `data/*/logs`"

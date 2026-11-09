@@ -30,7 +30,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
 - [ ] [[Epic - Lean and secret-free logs]]
     - [x] [[Story - INFO logs with secret masking]]
     - [x] [[Story - Remove the hardcoded LawRuler session cookie]]
-    - [ ] [[Story - Scrub secrets from historic run logs]]
+    - [x] [[Story - Scrub secrets from historic run logs]]
     - [ ] [[Story - Rotate exposed credentials and retire the old repo]]
 - [ ] [[Epic - No silent data loss]]
     - [x] [[Story - Dry-run never calls paid APIs or touches real data]]  ← before any dry-run
