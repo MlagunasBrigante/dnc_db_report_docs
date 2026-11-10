@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Project documentation and housekeeping]]"
 sprint: S1
 moscow: should
-status: in-review
+status: done
 gaps: [GAP-22]
 jira: "DNCUP-5"
 size: M
@@ -12,7 +12,7 @@ size: M
 # Story: Per-stage inputs and outputs reference
 
 > [!todo] Michelle — action needed
-> - [ ] Read the updated `[[pipeline-stages-reference]]` (Stage 4 SQL join, Stage 6 Alerts, memory log, new S2 mapping); then this story closes.
+> - [x] Read the updated `[[pipeline-stages-reference]]` (Stage 4 SQL join, Stage 6 Alerts, memory log, new S2 mapping); then this story closes.
 
 ## User Story
 **As** the S2 schema designer and future maintainer, **I want** a reference document stating each stage's inputs, outputs, keys, business rules, and failure modes, **so that** I can design the Postgres schema and understand the pipeline without reading all of `run.py`.
@@ -29,6 +29,7 @@ size: M
 - [x] ~~Jira DNCUP-5 (originally "Document each stage's data contract") is closed when this story is done.~~ Dropped: Jira deprecated (D-13).
 
 ## Notes
+- **Closed 2026-11-10 (Michelle).** Doc approved. In S2 it must drop the SQLite references once Postgres is the system of record (criterion added to [[Story - All stages write to Postgres with lineage]]).
 - **Updated 2026-11-10 against `main` `a03e293`:** Stage 4 SQL working set (quirk 4 resolved, measured 731.5/799 MiB vs 1,103/1,207), Stage 6 renamed *Alerts* (email + Teams, exit 3, config-failure card), per-stage metrics and `memory_log.csv` columns, exit codes 0/1/3, and a new **S2 Mapping** table (stage → SQLite table/file → suggested Postgres table). Line refs re-verified; spot-checked by the main session (`run.py:835`, `1266`, `2486`, `2506`, `dnc/memory_log.py` columns, `CODE_VERSION` from `GIT_SHA`). AC1–AC3 met; awaiting Michelle's read.
 - **Scope trimmed 2026-11-05 (Michelle):** sprints aren't mixed, so the doc describes the **current S1 pipeline only**. The S2 table-mapping proposal was removed; S2 schema design starts from this doc when S2 begins.
 - **Gap reference**: GAP-22 — "No per-stage inputs/outputs document (DNCUP-5)"
