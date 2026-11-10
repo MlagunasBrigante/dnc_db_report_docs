@@ -5,11 +5,12 @@ epic: "[[Epic - Project documentation and housekeeping]]"
 sprint: S1
 status: draft
 created: 2026-11-05
+updated: 2026-11-10
 tags: [project/dnc-cron-scrub, reference, stages]
 ---
 # Pipeline Stages Reference — Inputs, Outputs, Keys, Rules, Failures
 
-> **Purpose:** Describes each stage's inputs, outputs, keys, business rules and failure modes as implemented in the current SQLite-based pipeline. Written 2026-11-05 from the S1 code (`run.py` + `dnc/*.py`).
+> **Purpose:** Describes each stage's inputs, outputs, keys, business rules and failure modes as implemented in the current SQLite-based pipeline. Written 2026-11-05 from the S1 code (`run.py` + `dnc/*.py`), updated 2026-11-10 for Stage 4 SQL working set, Stage 6 alerts, and per-stage metrics.
 
 ---
 
@@ -19,7 +20,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 **Real runs:**
 - Artifacts: `data/<report_date>/` where `report_date` = run date (YYYY-MM-DD)
-- Subdirs: `processed/` (ODS DB, reports), `interim/` (staging DB), `logs/run.log`
+- Subdirs: `processed/` (ODS DB, reports), `interim/` (staging DB), `logs/run.log`, `metrics/memory_log.csv`
 - Trigger: `RUN_TRIGGER` env var (`scheduled` / `manual` / `dry-run`); default `manual`
 
 **Dry-runs** (`--dry-run`):
@@ -37,11 +38,34 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 **Exit codes:**
 - `0`: success or degraded (partial success)
-- `1`: unhandled exception or missing config
+- `1`: unhandled exception or missing config (`run.py:2154`, `run.py:2609`)
+- `3`: alert delivery failed on all channels (email AND Teams both failed for at least one due alert; `run.py:2506`)
 
 **Final status line** (`dnc/run_status.py`): logged at end, format varies by outcome and failed-item count.
 
-## Stage 1: Data Ingestion
+### Run-level metrics output
+
+**Memory log CSV:** `data/metrics/memory_log.csv` (real runs) or `data/_dryrun/<ts>/metrics/memory_log.csv` (dry-runs)
+- One row per stage per run; appended after Stage 6 (`run.py:2436-2480`)
+- Columns (`dnc/memory_log.py:17-32`):
+  - `run_id`: run start timestamp (UTC ISO format)
+  - `report_date`: YYYY-MM-DD report date
+  - `trigger`: `scheduled` / `manual` / `dry-run`
+  - `stage`: stage name (e.g. `Stage 1 Ingest`)
+  - `status`: `completed` / `failed`
+  - `start_utc`, `end_utc`: stage start/end times (UTC ISO format)
+  - `duration_s`: stage duration in seconds (decimal)
+  - `mean_mib`, `peak_mib`: mean and peak memory usage in MiB during stage (sampled every `STAGE_MEMORY_SAMPLE_SECONDS`, default 1.0 s; `dnc/stage_metrics.py:94-151`)
+  - `items`: stage-specific item count (pages/batches/leads/alerts; currently blank for all stages)
+  - `leads_in_snapshot`: total leads from Stage 1 snapshot (`SELECT COUNT(*) FROM raw_data` opened read-only; `run.py:2462-2466`)
+  - `code_version`: Git SHA from `GIT_SHA` build arg → `CODE_VERSION` env var (`Dockerfile:6-8`, `run.py:2450`)
+  - `memory_source`: memory measurement source (`cgroup v2 memory.current` / `cgroup v1 memory.usage_in_bytes` / `/proc/self/status VmRSS` / `resource.getrusage ru_maxrss`; `dnc/stage_metrics.py:46-91`)
+- Per-stage metrics also logged at INFO (`run.py:2180-2345` with `stage_timer` context manager; `dnc/stage_metrics.py:206-302`)
+- Per-stage metrics included in Teams success card (`dnc/stage_metrics.py:165-202`), but **not** in the monthly report email (which goes to management)
+
+---
+
+## Stage 1: Data Ingestion (Ingest)
 
 ### Inputs
 
@@ -61,6 +85,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 - Key: PRIMARY KEY (`Lead ID`, `Phone`) (`run.py:278`)
 - Write: idempotent via `INSERT OR IGNORE` (`run.py:230-258`)
 - Line ref: `run.py:273-279`
+- **Memory lifecycle:** DataFrame released after persistence (`run.py:485`); Stage 4 reads via SQL join (see Stage 4 Known Quirks item, resolved 2026-11-10)
 
 **SQLite table: `cleaned_phone_numbers` (staging DB)**
 - Schema: same columns as `raw_data` + `is_phone_valid` (boolean), `batch_id` (integer)
@@ -117,7 +142,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 ---
 
-## Stage 2: DNC Scrubbing
+## Stage 2: DNC Scrubbing (Scrub)
 
 ### Inputs
 
@@ -185,7 +210,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 ---
 
-## Stage 3: Interpret Scrub Results
+## Stage 3: Interpret Scrub Results (Interpret)
 
 ### Inputs
 
@@ -226,13 +251,14 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 ---
 
-## Stage 4: Update LawRuler Tags
+## Stage 4: Update LawRuler Tags (Update)
 
 ### Inputs
 
 **SQLite table: `raw_data` (ODS DB)**
-- Re-read from disk (not reused from Stage 1 in-memory copy; GAP-18)
-- All columns, all rows (~421k)
+- Accessed read-only via SQL join (ATTACHed to staging DB; `run.py:852`)
+- Stage 4 builds working set via `_build_working_set_via_sql()` (`run.py:835-876`): inner join with `scrub_results_translated` on `raw.Phone = '+1' || scrub.Phone`, selecting 10 columns (leadId, Phone, First Name, Last Name, Tags, Status, Lead Created Date, Case Created Date, ResultCode, Reason)
+- **Not loaded in full** (Stage 1 releases its DataFrame after persistence; `run.py:485`)
 
 **SQLite table: `scrub_results_translated` (staging DB)**
 - All scrubbed phones with interpreted result codes
@@ -309,7 +335,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 ---
 
-## Stage 5: Report Generation
+## Stage 5: Report Generation (Report)
 
 ### Inputs
 
@@ -344,7 +370,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 - Line ref: `run.py:1382-1387`
 
 **Soft-deletion CSV files** (output dir):
-- `dnc_without_optin_<report_date>.csv`: columns `leadId`, `First Name`, `Last Name`, `Phone`, `Status` (`run.py:1373-1378`, `SOFT_DELETE_CSV_COLUMNS` at `run.py:1250`)
+- `dnc_without_optin_<report_date>.csv`: columns `leadId`, `First Name`, `Last Name`, `Phone`, `Status` (`run.py:1373-1378`, `SOFT_DELETE_CSV_COLUMNS` at `run.py:1266`)
 - `litigators_to_soft_delete_<report_date>.csv`: same columns
 - Written always when report data exists; email only reads them if counts > 0
 
@@ -385,17 +411,17 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 ## Stage 5b: Soft-deletion Request Email
 
-> **Note:** This is a distinct email from the main report email. It is sent after Stage 5 report generation and before the Stage 6 success email. Subject: `[For review] DNC soft-deletion request — <report_date>`. Recipients: internal only (`SOFT_DELETE_RECIPIENTS` TO, `SOFT_DELETE_CC` CC), allowlisted by domain (`SOFT_DELETE_ALLOWED_DOMAINS`, default `briganteimmigration.com`). Michelle reviews and forwards to the LawRuler team manually (D-10).
+> **Note:** This is a distinct email from the main report email. It is sent after Stage 5 report generation and before the Stage 6 alerts (before the warning snapshot, so an unset/blocked recipient or a send failure reaches the alert email; `run.py:2301-2313`). Subject: `[For review] DNC soft-deletion request — <report_date>`. Recipients: internal only (`SOFT_DELETE_RECIPIENTS` TO, `SOFT_DELETE_CC` CC), allowlisted by domain (`SOFT_DELETE_ALLOWED_DOMAINS`, default `briganteimmigration.com`). Michelle reviews and forwards to the LawRuler team manually (D-10).
 
 ### Inputs
 
 **CSV files** (output dir):
 - `dnc_without_optin_<report_date>.csv`
 - `litigators_to_soft_delete_<report_date>.csv`
-- Written by Stage 5, read by this email step
+- Written by Stage 5, read by this email step (`run.py:1456-1457`)
 
 **Env vars:**
-- `SOFT_DELETE_RECIPIENTS` (TO), `SOFT_DELETE_CC` (CC), `SOFT_DELETE_ALLOWED_DOMAINS` (comma-separated)
+- `SOFT_DELETE_RECIPIENTS` (TO), `SOFT_DELETE_CC` (CC), `SOFT_DELETE_ALLOWED_DOMAINS` (comma-separated; `run.py:2109-2111`)
 - Dry-run override: `DRYRUN_EMAIL_RECIPIENTS`
 
 ### Outputs
@@ -403,8 +429,8 @@ tags: [project/dnc-cron-scrub, reference, stages]
 **Email via MS Graph** (`sendMail` API):
 - Subject: `[For review] DNC soft-deletion request — <report_date>` (dry-run: prefixed `[DRY-RUN]`)
 - Body: HTML table with counts + "Please review and remove by the 7th of <month>"
-- Attachments: both CSVs if total size < 2.5 MB; otherwise note in body with file paths
-- Line ref: `run.py:1427-1521`
+- Attachments: both CSVs if total size < 2.5 MB; otherwise note in body with file paths (`run.py:1490-1505`)
+- Line ref: `run.py:1443-1522`
 
 ### Keys and uniqueness
 
@@ -414,21 +440,21 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 **Domain allowlist** (`dnc/soft_delete_request.py`):
 - All recipients (TO + CC) must match `SOFT_DELETE_ALLOWED_DOMAINS`
-- Rejected domain → ERROR log, send skipped (`run.py:1461-1467`)
+- Rejected domain → ERROR log, send skipped (`run.py:1481-1483`)
 
-**Attachment size guard** (`dnc/soft_delete_request.py`): 2.5 MB total limit; over limit → email sent without attachments, body states file paths (`run.py:1473-1489`).
+**Attachment size guard** (`dnc/soft_delete_request.py`): 2.5 MB total limit; over limit → email sent without attachments, body states file paths (`run.py:1492-1505`).
 
-**Send condition:** skipped if both counts = 0 (`run.py:1452-1454`), or degraded mode (`run.py:1436-1438`), or allowlist violation.
+**Send condition:** skipped if both counts = 0 (`run.py:1468-1470`), or degraded mode (`run.py:1452-1454`), or allowlist violation.
 
 ### Failure modes and handling
 
-**Best-effort:** email send failure logged as ERROR, run continues (`run.py:1969-1970`).
+**Best-effort:** email send failure logged as ERROR, run continues (`run.py:2312-2313`).
 
-**Dry-run:** routes to `DRYRUN_EMAIL_RECIPIENTS` if set; logs only if unset (`run.py:1469`).
+**Dry-run:** routes to `DRYRUN_EMAIL_RECIPIENTS` if set; logs only if unset (`run.py:1485`).
 
 ---
 
-## Stage 6: Email Notifications
+## Stage 6: Alerts (email + Teams)
 
 ### Inputs
 
@@ -440,7 +466,11 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 **Warning collector** (`WarningCollector` in-memory):
 - Captures WARNING+ log records during Stages 1–5
-- Snapshot taken before Stage 6 (`run.py:1988`)
+- Snapshot taken before Stage 6 (`run.py:2331`)
+
+**Per-stage metrics** (`StageMetrics` in-memory):
+- Duration, mean/peak memory for each stage (collected via `stage_timer` context manager; `dnc/stage_metrics.py:206-302`)
+- Included in Teams success card only
 
 **Env vars (email):**
 - `O365_CLIENT_ID`, `O365_CLIENT_SECRET`, `O365_TENANT_ID` (app-only client credentials, `Mail.Send` permission)
@@ -449,56 +479,89 @@ tags: [project/dnc-cron-scrub, reference, stages]
 - `ALERT_EMAIL_CC` (for warning/error), `REPORT_RECIPIENTS_TO` (business + team, falls back to SUCCESS), `REPORT_RECIPIENTS_CC`
 - Dry-run override: `DRYRUN_EMAIL_RECIPIENTS`
 
+**Env vars (Teams):**
+- `TEAMS_WEBHOOK_URL` (real runs), `DRYRUN_TEAMS_WEBHOOK_URL` (dry-runs; `run.py:2115-2116`)
+
 ### Outputs
 
 **Three email types** (MS Graph `sendMail` API):
 
-1. **Success / Report email** (`run.py:1523-1567`):
+1. **Success / Report email** (`run.py:1539-1567`, sent at `run.py:2354-2362`):
    - When: run completes (normal or degraded)
    - Subject: `DNC Scrub Report — <report_date> ✅` (dry-run: prefixed `[DRY-RUN]`)
    - Body: HTML summary table (same as Excel Summary sheet), report date, run duration; degraded notice if applicable
    - Attachments: **none** (XLSX/CSV written to output folder, not attached)
    - Recipients: `REPORT_RECIPIENTS_TO` (TO), `REPORT_RECIPIENTS_CC` (CC)
 
-2. **Warning email** (`run.py:1645-1716`):
+2. **Warning email** (`run.py:1779-1850`, sent at `run.py:2397-2403`):
    - When: run completes AND `warning_collector.messages` non-empty
    - Subject: `DNC Scrub Report — <report_date> ⚠️ (<N> warning(s))` (dry-run: prefixed `[DRY-RUN]`)
    - Body: bulleted warning summary
    - Attachments: compact log excerpt (WARNING/ERROR/CRITICAL lines, capped 1 MB)
    - Recipients: `EMAIL_RECIPIENTS_WARNING` (TO), `ALERT_EMAIL_CC` (CC)
 
-3. **Error email** (`run.py:1569-1643`):
-   - When: unhandled exception in try block (`run.py:2041-2055`)
+3. **Error email** (`run.py:1687-1777`, sent in exception handler):
+   - When: unhandled exception in try block (`run.py:2541-2555`)
    - Subject: `DNC Scrub Pipeline FAILED — <report_date> ❌` (dry-run: prefixed `[DRY-RUN]`)
    - Body: traceback + last 50 log lines
    - Attachments: compact log excerpt (WARNING/ERROR/CRITICAL lines, capped 1 MB)
    - Recipients: `EMAIL_RECIPIENTS_ERROR` (TO), `ALERT_EMAIL_CC` (CC)
 
+**Three Teams alert types** (Workflows webhook POST):
+
+1. **Success card** (`run.py:1606-1685`, sent at `run.py:2368-2379`):
+   - When: run completes
+   - Contents: summary table rows, run duration, failed items count, final status line, per-stage metrics (duration + memory)
+   - Webhook: `TEAMS_WEBHOOK_URL` (real), `DRYRUN_TEAMS_WEBHOOK_URL` (dry-run)
+
+2. **Warning card** (`run.py:1923-1992`, sent at `run.py:2409-2416`):
+   - When: run completes with WARNING-level log messages
+   - Contents: warning counts by level, first 20 warning lines (truncated to 200 chars)
+
+3. **Error card** (`run.py:1994-2088`, sent in exception handler at `run.py:2562-2569`):
+   - When: unhandled exception
+   - Contents: exception type + message (first 500 chars), log file path
+
+**Cross-reporting:** when one channel fails, the working channel reports it (`dnc/alert_delivery.py`):
+- Email fails, Teams works → Teams card includes "Success/Warning/Error email failed to send"
+- Teams fails, email works → Follow-up email sent to alert recipients '[DNC scrub] Teams alert failed to post' (`run.py:2384-2389`, `2421-2426`)
+- Both fail → exit 3 logged (`run.py:2486`)
+
 ### Keys and uniqueness
 
-**None** (email only).
+**None** (email/Teams only).
 
 ### Business rules
 
 **Failed-items summary** (`dnc/failed_item_formatting.py`):
-- Logged before Stage 6 warning snapshot (`run.py:1973-1985`)
+- Logged before Stage 6 warning snapshot (`run.py:2315-2328`)
 - Per-stage WARNING with item keys (failed vs deferred), max 50 keys shown
-- Always logged even when zero (`run.py:1977`)
+- Always logged even when zero (`run.py:2320`)
 
-**Notice for degraded runs** (`run.py:1993-1998`):
+**Notice for degraded runs** (`run.py:2336-2341`):
 - `degraded_no_results` → "Scrub service unavailable this run — no leads were scrubbed; the batches will be retried."
 - `nothing_to_scrub` → "No new leads needed scrubbing this run."
 
 **Dry-run recipient override:**
 - All emails route to `DRYRUN_EMAIL_RECIPIENTS` (comma-separated) if set; skipped (logged only) if unset (`dnc/email_helpers.py`)
 
+**Teams skipped when not configured:**
+- Real runs: `TEAMS_WEBHOOK_URL` unset → logged as "Teams not configured; skipped" (INFO, not a failure)
+- Dry-runs: `DRYRUN_TEAMS_WEBHOOK_URL` unset → logged as "DRY-RUN: Teams skipped (DRYRUN_TEAMS_WEBHOOK_URL not set)" (INFO; `run.py:1638`, `1956`, `2023`)
+
 ### Failure modes and handling
 
-**Best-effort:** email send failures logged as WARNING, never fail the run or change exit code (`run.py:2012-2013`, `2025-2026`, `2053-2054`).
+**Alert delivery failure (exit 3):**
+- If both email and Teams fail for the same alert (success/warning/error) → `any_alert_failed_all_channels = True` (`run.py:2392-2393`, `2429-2430`)
+- CRITICAL logged before final status: "Alert delivery failed on all channels" (`run.py:2486`)
+- Exit code 3 (`run.py:2506`)
+- Config validation failure (exit 1) takes precedence over exit 3 if both occur (`run.py:2608`)
 
-**Auth failure:** O365 auth failure logged as ERROR, email skipped (`run.py:1494-1496`, `1584-1587`, `1667-1669`).
+**Best-effort email:** email send failures logged as WARNING, never fail the run or change exit code (unless all channels fail for a due alert; see exit 3 above).
 
-**Log excerpt:** extracted via `extract_log_excerpt()` (`dnc/log_excerpt.py`), capped 1 MB; attached as temp file (`run.py:1624-1639`, `1696-1712`).
+**Auth failure:** O365 auth failure logged as ERROR, email skipped (`run.py:1510-1512`).
+
+**Log excerpt:** extracted via `extract_log_excerpt()` (`dnc/log_excerpt.py`), capped 1 MB; attached as temp file.
 
 ---
 
@@ -510,22 +573,48 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 3. **Dry-run timestamp isolation:** each dry-run gets a unique UTC timestamp folder (`data/_dryrun/YYYY-MM-DDTHHMMSSZ/`), so parallel dry-runs never collide.
 
-4. **Stage 4 re-reads `raw_data`:** the full `raw_data` table is read from disk in Stage 4 (`run.py:795-796`) even though Stage 1 already has it in memory; both coexist (~1.1 GB plateau, GAP-18). This is for stage isolation (Stage 4 can resume independently).
+4. **Stage 4 SQL working set (resolved 2026-11-10):** Stage 4 now builds its working set via SQL join (`_build_working_set_via_sql()` at `run.py:835-876`) instead of loading all of `raw_data` into memory. Stage 1 releases its DataFrames after persistence (`run.py:485`), and main() releases `cleaned_df` after Stage 2. Measured effect on 2026-11-10 dry-run: Stage 4 mean 731.5 MiB / peak 799 MiB vs 1,103 / 1,207 on 2026-11-09 (before the fix). The SQL join ATTACHes the ODS DB read-only and selects only the 10 columns needed for tagging + report.
 
 5. **Failed leads marked DONE:** currently, leads that fail Stage 4 API calls are still checkpointed as `status = DONE` in `update_status` (`run.py:959`), so they're never retried in the same run.
 
-6. **Email failures silent:** send failures logged as WARNING, run continues and reports success (`run.py:2012-2013`); email delivery never verified.
+6. **Email failures silent:** send failures logged as WARNING, run continues and reports success (unless every alert channel fails for a due alert, triggering exit 3; see Stage 6 exit codes); email delivery never verified.
 
 7. **INCOMPLETE marker sticky:** once written, the marker file stays in the output dir for same-date reruns unless manually deleted.
 
 ---
 
+## S2 Mapping
+
+For each stage, the SQLite tables and files it writes, with suggested Postgres table names (S2 schema design starts from this doc):
+
+| Stage | SQLite table / file | Suggested Postgres table | Notes |
+|-------|---------------------|-------------------------|-------|
+| **Stage 1 Ingest** | `raw_data` (ODS) | `raw_data_snapshots` | Partitioned by `run_id`; add `run_id`, `snapshot_timestamp` |
+| | `cleaned_phone_numbers` (staging) | `scrub_queue` | Ephemeral; can be a temp table or derived view |
+| | INCOMPLETE marker file | `run_metadata.snapshot_complete` | Boolean column in run metadata |
+| **Stage 2 Scrub** | `batch_status` (staging) | `batch_checkpoints` | Partitioned by `run_id`; resume-safety |
+| | `scrub_results` (staging) | `scrub_responses_raw` | Partitioned by `run_id`; raw JSON per batch |
+| **Stage 3 Interpret** | `scrub_results_translated` (staging) | `scrub_results` | Partitioned by `run_id`; interpreted scrub results |
+| **Stage 4 Update** | `leads_with_tags` (staging) | `tagged_leads` | Partitioned by `run_id`; join result + tag assignments |
+| | `update_status` (staging) | `update_checkpoints` | Partitioned by `run_id`; resume-safety |
+| | `update_results` (staging) | `update_responses` | Partitioned by `run_id`; API responses |
+| **Stage 5 Report** | `leads_with_tags_<date>.csv` | (file artifact; not persisted in Postgres) | Archive in object storage |
+| | `leads_with_tags_<date>.xlsx` | (file artifact; not persisted in Postgres) | Archive in object storage |
+| | `dnc_without_optin_<date>.csv` | `soft_delete_lists` | Partitioned by `run_id`, `list_type` ENUM |
+| | `litigators_to_soft_delete_<date>.csv` | `soft_delete_lists` | Same table, `list_type = 'litigator'` |
+| **Stage 6 Alerts** | (email/Teams; no persistence) | `alert_log` | Log alert outcomes (sent/failed/skipped) per run |
+| **Run-level** | `data/metrics/memory_log.csv` | `stage_metrics` | Partitioned by `report_date`; per-stage timeseries |
+
+All staging tables (`batch_status`, `scrub_results`, `scrub_results_translated`, `leads_with_tags`, `update_status`, `update_results`) should include `run_id` (UUID or ISO timestamp) as part of the primary key or partition key. The ODS `raw_data` table becomes `raw_data_snapshots` partitioned by `run_id` or `snapshot_date`. The S2 schema designer can map each stage to Postgres tables without reading `run.py`.
+
+---
+
 ## Code Line References
 
-> All line numbers from `Dev/run.py` and `Dev/dnc/*.py` as of 2026-11-05 (S1 code, commit preceding this doc).
+> All line numbers from `Dev/run.py` and `Dev/dnc/*.py` as of 2026-11-10 (main @ a03e293, commit `Stage 4 review: parameterized ATTACH, drop dead _translate_tags...`).
 
 **Key files:**
-- `run.py`: main pipeline (2,069 lines)
+- `run.py`: main pipeline (2,613 lines)
 - `dnc/retry.py`: retry policies, OutageBreaker, FailedItemCollector (464 lines)
 - `dnc/run_paths.py`: real vs dry-run path resolution (136 lines)
 - `dnc/report_summary.py`: Summary table builder (70 lines)
@@ -535,7 +624,11 @@ tags: [project/dnc-cron-scrub, reference, stages]
 - `dnc/soft_delete_request.py`: allowlist, attachment guard, email builder
 - `dnc/email_helpers.py`: recipient resolution (TO/CC, dry-run override)
 - `dnc/log_excerpt.py`: compact log extractor (WARNING+ lines only)
+- `dnc/stage_metrics.py`: stage duration and memory tracking (332 lines)
+- `dnc/memory_log.py`: memory log CSV persistence (172 lines)
+- `dnc/teams.py`: Teams Workflows webhook posting
+- `dnc/alert_delivery.py`: cross-reporting logic for failed alert channels
 
 ---
 
-*Written 2026-11-05 from the S1 code. The code is the source of truth; this doc is derived from it.*
+*Written 2026-11-05 from the S1 code, updated 2026-11-10 for Stage 4 SQL working set, Stage 6 alerts (email + Teams with cross-reporting and exit 3), per-stage metrics, and memory log CSV. The code is the source of truth; this doc is derived from it.*
