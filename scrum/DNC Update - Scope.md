@@ -212,6 +212,11 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | D-08 | Rotate the exposed credentials now? | Decided 2026-11-02: defer. Many other flows share them. Later options: rotate and update every flow, or create a dedicated account for this pipeline. Revisit when the *No silent data loss* epic closes. 2026-11-09: carried to S2; S1 closes without it, with a recurring reminder |
 | D-09 | What does a run do when every Stage 2 batch fails? | Decided 2026-11-04: finish as degraded. Skip Stages 3–4, report zero counts, warning email lists failed batches, exit 0 (GAP-29) |
 | D-10 | Does the job email the soft-deletion request to LawRuler directly? | Decided 2026-11-05: no. The job sends an internal `[For review]` email (Michelle, CC e.cervera) with both lists. Michelle reviews and forwards it to the LawRuler team manually. The allowlist stays internal-only |
+| D-11 | Re-verify the config-error alert path on the Mac? | Decided 2026-11-06: no; accepted on unit tests (`dnc/config_failure_alerts.py`). Both alert fixes (status line on all-channels-failed, Teams card on config failure) merged |
+| D-12 | Automatic sleep prevention on the Mac until the ITServer cutover? | Decided 2026-11-06: no automatic changes beyond a daily wake at 19:45 UTC (`pmset repeat`). Michelle keeps the Mac awake by hand on run night |
+| D-13 | Jira criteria in the README/references story? | Decided 2026-11-06: dropped (Jira `DNCUP` is deprecated); empty `Projects/DNC-Update/` deleted 2026-11-09 |
+| D-14 | Where does the restored `Scrub_API/` folder go? | Decided 2026-11-06: `data/legacy/Scrub_API-2026-11-05/` after the historic-log inventory; moved 2026-11-09. Its old `.env` is covered by the rotation story (D-08) |
+| D-15 | Who approves deleting historic log originals? | Decided 2026-11-09: Michelle approves the scrub report; the tool deletes only listed originals whose copy re-passes the checks. Done 2026-11-09: 19 deleted, 0 skipped |
 | D-16 | Stage 4 kill/restart test without a real run? | Decided 2026-11-10 (Michelle): accepted on the unit test (`test_checkpoint_resume_unchanged`) because the resume code (`update_status`, `_is_lead_done`) was not changed; a dry-run can't resume and a live test would write LawRuler tags |
 
 ## Open items (to resolve before or during backlog scaffolding)
