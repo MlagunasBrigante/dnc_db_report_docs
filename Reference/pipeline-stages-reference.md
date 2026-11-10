@@ -393,7 +393,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 - DNC without opt-in: `~optin_mask & dnc_mask & ~case_mask`
 - Litigators to delete: `~case_mask & dnc_mask & ~optin_mask & litigator_mask & ~active_process_mask`
 
-**Deadline in report** (`dnc/report_summary.py:61-62`): "Will be removed by the 7th of <month>" (run on 1st → patch on 3rd → watchdog on 5th → removal by 7th).
+**Deadline in report** (`dnc/report_summary.py`, `removal_deadline()` / `deadline_label()`): "Will be removed by the <Nth> of <month>", where the deadline is **run date + 6 days** (GAP-30, 2026-11-10). The scheduled run on the 1st gives the 7th (run on 1st → patch on 3rd → watchdog on 5th → removal by 7th); ad-hoc runs never show a past date. The soft-deletion email uses the same date.
 
 **Degraded mode:** zero counts for scrubbed/derived metrics; total leads and completeness status unchanged (`run.py:1922-1928`).
 
@@ -428,7 +428,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 **Email via MS Graph** (`sendMail` API):
 - Subject: `[For review] DNC soft-deletion request — <report_date>` (dry-run: prefixed `[DRY-RUN]`)
-- Body: HTML table with counts + "Please review and remove by the 7th of <month>"
+- Body: HTML table with counts + the removal deadline (run date + 6 days, same as the report)
 - Attachments: both CSVs if total size < 2.5 MB; otherwise note in body with file paths (`run.py:1490-1505`)
 - Line ref: `run.py:1443-1522`
 

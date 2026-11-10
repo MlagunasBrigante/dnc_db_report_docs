@@ -13,21 +13,24 @@ size: S
 # Story: Monthly report email as a summary table
 
 > [!todo] Michelle — action needed
-> - [ ] Confirm the 2026-11-10 report email body showed the summary table only (no lead rows, no attachments).
-> - [ ] Set `REPORT_RECIPIENTS_TO` and `REPORT_RECIPIENTS_CC` in `Dev/.env` (see `.env.example`), then recreate `dnc-scrub` before Dec 1.
+> - [x] Confirm the 2026-11-10 report email body showed the summary table only (no lead rows, no attachments). Confirmed 2026-11-10.
+> - [x] Set `REPORT_RECIPIENTS_TO` in `Dev/.env`. Done 2026-11-10.
+> - [ ] Set `REPORT_RECIPIENTS_CC` too (AC4 lists m.lagunas@, j.fernandez@, e.cervera@ in CC), if not done.
+> - [ ] After merging `s1/fix/removal-deadline`: rebuild and recreate `dnc-scrub` so Dec 1 uses the new recipients and the GAP-30 deadline.
 > - [ ] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`.
 
 ## User Story
 **As** a report recipient (management and the team), **I want** the monthly report email to show the run's summary table (counts and actions) in the email body, with no attachments, **so that** I can read the month's DNC outcome at a glance, and the email can never fail because of its size.
 
 ## Acceptance Criteria
-- [ ] **Given** a successful run, **when** the report email is sent, **then** its body contains the Summary table (`Metric | Count | Actions Taken`, the same rows as the xlsx "Summary" sheet, using the corrected labels from [[Story - Report labels and unmatched warning fixed]]) as an HTML table, plus the report date and run duration. **No attachments.**
-- [ ] **Given** the report email is built, **when** its content is inspected, **then** it holds **aggregate counts only, with no lead-level data** (no names, phones or lead IDs), because one recipient is external (see Notes).
-- [ ] **Given** the run produces the xlsx and csv, **when** the email is sent, **then** those files are still written to the run's output folder (`data/{date}/processed/`) for internal use; they're just not emailed. `_zip_output` is no longer called for this email.
+- [x] **Given** a successful run, **when** the report email is sent, **then** its body contains the Summary table (`Metric | Count | Actions Taken`, the same rows as the xlsx "Summary" sheet, using the corrected labels from [[Story - Report labels and unmatched warning fixed]]) as an HTML table, plus the report date and run duration. **No attachments.**
+- [x] **Given** the report email is built, **when** its content is inspected, **then** it holds **aggregate counts only, with no lead-level data** (no names, phones or lead IDs), because one recipient is external (see Notes).
+- [x] **Given** the run produces the xlsx and csv, **when** the email is sent, **then** those files are still written to the run's output folder (`data/{date}/processed/`) for internal use; they're just not emailed. `_zip_output` is no longer called for this email.
 - [ ] **Given** the recipient config, **when** the email is sent, **then** it goes **to** `brad@briganteimmigration.com`, `r.jimenez@briganteimmigration.com` and `matt.hirschberg@jordanbelfort.com`, with **CC** to `m.lagunas@`, `j.fernandez@` and `e.cervera@` (briganteimmigration.com). Recipients are read from `Dev/.env` (e.g. `REPORT_RECIPIENTS_TO` / `REPORT_RECIPIENTS_CC`), not hardcoded.
 - [ ] **Given** a real run, **when** delivery is checked, **then** an internal recipient (Michelle, CC) confirms it arrived, and the external recipient's copy isn't bounced (no NDR in the `it.admin@` sender mailbox).
 
 ## Notes
+- **2026-11-10:** Michelle confirmed the report body showed the summary table (AC1–AC3 ticked). `REPORT_RECIPIENTS_TO` set in `.env` (not read by the agent). AC4–AC5 close on the Dec 1 run: recipients in the log line `Success email sent to [...] (CC: ...)` and no NDR for the external copy. **GAP-30 fixed** on `s1/fix/removal-deadline` (`b9607c6`, 313 tests): deadline = run date + 6 days in the report labels, the soft-deletion subject and body; README, runbook and stage reference updated.
 - **Real run 2026-11-10:** `REPORT_RECIPIENTS_TO` is not set in `Dev/.env`, so the report went to the fallback success recipients (`it.admin@`, `m.lagunas@`), not the business list; no attachments logged on the success email; xlsx/csv written to `data/2026-11-10/processed/`. AC4–AC5 still open: Michelle sets `REPORT_RECIPIENTS_TO`/`REPORT_RECIPIENTS_CC` in `.env` (after j.fernandez confirms external sending), recreates `dnc-scrub`; Dec 1 verifies delivery. AC1–AC3 tick once Michelle confirms the email body showed the summary table and no lead data.
 - **Mailbox confirmed by Michelle 2026-11-05**: the report email arrived as an HTML table with no attachments. Still open: set `REPORT_RECIPIENTS_TO`/`_CC` once j.fernandez confirms external sending, then check delivery on the next real run (December 1) with no NDR.
 - **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T232423Z/`, `DRYRUN_EMAIL_RECIPIENTS` set to Michelle): the report email was sent (TO Michelle, no CC) and Graph accepted it. **Waiting on Michelle's mailbox check**: HTML table renders and there are no attachments. The real-run checks (business recipients, external delivery) stay open until `REPORT_RECIPIENTS_TO` is set.

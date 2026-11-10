@@ -308,7 +308,7 @@ Monthly internal review email listing DNC leads without opt-in and litigators to
 **Owner:** m.lagunas
 
 ### Response time
-**Before the 7th of the run's month** (run on 1st, patch on 3rd, watchdog on 5th, removal by 7th)
+**By the removal deadline: run date + 6 days** (scheduled run on the 1st → the 7th: patch on 3rd, watchdog on 5th, removal by 7th; an ad-hoc run on the 10th → the 16th). The date is printed in the report and the email subject.
 
 ### What to do
 1. **Review the counts** in the email body (DNC without opt-in, litigators to soft-delete).
@@ -483,7 +483,7 @@ Every quarter (first week of January, April, July, October), review the pipeline
 | ⚠️ **Warning** | m.lagunas (e.cervera backup) | Urgent: next business day; informational: within the week | Check log excerpt; classify warning; re-run if critical |
 | ❌ **Error** | m.lagunas (e.cervera backup) | Next business day | Check log + traceback; fix cause; re-run |
 | 🔕 **Alert-delivery failure** | m.lagunas (e.cervera backup) | Next business day | Check logs; restore failed channel; recreate container if needed |
-| 📋 **Soft-deletion review** | m.lagunas | Before the 7th | Review CSVs; forward to LawRuler team manually |
+| 📋 **Soft-deletion review** | m.lagunas | By the deadline in the email (the 7th for the scheduled run) | Review CSVs; forward to LawRuler team manually |
 
 **Logs:** `data/<date>/logs/run.log` or `docker logs dnc-scrub`  
 **Reports:** `data/<date>/processed/*.xlsx`  
