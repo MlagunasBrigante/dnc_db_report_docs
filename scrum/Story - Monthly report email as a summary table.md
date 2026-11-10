@@ -16,7 +16,7 @@ size: S
 > - [x] Confirm the 2026-11-10 report email body showed the summary table only (no lead rows, no attachments). Confirmed 2026-11-10.
 > - [x] Set `REPORT_RECIPIENTS_TO` in `Dev/.env`. Done 2026-11-10.
 > - [ ] Set `REPORT_RECIPIENTS_CC` too (AC4 lists m.lagunas@, j.fernandez@, e.cervera@ in CC), if not done.
-> - [ ] After merging `s1/fix/removal-deadline`: rebuild and recreate `dnc-scrub` so Dec 1 uses the new recipients and the GAP-30 deadline.
+> - [x] After merging `s1/fix/removal-deadline`: rebuild and recreate `dnc-scrub` so Dec 1 uses the new recipients and the GAP-30 deadline. Done 2026-11-10 (main `b9607c6`, 317 tests in the image).
 > - [ ] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`.
 
 ## User Story
