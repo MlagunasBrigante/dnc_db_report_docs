@@ -2,7 +2,7 @@
 type: epic
 project: dnc-cron-scrub
 sprint: S1
-status: to-do
+status: done
 gaps: [GAP-26, GAP-09, GAP-10, GAP-14, GAP-15, GAP-16, GAP-17]
 ---
 # Epic: No silent data loss
@@ -55,7 +55,7 @@ Each story delivers value to the IT & Data lead: page errors can't truncate down
 - [[Story - Per-stage duration and memory in every run]]
 
 > [!check] Before closing this epic
-> - [ ] Nudge Michelle about [[Story - Rotate exposed credentials and retire the old repo]] (deferred, D-08): rotate the shared credentials and update every flow, or create a dedicated account for this pipeline.
+> - [x] Nudge Michelle about [[Story - Rotate exposed credentials and retire the old repo]] (deferred, D-08): rotate the shared credentials and update every flow, or create a dedicated account for this pipeline. Done: monthly D-08 Outlook reminder (2026-11-10); story carried to S2.
 
 ## Dependencies / sequencing
 **Start with [[Story - One retry policy for every API call]]** (added 2026-10-29 at Michelle's request). The page and batch stories build on its failed-item event.

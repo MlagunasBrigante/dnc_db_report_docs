@@ -13,6 +13,8 @@ size: S
 # Story: Monthly report email as a summary table
 
 > [!todo] Michelle — action needed
+> - [ ] Confirm the 2026-11-10 report email body showed the summary table only (no lead rows, no attachments).
+> - [ ] Set `REPORT_RECIPIENTS_TO` and `REPORT_RECIPIENTS_CC` in `Dev/.env` (see `.env.example`), then recreate `dnc-scrub` before Dec 1.
 > - [ ] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`.
 
 ## User Story
@@ -26,6 +28,7 @@ size: S
 - [ ] **Given** a real run, **when** delivery is checked, **then** an internal recipient (Michelle, CC) confirms it arrived, and the external recipient's copy isn't bounced (no NDR in the `it.admin@` sender mailbox).
 
 ## Notes
+- **Real run 2026-11-10:** `REPORT_RECIPIENTS_TO` is not set in `Dev/.env`, so the report went to the fallback success recipients (`it.admin@`, `m.lagunas@`), not the business list; no attachments logged on the success email; xlsx/csv written to `data/2026-11-10/processed/`. AC4–AC5 still open: Michelle sets `REPORT_RECIPIENTS_TO`/`REPORT_RECIPIENTS_CC` in `.env` (after j.fernandez confirms external sending), recreates `dnc-scrub`; Dec 1 verifies delivery. AC1–AC3 tick once Michelle confirms the email body showed the summary table and no lead data.
 - **Mailbox confirmed by Michelle 2026-11-05**: the report email arrived as an HTML table with no attachments. Still open: set `REPORT_RECIPIENTS_TO`/`_CC` once j.fernandez confirms external sending, then check delivery on the next real run (December 1) with no NDR.
 - **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T232423Z/`, `DRYRUN_EMAIL_RECIPIENTS` set to Michelle): the report email was sent (TO Michelle, no CC) and Graph accepted it. **Waiting on Michelle's mailbox check**: HTML table renders and there are no attachments. The real-run checks (business recipients, external delivery) stay open until `REPORT_RECIPIENTS_TO` is set.
 - **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T222929Z/`, `main` @ `ea3d03c`, `DRYRUN_INJECT_FAILURES=batch:0`): both emails were built, but sending was skipped because `DRYRUN_EMAIL_RECIPIENTS` is unset. Delivery, attachment size and HTML rendering still need one dry-run with it set.

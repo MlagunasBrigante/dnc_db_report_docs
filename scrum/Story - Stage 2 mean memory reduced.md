@@ -21,6 +21,7 @@ size: M
 - [ ] **Resilience and stability win over the memory target**, as in Stage 4.
 
 ## Notes
+- **Observation 2026-11-10 (real run, no Stage 2 change yet):** Stage 2 mean 648 MiB vs 744 baseline (−13%) after the DataFrame releases from the Stage 4 story, on a small pass (2,905 phones, 6 s). Per AC1 this story still starts after Stage 4 is stable on a monthly run (Dec 1).
 - **Priority 2** (Michelle, 2026-10-29): attended only after Stage 4 is stabilized and its key design lessons are learned.
 - Focus is the **mean**; peaks only if manual runs show them to be non-negligible.
 - Replaces the scaffolded "Stage 1 streams pages instead of holding them" story. Stage 1 has the lowest mean (409 MiB) and isn't prioritized; it's revisited only if the quarterly memory review shows growth.

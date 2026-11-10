@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - No silent data loss]]"
 sprint: S1
 moscow: should
-status: in-review
+status: done
 gaps: [GAP-17]
 jira: ""
 size: M
@@ -18,9 +18,10 @@ size: M
 - [x] **Given** the pipeline runs, **when** each stage starts and ends, **then** the start time, end time, duration, and peak memory are logged at INFO level (e.g. "Stage 1 Ingest: 20:46:48 → 21:15:56, duration 29m 08s, peak memory 788 MiB").
 - [x] **Given** the run completes successfully, **when** the Teams run-summary message is sent, **then** it includes a summary table of per-stage durations and peak memory (e.g. "Stage 1: 29m, 788 MiB; Stage 2: 2m, 907 MiB; …").
 - [x] **Given** the memory instrumentation, **when** peak memory is measured, **then** it uses cgroup `memory.peak` (Linux; most accurate) or `resource.getrusage` (fallback; macOS/Linux) or `psutil.Process.memory_info().rss` (cross-platform fallback).
-- [ ] **Given** one real run completes, **when** I review the log and the Teams summary, **then** the per-stage metrics are present and match expected values (cross-check with the 2026-10-28 run report for sanity).
+- [x] **Given** one real run completes, **when** I review the log and the Teams summary, **then** the per-stage metrics are present and match expected values (cross-check with the 2026-10-28 run report for sanity).
 
 ## Notes
+- **Closed 2026-11-10 on the real run.** **Real run 2026-11-10 18:02–18:57 UTC** (manual `once`, image `a03e293`, exit 0, 55 min): Stage 1 28m 18s mean 382 / peak 831 MiB; Stage 2 6 s 648/648; Stage 3 0 s 623; **Stage 4 26m 03s mean 774.4 / peak 823.5 MiB**; Stage 5 1 s 628; Stage 6 2 s 628; run-wide peak (memory.peak) 858 MiB; 426,075 leads in snapshot. All six stage lines at INFO, Teams card posted, six rows in `data/metrics/memory_log.csv` (trigger `manual`). Consistent with 2026-10-28 (Stage 1 ~29 min / ~790–830 MiB peak); Stage 4 lower as expected from the lean working set.
 - **2026-11-10: AC1–AC3 ticked on the Mac dry-runs of 2026-11-06 and 2026-11-10** (INFO stage lines and Teams per-stage table present; the card lists Stages 1–5 because it is sent during Stage 6, whose own row is in the log and the memory log). AC3 deviation, accepted: per-stage peak comes from sampling cgroup v2 `memory.current` (1 s) because `memory.peak` is a container-lifetime high-water mark and can't be split per stage; the fallback is `getrusage ru_maxrss`; `memory.peak` is still read for the run-wide peak; no psutil dependency. AC4 waits for the Dec 1 real run.
 - **Mac dry-run 2026-11-06 19:58 UTC** (merged `efe2647`): source cgroup v2; Stage 1 28m 23s / 821 MiB, Stage 2 0s / 710, Stage 3 0s / 709, Stage 4 1s / 1269, Stage 5 0s / 1085, Stage 6 2s / 1073; run-wide peak 1297 MiB, exit 0. The 1 s sampler missed ~28 MiB of the run-wide peak (acceptable). Soft-deletion email (between Stages 5 and 6) is not timed. Teams success card shows the per-stage list (Michelle, 2026-11-06); container recreated from `efe2647`. Dec 1 real-run comparison with the 2026-10-28 baseline still open.
 - **Gap reference**: GAP-17 — "No per-stage duration or memory instrumentation" at `main()` (`run.py:1318-1445`)

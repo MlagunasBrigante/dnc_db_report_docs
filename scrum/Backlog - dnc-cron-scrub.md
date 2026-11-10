@@ -32,7 +32,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [x] [[Story - Remove the hardcoded LawRuler session cookie]]
     - [x] [[Story - Scrub secrets from historic run logs]]
     - → [[Story - Rotate exposed credentials and retire the old repo]] carried to S2 (D-08, 2026-11-09)
-- [ ] [[Epic - No silent data loss]]
+- [x] [[Epic - No silent data loss]]
     - [x] [[Story - Dry-run never calls paid APIs or touches real data]]  ← before any dry-run
     - [x] [[Story - One retry policy for every API call]]  ← do first
     - [x] [[Story - Lead download never truncates silently]]
@@ -40,12 +40,12 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [x] [[Story - Dry-run failure injection]]  (Should; verification tool)
     - [x] [[Story - Config validated before any API call]]
     - [x] [[Story - Report labels and unmatched warning fixed]]
-    - [ ] [[Story - Per-stage duration and memory in every run]]
+    - [x] [[Story - Per-stage duration and memory in every run]]
 - [x] [[Epic - Project documentation and housekeeping]]
     - [x] [[Story - Per-stage inputs and outputs reference]]
     - [x] [[Story - README, Jira and vault references re-scoped]]
 - [ ] [[Epic - Memory optimization]]: closes S1, **only after the other S1 epics are done and the code is stable**
-    - [ ] [[Story - Stage 4 stops reloading the full lead history]]  ← priority 1
+    - [x] [[Story - Stage 4 stops reloading the full lead history]]  ← priority 1
     - [x] [[Story - Memory log with quarterly review]]
     - [ ] [[Story - Stage 2 mean memory reduced]]  ← only after Stage 4 is stable
 
