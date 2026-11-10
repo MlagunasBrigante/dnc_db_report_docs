@@ -7,7 +7,7 @@ created: 2026-10-29
 ---
 # Backlog — dnc-cron-scrub
 
-14 epics, 53 stories. Priorities (MoSCoW, in each story's `moscow` property) and risks: [[Prioritization and Risk Register]]. Scope, gap register (GAP-01…29) and decisions (D-01…10) live in [[DNC Update - Scope]].
+14 epics, 53 stories. Priorities (MoSCoW, in each story's `moscow` property) and risks: [[Prioritization and Risk Register]]. Scope, gap register and decisions (GAP-NN, D-NN) live in [[DNC Update - Scope]].
 
 Sprints are sequential. Each one starts only when the previous one is stable. All code is developed as if it already runs on the AlmaLinux ITServer (Docker, systemd, local PostgreSQL), even though the job stays on the Mac until the S2 cutover.
 
@@ -18,6 +18,8 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
 > **Checkboxes track completion.** A box is ticked only when that story's or epic's `status` property is `done`. After closing a story or epic, re-check every box in its epic so ticks match the `status` fields.
 
 ## S1 — Gap-closing
+> **D-17 (2026-11-10):** S2 starts now; the open S1 stories below are finished in December. S1 epics stay open until then.
+
 - [ ] [[Epic - Reliable alerts]]
     - [x] [[Story - Warning and error emails always arrive]]
     - [ ] [[Story - Monthly report email as a summary table]]
@@ -52,7 +54,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
 ## S2 — Technical migration
 - Carried from S1:
     - [ ] [[Story - Rotate exposed credentials and retire the old repo]]  (Must, D-08)
-> Key decision: [[Decision - Dedicated PostgreSQL database]]
+> Key decisions (2026-11-10): D-04 = no n8n rewrite (Python + Docker + PostgreSQL); D-18 = dedicated `dnc` database ([[Decision - Dedicated PostgreSQL database]]).
 - [ ] [[Epic - PostgreSQL system of record]]
     - [ ] [[Story - Raw snapshot and run record land in Postgres]]
     - [ ] [[Story - All stages write to Postgres with lineage]]

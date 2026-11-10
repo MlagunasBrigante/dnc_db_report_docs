@@ -11,7 +11,7 @@ size: M
 ---
 # Story: Raw snapshot and run record land in Postgres
 > [!todo] Michelle — action needed
-> - [ ] Answer the two database questions in the epic and settle the dedicated-DB decision.
+> - [x] Answer the two database questions in the epic and settle the dedicated-DB decision. (2026-11-10, D-18)
 > - [ ] Create the database objects on the ITServer using the DDL guide.
 
 ## User Story
@@ -26,16 +26,16 @@ size: M
 - [ ] **Given** run.py connects to Postgres, **when** it starts, **then** it reads the connection string from `Dev/.env` (POSTGRES_DSN), never hardcoded (verified by grep)
 
 ## Notes
-- **Database layout:** see [[Decision - Dedicated PostgreSQL database]] (dedicated `dnc` DB, roles `dnc_owner` / `dnc_writer` / `dnc_reader` / `dnc_archive`, Unix-socket connection). Pending Michelle's decision.
+- **Database layout:** see [[Decision - Dedicated PostgreSQL database]] (dedicated `dnc` DB, roles `dnc_owner` / `dnc_writer` / `dnc_reader` / `dnc_archive`, Unix-socket connection). Accepted 2026-11-10 (D-18); Michelle creates the DB and roles from the guide.
 - **Input:** S1's per-stage inputs/outputs document defines the raw_snapshot schema (15 columns, all TEXT per the brief's "current SQLite tables" reference)
 - **Partition naming:** `raw_snapshot_YYYYMM` (e.g. `raw_snapshot_202610`); the run_id foreign key ties rows to `pipeline_run`
 - **Uniqueness:** `(run_id, lead_id, phone)` unique constraint per partition, not a PK (allows surrogate key `id SERIAL`)
 - **Checksum:** SHA-256 of the raw CSV bytes fetched from LawRuler, stored before any cleaning/transformation
 - **DDL + guide:** Committed to `Dev/schema/` (DDL) and `Docs/ITServer-setup.md` or similar (guide for Michelle)
-- **Roles:** Suggest `dnc_app` (read/write), `dnc_readonly` (analyst queries), `dnc_archive` (the only role allowed to UPDATE/DELETE closed partitions in S5)
+- **Roles:** use the decision note's layout (`dnc_owner`, `dnc_writer`, `dnc_reader`, `dnc_archive`); the earlier `dnc_app`/`dnc_readonly` names are superseded.
 
 ## Open questions
-- [ ] #open-question Answer the two questions in the "Open questions" section of [[Epic - PostgreSQL system of record]] (existing DB contents/joins; admin rights) and settle [[Decision - Dedicated PostgreSQL database]].
+- [x] #open-question Answer the two questions in the "Open questions" section of [[Epic - PostgreSQL system of record]] (existing DB contents/joins; admin rights) and settle [[Decision - Dedicated PostgreSQL database]].
 
 ## Dependencies
 - S1 DNCUP-5 (per-stage inputs/outputs document) defines the raw_snapshot columns

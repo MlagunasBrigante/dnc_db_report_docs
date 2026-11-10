@@ -17,10 +17,10 @@ Move the pipeline's data layer from SQLite to PostgreSQL on the ITServer. Each s
 - [[Decision - Dedicated PostgreSQL database]]: dedicated `dnc` database vs tables in the existing DB; role layout and socket connection (proposed, awaiting Michelle)
 
 ## Open questions (to answer before [[Story - Raw snapshot and run record land in Postgres]] starts)
-- [ ] #open-question **What does the existing database on the ITServer hold, and will S3/S4 need to join DNC data with it?** If no, the dedicated `dnc` database wins outright. If yes, weigh the cross-database joins against the isolation benefits. See [[Decision - Dedicated PostgreSQL database]].
-- [ ] #open-question **Does Michelle have admin rights (`CREATEDB` / `CREATEROLE`) on that PostgreSQL server?** Needed to create the database or schema and the `dnc_*` roles under either option.
+- [x] #open-question **What does the existing database on the ITServer hold, and will S3/S4 need to join DNC data with it?** ✅ 2026-11-10: no joins needed → dedicated `dnc` database (D-18). If no, the dedicated `dnc` database wins outright. If yes, weigh the cross-database joins against the isolation benefits. See [[Decision - Dedicated PostgreSQL database]].
+- [x] #open-question **Does Michelle have admin rights (`CREATEDB` / `CREATEROLE`) on that PostgreSQL server?** ✅ 2026-11-10: the database isn't created yet; Michelle creates it and adds the required roles herself, from the DDL guide. Needed to create the database or schema and the `dnc_*` roles under either option.
 
-- [ ] #open-question **D-04: rewrite the process in pure n8n?** Decide before S2 starts. It changes how this whole sprint is built (Python + Postgres vs n8n workflows).
+- [x] #open-question **D-04: rewrite the process in pure n8n?** ✅ 2026-11-10: no; Python + Docker + PostgreSQL. Decide before S2 starts. It changes how this whole sprint is built (Python + Postgres vs n8n workflows).
 
 ## Breakdown
 
@@ -54,7 +54,7 @@ Earlier patterns rejected:
 - **Are the sizes roughly equal?** Stories 1–2 are Medium, 3–4 are Small; acceptable imbalance driven by the first story's bootstrap cost (DDL + guide for Michelle).
 
 > [!check] Before closing this epic, verify Michelle's actions were actually done
-> - [ ] Answer the two database questions in the epic and settle the dedicated-DB decision. — [[Story - Raw snapshot and run record land in Postgres]]
+> - [x] Answer the two database questions in the epic and settle the dedicated-DB decision. (2026-11-10, D-18) — [[Story - Raw snapshot and run record land in Postgres]]
 > - [ ] Create the database objects on the ITServer using the DDL guide. — [[Story - Raw snapshot and run record land in Postgres]]
 
 ## Child user stories

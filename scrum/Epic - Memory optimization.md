@@ -43,6 +43,7 @@ Lower the job's **mean** memory use, one stage at a time, **always favoring resi
 - **Equal sizes?** Roughly: Stage 4 is M, Stage 2 is M, and the memory log is S.
 
 > [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] D-17 (2026-11-10): S2 started with this epic still open; finish its remaining stories in December.
 > - [x] Decide which memory figure governs the target (per hour per thousand leads, or plain MiB). — [[Story - Stage 4 stops reloading the full lead history]]
 
 ## Child user stories

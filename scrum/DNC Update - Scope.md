@@ -176,7 +176,7 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | GAP-05 | Alert-delivery failures are silent; email is the only channel | `run.py:1423-1446` | S1 |
 | GAP-06 | DEBUG logging for every library, so logs reach GB scale | `run.py:113-125` | S1 |
 | GAP-07 | Secrets exposed: OAuth secret and tokens in logs, hardcoded cookie, token/PEMs in legacy files | `run.py:683`; `data/*/logs`; `Scrub_API/` | S1 |
-| GAP-08 | Failed tagging requests recorded as `DONE`, never retried | `run.py:819-838` | S2 |
+| GAP-08 | Failed tagging requests recorded as `DONE`, never retried | `run.py:819-838` | S2. Partial fix 2026-11-10 (code review, `s1/fix/code-review-findings`): failed leads are no longer marked `DONE`, so a same-period re-run retries them; the patch pass stays S2 |
 | GAP-09 | A Stage-1 page error silently truncates the download | `run.py:306-308` | S1 |
 | GAP-10 | A failed Stage-2 batch is skipped; the "next run retries" comment is false | `run.py:506-508` | S1 |
 | GAP-11 | Resume only works on the same day (`report_date` = today) | `main()` | S2 |
@@ -197,6 +197,9 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | GAP-27 | `--dry-run` still calls the paid dncscrub API for every phone | `run.py:1015`, `1510` | S1 (dry-run story) |
 | GAP-28 | Dry-runs write into the real `data/<date>/` folder, including Stage 2 checkpoints (synthetic results could be reused by a same-day real run), and email real recipients | `run.py:1418-1464`, `489-506`, `1265-1400` | S1 (dry-run story) |
 | GAP-29 | When every Stage 2 batch fails or is deferred, Stage 3 crashes with "No scrub results found"; the failed-items summary is skipped and the error email doesn't list the failed batches | `run.py:682`, `1750-1760`, `1805` | S1 ([[Story - Failed scrub batches are retried and reported]]) |
+| GAP-31 | Literal secret masking looks up UPPERCASE config keys (`LAW_RULER_ACCOUNT_KEY`, `O365_CLIENT_SECRET`, `LOGIN_ID`) that the config dict stores in lowercase, so those three values are not literal-masked (pattern masking still applies) | `dnc/log_setup.py:50-52` | Found by the 2026-11-10 code review; fixed on `s1/fix/code-review-findings` |
+| GAP-32 | Config validation reports the wrong variable names (`AUTH_URL` for `auth_url`; the password and O365 secret mapped to the literal `***`) and never checks `law_ruler_client_id`/`law_ruler_client_secret`, so a missing client secret fails late at the token call | `dnc/config_check.py:9-21`, `38-47` | Found by the 2026-11-10 code review; fixed on `s1/fix/code-review-findings` |
+| GAP-33 | The error email reads the whole log into memory (`readlines()`) for its 50-line preview, including earlier same-day runs | `run.py:1728` | Found by the 2026-11-10 code review; fixed on `s1/fix/code-review-findings` |
 | GAP-30 | Removal deadline is always the 7th of the run's month, so an ad-hoc run after the 7th (e.g. 2026-11-10) labels the report and the soft-deletion request with a past date | `dnc/report_summary.py:61-62`, `dnc/soft_delete_request.py:91-113` | Decided 2026-11-10 (Michelle): run date + 6 days (1st → 7th unchanged). Fixed on `s1/fix/removal-deadline` (`b9607c6`); tracked in [[Story - Monthly report email as a summary table]] |
 | GAP-25 | About 4.1 GB of lead PII sits in OneDrive (`data/legacy/`) with no retention policy | Scrub_API inspection | S2 (moves to the ITServer at cutover) / S5 (retention) |
 
@@ -206,7 +209,7 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | D-01 | Known litigators: soft-delete or hard-delete? | Open since 2025-05 |
 | D-02 | Handling of non-US numbers | Never built |
 | D-03 | Reassigned-number check (6-month refresh)? | Never built |
-| D-04 | Rewrite the process in pure n8n? | To discuss 2026-10-29. Measured ~1.1 GiB working set and ~360k per-lead calls on a full pass argue against it. |
+| D-04 | Rewrite the process in pure n8n? | Decided 2026-11-10 (Michelle): no. S2 keeps Python + Docker and adds PostgreSQL; the tested `dnc/` package carries over. (Measured ~1.1 GiB working set and ~360k per-lead calls on a full pass argued against n8n.) |
 | D-05 | Keep the 2 s/page LawRuler throttle? | The full snapshot is legally required, so only the throttle is in question |
 | D-06 | Parallelize Stage 4 tagging? | Decided 2026-11-09: no, Stage 4 stays sequential (stability first; LawRuler's flakiness and rate limits) |
 | D-07 | Automate the monthly soft-deletion through the LawRuler API (S6), or keep the email request to the LawRuler team? | Decided 2026-10-29: email request until at least after S5 |
@@ -218,6 +221,8 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 | D-13 | Jira criteria in the README/references story? | Decided 2026-11-06: dropped (Jira `DNCUP` is deprecated); empty `Projects/DNC-Update/` deleted 2026-11-09 |
 | D-14 | Where does the restored `Scrub_API/` folder go? | Decided 2026-11-06: `data/legacy/Scrub_API-2026-11-05/` after the historic-log inventory; moved 2026-11-09. Its old `.env` is covered by the rotation story (D-08) |
 | D-15 | Who approves deleting historic log originals? | Decided 2026-11-09: Michelle approves the scrub report; the tool deletes only listed originals whose copy re-passes the checks. Done 2026-11-09: 19 deleted, 0 skipped |
+| D-17 | Start S2 while S1 stories are still open? | Decided 2026-11-10 (Michelle): yes. S2 starts now; the remaining S1 stories (report email awaiting a business-recipient run, Mac run-night safeguards, Stage 2 mean memory) are finished in December. S1 epics stay open until then |
+| D-18 | Dedicated `dnc` database or tables in the existing ITServer DB? | Decided 2026-11-10 (Michelle): dedicated `dnc` database (no S3/S4 joins with the existing DB needed). Michelle creates the database and the `dnc_*` roles from the DDL guide. See [[Decision - Dedicated PostgreSQL database]] |
 | D-16 | Stage 4 kill/restart test without a real run? | Decided 2026-11-10 (Michelle): accepted on the unit test (`test_checkpoint_resume_unchanged`) because the resume code (`update_status`, `_is_lead_done`) was not changed; a dry-run can't resume and a live test would write LawRuler tags |
 
 ## Open items (to resolve before or during backlog scaffolding)
@@ -225,7 +230,7 @@ Sources: health audit 2026-10-28, `Docs/Run Reports/DNC Run Report 2026-10-28.md
 2. ~~**`Scrub_API/` triage**~~ — ✅ resolved 2026-10-29: PDFs → `Docs/Reference/dncscrub-api/`; Azure-era files → `Docs/Archive/azure-function-era/`; data → `data/legacy/`; `dnctag_local_py` archived to `Dev/Archive/`; duplicates and deprecated code deleted; `Scrub_API/` removed.
 > It's the local version (deprecated). It should be archived 👆🏽
 3. **Teams through MS Graph.** The connector (credentials in `Dev/.env`) and the Graph calling code (email feature) already exist. To verify with `microsoft-learn` during the S1 story: which Graph permission lets the app post to a Teams channel or chat, since app-only posting has restrictions.
-4. **D-04 (n8n)**, discussed after the 2026-10-28 run data.
+4. ~~**D-04 (n8n)**, discussed after the 2026-10-28 run data.~~ Decided 2026-11-10: no (D-04).
 5. ~~**Leftovers in `Scrub_API/`**~~ — ✅ resolved 2026-10-29 (see item 2).
 6. **Soft-deletion request recipient:** our LawRuler account manager (identity unknown). Until named, the request goes to Michelle to forward. Once known, add the LawRuler vendor domain to the request email's allowlist.
 7. **PostgreSQL placement:** dedicated `dnc` database vs the existing DB. See [[Decision - Dedicated PostgreSQL database]].

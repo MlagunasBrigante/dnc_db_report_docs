@@ -43,6 +43,7 @@ Earlier patterns rejected:
 Each story delivers observable value to the IT & Data lead: emails without oversized attachments arrive, Teams channel exists, any alert-delivery failure raises a visible alarm, runbook exists for who acts on what. Sizes are reasonably equal (1-4 AC each); no pure infrastructure stories.
 
 > [!check] Before closing this epic, verify Michelle's actions were actually done
+> - [ ] D-17 (2026-11-10): S2 started with this epic still open; finish its remaining stories in December.
 > - [ ] Create the dedicated Teams channel and share its team and channel IDs (needed before this story starts). — [[Story - Teams alert channel]]
 > - [ ] If the spike needs admin consent for a Graph permission, request it from j.fernandez (M365 admin). — [[Story - Spike Teams posting through Graph]]
 > - [ ] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out. — [[Story - Runbook for failed or degraded runs]]

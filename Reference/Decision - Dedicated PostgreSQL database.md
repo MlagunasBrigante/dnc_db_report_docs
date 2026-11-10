@@ -3,7 +3,7 @@ type: decision
 project: dnc-cron-scrub
 sprint: S2
 epic: "[[Epic - PostgreSQL system of record]]"
-status: proposed — awaiting Michelle (stories interview Q8)
+status: accepted (2026-11-10, D-18)
 created: 2026-10-29
 tags: [project/dnc-cron-scrub, decision, postgresql]
 ---
@@ -58,3 +58,4 @@ The choice is only about **how separate the DNC data is inside that server.**
 
 ## Decision log
 - 2026-10-29 — Proposed by Claude in the stories interview (Q8). Michelle's initial preference was the existing DB; she asked for this justification note before deciding.
+- 2026-11-10 — **Accepted** (Michelle): S3/S4 don't need joins with the existing database, so the dedicated `dnc` database wins outright. The database doesn't exist yet; Michelle creates it and the `dnc_*` roles from the DDL guide (D-18).

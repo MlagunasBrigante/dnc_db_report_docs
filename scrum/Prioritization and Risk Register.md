@@ -72,10 +72,10 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 | R6 | Legal record has no off-machine backup | Technical | 2 | 5 | 10 | Michelle | No backup before cutover | Mitigated by story (S2 Must) |
 | R7 | Backfill or migration corrupts the legal record | Technical | 2 | 5 | 10 | Michelle | Row-count or checksum mismatch | Monitoring |
 | R8 | Lead-level data reaches an external recipient | Process | 2 | 5 | 10 | Michelle | Allowlist error logged; external recipient added | Monitoring |
-| R9 | Database setup undecided or no admin rights, so S2 is blocked | Process | 3 | 3 | 9 | Michelle | Open questions unanswered at S2 start | Monitoring |
+| R9 | Database setup undecided or no admin rights, so S2 is blocked | Process | 3 | 3 | 9 | Michelle | Open questions unanswered at S2 start | Closed 2026-11-10 (D-18: dedicated DB; Michelle creates DB + roles) |
 | R10 | Legacy runs incompatible, so S3 gets less history | Technical | 2 | 3 | 6 | Michelle | Profiling marks most runs "not loadable" | Monitoring (P lowered: schemas barely changed) |
 | R11 | Scope creep across 6 sprints | Process | 3 | 3 | 9 | Michelle | Stories added mid-sprint without the gate | Monitoring |
-| R12 | Late n8n decision (D-04) flips the S2 design | Process | 2 | 4 | 8 | Michelle | D-04 open at S2 start | Monitoring |
+| R12 | Late n8n decision (D-04) flips the S2 design | Process | 2 | 4 | 8 | Michelle | D-04 open at S2 start | Closed 2026-11-10 (D-04 = no) |
 | R13 | Deleted logs later needed as legal evidence | Process | 2 | 4 | 8 | Michelle | Legal request references a pre-2026-11 run | Monitoring |
 | R4 | Mac runs miss a month before cutover (sleep, folder rename) | Technical | 2 | 2 | 4 | Michelle | No run folder by the 2nd | Downgraded: about a month of buffer; handled by a Could story |
 | R14 | Graph won't allow app-only posting to Teams | External | 3 | 2 | 6 | j.fernandez | Spike result | Monitoring |
