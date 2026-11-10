@@ -20,6 +20,7 @@ size: M
 - [ ] **Given** all stages write to Postgres, **when** the Stage 5 report generation reads from `leads_with_tags_YYYYMM`, **then** the row counts and sample lead IDs match the SQLite-era `leads_with_tags` table for the same run (verified by side-by-side diff of 2026-10-28 SQLite vs Postgres)
 - [ ] **Given** a run writes to multiple partitioned tables, **when** each table's DDL is reviewed, **then** every table has `(run_id, lead_id, phone)` uniqueness where applicable and a `created_at TIMESTAMPTZ DEFAULT NOW()` audit column (verified by inspection of Dev/schema/*.sql)
 - [ ] **Given** the scrub_results table stores the raw JSON from dncscrub.com, **when** a scrub_results row is inserted, **then** the `response_json` column (JSONB) holds the full API response unchanged, preserving legal traceability (verified by querying `response_json->>'resultCode'` and comparing to the SQLite-era `scrub_results.response_json`)
+- [ ] **Given** S2 (Postgres), **when** the migration lands, **then** the per-stage metrics rows (same columns as `data/metrics/memory_log.csv`, see `dnc/memory_log.py`) are written to a `run_stage_metrics` table, the existing CSV rows are loaded into it, and the CSV can be retired. (Moved from [[Story - Memory log with quarterly review]], 2026-11-10.)
 
 ## Notes
 - **Input:** S1 DNCUP-5 per-stage inputs/outputs document defines the schema for all stage tables

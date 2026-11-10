@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Project documentation and housekeeping]]"
 sprint: S1
 moscow: should
-status: in-review
+status: done
 gaps: [GAP-23]
 jira: ""
 size: M
@@ -12,7 +12,7 @@ size: M
 # Story: README, Jira and vault references re-scoped
 
 > [!todo] Michelle — action needed
-> - [ ] Review the README rewrite.
+> - [x] Review the README rewrite.
 
 ## User Story
 **As** a new contributor or backlog consumer, **I want** the project README, Dev/README, Jira tickets, and vault references to reflect the Container→Dev and DNC-Update→dnc-cron-scrub renames, **so that** docs are current and the Jira↔vault sync works.
@@ -20,10 +20,11 @@ size: M
 ## Acceptance Criteria
 - [x] **Given** the project root README.md and `Dev/README.md`, **when** they are updated, **then** all references to `Container/` are changed to `Dev/` and all references to `DNC-Update` are changed to `dnc-cron-scrub`.
 - [x] **Given** the vault `CLAUDE.md` §16, **when** stale references to removed `.cursor` folders are found, **then** they are deleted or updated to reflect the current project structure.
-- [ ] Michelle reviews the README rewrite.
+- [x] Michelle reviews the README rewrite.
 - ~~Jira criteria (DNCUP-2…7 close-out, Jira↔vault sync `vault_path`)~~: dropped 2026-11-06, Jira is deprecated (Michelle, 2026-10-29).
 
 ## Notes
+- **Closed 2026-11-10 (Michelle approved the README).** No `DNC-Update` or `Container/` references remain in `Dev/README.md`.
 - **2026-11-09:** `Scrub_API/` moved to `data/legacy/Scrub_API-2026-11-05/` (no log files inside; it holds an old `DNC_db_report/.env`, not opened, covered by the credential-rotation story and GAP-24).
 - **2026-11-06:** `Dev/README.md` paths `Projects/DNC-Update/{Container,data}` → `Projects/dnc-cron-scrub/{Dev,data}` (branch `s1/docs/readme-renames`, `e54ddd1`). Vault `CLAUDE.md`: §16.3 bullet for `Projects/DNC-Update/.cursor/…` removed (folder gone); `DNCUP` removed from the active Jira projects list and its JQL. Left as-is: naming-convention example `DNC-Update` and `` `DNCUP-3` `` in the vault CLAUDE.md conventions table (examples, not references); historic DNCUP rows in `Knowledge/Project Management/Jira-Vault-Sync-SOP.md` and `Jira-Mirror.md`. **Found:** `Projects/DNC-Update/data/` exists again (empty dir, likely recreated by an old bind mount); `Projects/dnc-cron-scrub/Scrub_API/` is back (36 MB, dated 2026-11-05, contains `leads_to_tag.json` with lead data and two git checkouts) although triaged on 2026-10-29. Decided 2026-11-06 (Michelle): `Projects/DNC-Update/` deleted (was empty); `Scrub_API/` to move to `data/legacy/Scrub_API-2026-11-05/` (covered by the historic-log scrub and S5 retention), done after the log-scrub inventory finishes.
 - **Progress 2026-11-02 (doc maintenance pass):** project `README.md` rewritten in SPEAR format for the re-scope; `Dev/README.md` paths moved to `dnc-cron-scrub/`, env-var table completed (dry-run, logging, retry, outage), dry-run section unified, `/output`/`/logs` mounts dropped; `Dev/.env.example` `OUTPUT_DIR`/`LOG_DIR` commented out and retry vars added. **Remaining:** Michelle's review (todo above), and vault-wide references outside this project that still say `DNC-Update` (vault `CLAUDE.md` §8.7 example, `Knowledge/Project Management/Jira-Vault-Sync-SOP.md`, `Knowledge/Reference/Jira-Mirror.md`) plus the §16 `.cursor` cleanup.

@@ -43,10 +43,10 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [ ] [[Story - Per-stage duration and memory in every run]]
 - [ ] [[Epic - Project documentation and housekeeping]]
     - [ ] [[Story - Per-stage inputs and outputs reference]]
-    - [ ] [[Story - README, Jira and vault references re-scoped]]
+    - [x] [[Story - README, Jira and vault references re-scoped]]
 - [ ] [[Epic - Memory optimization]]: closes S1, **only after the other S1 epics are done and the code is stable**
     - [ ] [[Story - Stage 4 stops reloading the full lead history]]  ← priority 1
-    - [ ] [[Story - Memory log with quarterly review]]
+    - [x] [[Story - Memory log with quarterly review]]
     - [ ] [[Story - Stage 2 mean memory reduced]]  ← only after Stage 4 is stable
 
 ## S2 — Technical migration
