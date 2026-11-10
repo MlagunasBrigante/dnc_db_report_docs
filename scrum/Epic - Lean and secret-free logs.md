@@ -48,8 +48,8 @@ Each story delivers value to the compliance/legal owner: INFO logs are lean and 
 > [!check] Before closing this epic, verify Michelle's actions were actually done
 > - [x] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app). Michelle can (2026-11-02); rotation deferred, D-08. — [[Story - Rotate exposed credentials and retire the old repo]]
 > - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `MlagunasBrigante`, after the `git bundle` backup is verified. — [[Story - Rotate exposed credentials and retire the old repo]]
-> - [ ] Set the recurring reminders for any credential that can't be rotated yet. — [[Story - Rotate exposed credentials and retire the old repo]]
-> - [ ] Approve the summary report before any original log is deleted. — [[Story - Scrub secrets from historic run logs]]
+> - [x] Set the recurring reminders for any credential that can't be rotated yet. Monthly D-08 Outlook reminder, 2026-11-10. — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [x] Approve the summary report before any original log is deleted. Approved and done 2026-11-09 (19 deleted). — [[Story - Scrub secrets from historic run logs]]
 
 ## Child user stories
 - [[Story - INFO logs with secret masking]]
