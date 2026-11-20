@@ -1,7 +1,7 @@
 ---
 type: log
 project: dnc-cron-scrub
-last_synced_dev_commit: 967308d84480aa69642e387d73ac341d081eddb2
+last_synced_dev_commit: d0f3457b948607bfca70cc793dc07030f43f0af3
 tags: [project/dnc-cron-scrub, doc-sync]
 ---
 # Doc-sync log
@@ -40,6 +40,18 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 > Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs `<owner>`** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
 
 <!-- entries below, newest first -->
+
+## 2026-11-20: Dev main d0f3457
+**Commits since last sync:** 1 (967308d…d0f3457): `d0f3457` Fix run_id UUID handling: psycopg 3 returns `uuid.UUID` for `RETURNING` (`dnc/pg_store.py`, `tests/test_pg_store.py`). 2 files, +20/−5. No env var, CLI, Dockerfile or output-layout change.
+**Auto-fixed:**
+- `Docs/README.md:23`: GAP-01…34 → GAP-01…35, D-01…25 → D-01…27 (`Docs/scrum/DNC Update - Scope.md:206,236-237`).
+**Needs `<owner>`:**
+- [[Story - Raw snapshot and run record land in Postgres]] still `in-review`: story:58 and GAP-34 row (`Scope.md:205`) still say GAP-34 is "in progress on `s2/fix/gap-34-streaming-checksum`", merged to main since 967308d. Story:62 already notes the UUID fix (d0f3457); rerun the ITServer dry-run, then update branch line + GAP-34 resolution and set `done`.
+- Carried over: `schema/000_roles_and_database.sql:3` still "PostgreSQL 13.23+" vs 17+ (D-23). Fix on the next code branch.
+- Carried over: project `README.md:88-89` § Open Gaps lists D-04 as pending and [[Decision - Dedicated PostgreSQL database]] as "proposed" (decided via D-04/D-18); D-23…27 and GAP-35 not mentioned. Edit by hand.
+- Carried over: GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (`Scope.md:200-202`); now on main.
+- `Dev/README.md` working tree carries the uncommitted 2026-11-17/18 auto-fixes (verify-tool text, `.run_id` layout line). Commit when ready.
+- Checks clean: status table vs story `status` (24 rows), backlog boxes (67) vs `status`, 14 epics / 53 stories, wikilinks resolve (incl. [[Plan - Git history identifier rewrite]] in `Docs/Reference/`), no new TODO/FIXME in the diff. Docs repo is clean apart from this run's edits.
 
 ## 2026-11-18: Dev main 967308d
 **Commits since last sync:** 4 (1bdd6b9…967308d): `bd682a3` PG 17 composite PK on `raw_snapshot`, skip-if-stored resume · `d6b7454` skip-if-stored rollback fix, SECURITY DEFINER `pg_temp` · `04d42b0` Updated for Postgres 17 (README/.env.example: `dnc-pgsocket` volume) · `967308d` GAP-34 shared `StreamingChecksum`, streaming verify tool, `sql.Identifier` schema names. 7 files, +823/−190.
