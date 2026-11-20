@@ -49,7 +49,7 @@ The choice is only about **how separate the DNC data is inside that server.**
 | Item | Role / setting | Purpose |
 |---|---|---|
 | Database | `dnc` | Dedicated, `REVOKE CONNECT … FROM PUBLIC` |
-| `dnc_owner` | Owns the tables, runs the DDL (Michelle) | Table changes only through reviewed scripts |
+| `dnc_owner` | Owns the tables, runs the DDL (`<owner>`) | Table changes only through reviewed scripts |
 | `dnc_writer` | The job: insert into stage tables; update only open partitions and `failed_items` | Closed months stay read-only |
 | `dnc_reader` | Read-only (S3 statistics, S4 dashboard) | Analysis can't change data |
 | `dnc_archive` | Detaches and exports closed partitions (S5). Until then **SELECT only** (D-22): detach/export comes as a reviewed capability (e.g. a SECURITY DEFINER function owned by `dnc_owner`), never as standing UPDATE/DELETE grants | The only role that can touch closed months |
@@ -57,9 +57,9 @@ The choice is only about **how separate the DNC data is inside that server.**
 
 ## Open points before deciding
 1. **What does the existing database hold, and does S3/S4 need to join with it?** If not, dedicated wins outright.
-2. **Does Michelle have admin rights (`CREATEDB` / `CREATEROLE`)** on that PostgreSQL server? Needed for either option's roles.
+2. **Does `<owner>` have admin rights (`CREATEDB` / `CREATEROLE`)** on that PostgreSQL server? Needed for either option's roles.
 
 ## Decision log
-- 2026-10-29 — Proposed by Claude in the stories interview (Q8). Michelle's initial preference was the existing DB; she asked for this justification note before deciding.
-- 2026-11-10 — **Accepted** (Michelle): S3/S4 don't need joins with the existing database, so the dedicated `dnc` database wins outright. The database doesn't exist yet; Michelle creates it and the `dnc_*` roles from the DDL guide (D-18).
-- 2026-11-12 — **Amended** (Michelle, D-22): `dnc_archive` is read-only (SELECT) until S5 designs detach/export, and snapshot rows no longer cascade-delete with their `pipeline_run` row, so the legal record can't be edited or wiped as a side effect.
+- 2026-10-29 — Proposed by Claude in the stories interview (Q8). `<owner>`'s initial preference was the existing DB; she asked for this justification note before deciding.
+- 2026-11-10 — **Accepted** (`<owner>`): S3/S4 don't need joins with the existing database, so the dedicated `dnc` database wins outright. The database doesn't exist yet; `<owner>` creates it and the `dnc_*` roles from the DDL guide (D-18).
+- 2026-11-12 — **Amended** (`<owner>`, D-22): `dnc_archive` is read-only (SELECT) until S5 designs detach/export, and snapshot rows no longer cascade-delete with their `pipeline_run` row, so the legal record can't be edited or wiped as a side effect.

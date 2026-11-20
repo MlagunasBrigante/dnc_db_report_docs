@@ -12,12 +12,12 @@ size: S
 ---
 # Story: Monthly report email as a summary table
 
-> [!todo] Michelle — action needed
+> [!todo] `<owner>` — action needed
 > - [x] Confirm the 2026-11-10 report email body showed the summary table only (no lead rows, no attachments). Confirmed 2026-11-10.
 > - [x] Set `REPORT_RECIPIENTS_TO` in `Dev/.env`. Done 2026-11-10.
-> - [x] Set `REPORT_RECIPIENTS_CC` too (AC4 lists m.lagunas@, j.fernandez@, e.cervera@ in CC), if not done. ✅ 2026-11-11: done (Michelle).
+> - [x] Set `REPORT_RECIPIENTS_CC` too (AC4 lists `<owner>`@, j.fernandez@, e.cervera@ in CC), if not done. ✅ 2026-11-11: done (`<owner>`).
 > - [x] After merging `s1/fix/removal-deadline`: rebuild and recreate `dnc-scrub` so Dec 1 uses the new recipients and the GAP-30 deadline. Done 2026-11-10 (main `b9607c6`, 317 tests in the image).
-> - [x] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. ✅ 2026-11-11: confirmed by j.fernandez (Michelle).
+> - [x] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. ✅ 2026-11-11: confirmed by j.fernandez (`<owner>`).
 
 ## User Story
 **As** a report recipient (management and the team), **I want** the monthly report email to show the run's summary table (counts and actions) in the email body, with no attachments, **so that** I can read the month's DNC outcome at a glance, and the email can never fail because of its size.
@@ -26,21 +26,21 @@ size: S
 - [x] **Given** a successful run, **when** the report email is sent, **then** its body contains the Summary table (`Metric | Count | Actions Taken`, the same rows as the xlsx "Summary" sheet, using the corrected labels from [[Story - Report labels and unmatched warning fixed]]) as an HTML table, plus the report date and run duration. **No attachments.**
 - [x] **Given** the report email is built, **when** its content is inspected, **then** it holds **aggregate counts only, with no lead-level data** (no names, phones or lead IDs), because one recipient is external (see Notes).
 - [x] **Given** the run produces the xlsx and csv, **when** the email is sent, **then** those files are still written to the run's output folder (`data/{date}/processed/`) for internal use; they're just not emailed. `_zip_output` is no longer called for this email.
-- [ ] **Given** the recipient config, **when** the email is sent, **then** it goes **to** `brad@briganteimmigration.com`, `r.jimenez@briganteimmigration.com` and `matt.hirschberg@jordanbelfort.com`, with **CC** to `m.lagunas@`, `j.fernandez@` and `e.cervera@` (briganteimmigration.com). Recipients are read from `Dev/.env` (e.g. `REPORT_RECIPIENTS_TO` / `REPORT_RECIPIENTS_CC`), not hardcoded.
-- [ ] **Given** a real run, **when** delivery is checked, **then** an internal recipient (Michelle, CC) confirms it arrived, and the external recipient's copy isn't bounced (no NDR in the `it.admin@` sender mailbox).
+- [ ] **Given** the recipient config, **when** the email is sent, **then** it goes **to** `brad@briganteimmigration.com`, `r.jimenez@briganteimmigration.com` and `matt.hirschberg@jordanbelfort.com`, with **CC** to `<owner>@`, `j.fernandez@` and `e.cervera@` (briganteimmigration.com). Recipients are read from `Dev/.env` (e.g. `REPORT_RECIPIENTS_TO` / `REPORT_RECIPIENTS_CC`), not hardcoded.
+- [ ] **Given** a real run, **when** delivery is checked, **then** an internal recipient (`<owner>`, CC) confirms it arrived, and the external recipient's copy isn't bounced (no NDR in the `it.admin@` sender mailbox).
 
 ## Notes
 - **2026-11-11:** TO/CC now set in `.env`. Delivery to business recipients still to be proven by the Dec 1 run. The scheduled `dnc-scrub` container must be recreated to pick up the new `.env`.
-- **2026-11-10:** Michelle confirmed the report body showed the summary table (AC1–AC3 ticked). `REPORT_RECIPIENTS_TO` set in `.env` (not read by the agent). AC4–AC5 close on the Dec 1 run: recipients in the log line `Success email sent to [...] (CC: ...)` and no NDR for the external copy. **GAP-30 fixed** on `s1/fix/removal-deadline` (`b9607c6`, 313 tests): deadline = run date + 6 days in the report labels, the soft-deletion subject and body; README, runbook and stage reference updated.
-- **Real run 2026-11-10:** `REPORT_RECIPIENTS_TO` is not set in `Dev/.env`, so the report went to the fallback success recipients (`it.admin@`, `m.lagunas@`), not the business list; no attachments logged on the success email; xlsx/csv written to `data/2026-11-10/processed/`. AC4–AC5 still open: Michelle sets `REPORT_RECIPIENTS_TO`/`REPORT_RECIPIENTS_CC` in `.env` (after j.fernandez confirms external sending), recreates `dnc-scrub`; Dec 1 verifies delivery. AC1–AC3 tick once Michelle confirms the email body showed the summary table and no lead data.
-- **Mailbox confirmed by Michelle 2026-11-05**: the report email arrived as an HTML table with no attachments. Still open: set `REPORT_RECIPIENTS_TO`/`_CC` once j.fernandez confirms external sending, then check delivery on the next real run (December 1) with no NDR.
-- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T232423Z/`, `DRYRUN_EMAIL_RECIPIENTS` set to Michelle): the report email was sent (TO Michelle, no CC) and Graph accepted it. **Waiting on Michelle's mailbox check**: HTML table renders and there are no attachments. The real-run checks (business recipients, external delivery) stay open until `REPORT_RECIPIENTS_TO` is set.
+- **2026-11-10:** `<owner>` confirmed the report body showed the summary table (AC1–AC3 ticked). `REPORT_RECIPIENTS_TO` set in `.env` (not read by the agent). AC4–AC5 close on the Dec 1 run: recipients in the log line `Success email sent to [...] (CC: ...)` and no NDR for the external copy. **GAP-30 fixed** on `s1/fix/removal-deadline` (`b9607c6`, 313 tests): deadline = run date + 6 days in the report labels, the soft-deletion subject and body; README, runbook and stage reference updated.
+- **Real run 2026-11-10:** `REPORT_RECIPIENTS_TO` is not set in `Dev/.env`, so the report went to the fallback success recipients (`it.admin@`, `<owner>@`), not the business list; no attachments logged on the success email; xlsx/csv written to `data/2026-11-10/processed/`. AC4–AC5 still open: `<owner>` sets `REPORT_RECIPIENTS_TO`/`REPORT_RECIPIENTS_CC` in `.env` (after j.fernandez confirms external sending), recreates `dnc-scrub`; Dec 1 verifies delivery. AC1–AC3 tick once `<owner>` confirms the email body showed the summary table and no lead data.
+- **Mailbox confirmed by `<owner>` 2026-11-05**: the report email arrived as an HTML table with no attachments. Still open: set `REPORT_RECIPIENTS_TO`/`_CC` once j.fernandez confirms external sending, then check delivery on the next real run (December 1) with no NDR.
+- **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T232423Z/`, `DRYRUN_EMAIL_RECIPIENTS` set to `<owner>`): the report email was sent (TO `<owner>`, no CC) and Graph accepted it. **Waiting on `<owner>`'s mailbox check**: HTML table renders and there are no attachments. The real-run checks (business recipients, external delivery) stay open until `REPORT_RECIPIENTS_TO` is set.
 - **Mac dry-run 2026-11-04** (`data/_dryrun/2026-11-04T222929Z/`, `main` @ `ea3d03c`, `DRYRUN_INJECT_FAILURES=batch:0`): both emails were built, but sending was skipped because `DRYRUN_EMAIL_RECIPIENTS` is unset. Delivery, attachment size and HTML rendering still need one dry-run with it set.
 - **In review 2026-11-04** (`94ca49d` + `c433d66` removing the now-unused zip helper): the body is an HTML table built from `build_summary_rows`, plus the date and run duration. No attachments; xlsx and csv are still written. Recipients come from `REPORT_RECIPIENTS_TO`/`_CC`, falling back to today's recipients. No business address is in the code or `.env.example`.
-- Branch: `s1/fix/report-email-summary-table`, stacked on `s1/fix/alert-emails-compact-excerpt`. **Safety default:** if `REPORT_RECIPIENTS_TO` isn't set, the report keeps going to today's recipients, so business recipients only start receiving it once Michelle adds them to `.env`.
+- Branch: `s1/fix/report-email-summary-table`, stacked on `s1/fix/alert-emails-compact-excerpt`. **Safety default:** if `REPORT_RECIPIENTS_TO` isn't set, the report keeps going to today's recipients, so business recipients only start receiving it once `<owner>` adds them to `.env`.
 - Carries over from [[Story - Report labels and unmatched warning fixed]] (2026-11-04): the email table must use the same rows as the xlsx Summary, built by `dnc/report_summary.build_summary_rows`, including "Raw snapshot complete". Its counts must match the run log's Summary block.
 - **Decided 2026-10-29 (stories interview Q2):** the report email carries **no files**. It focuses on the actual report: a succinct table of counts and actions. The report format may change after S3 statistical modeling; until then it stays as it is (Summary sheet content).
-- **This email and the alert emails are separate audiences.** Warning, error, unresolved-item and watchdog alerts go to `it.admin@` + Michelle, CC j.fernandez and e.cervera, plus the Teams channel (interview Q1). The report email goes to the business recipients above.
+- **This email and the alert emails are separate audiences.** Warning, error, unresolved-item and watchdog alerts go to `it.admin@` + `<owner>`, CC j.fernandez and e.cervera, plus the Teams channel (interview Q1). The report email goes to the business recipients above.
 - **External recipient:** `matt.hirschberg@jordanbelfort.com` is outside the tenant. Implications:
   - nothing lead-level may appear in the body
   - the tenant must allow external sending from the `it.admin@` mailbox (verify with j.fernandez / microsoft-learn)
@@ -49,7 +49,7 @@ size: S
 - Renamed from "Success email carries only the report" (2026-10-29).
 
 ## Open questions
-- [x] #open-question Can `it.admin@briganteimmigration.com` send to the external domain **`jordanbelfort.com`** (`matt.hirschberg@`)? Ask j.fernandez to check Exchange transport rules, outbound policy and any app access policy on the Graph app. This is the only external recipient in the project, now that the soft-deletion email is internal-only (D-10). ✅ 2026-11-11: confirmed by j.fernandez (Michelle).
+- [x] #open-question Can `it.admin@briganteimmigration.com` send to the external domain **`jordanbelfort.com`** (`matt.hirschberg@`)? Ask j.fernandez to check Exchange transport rules, outbound policy and any app access policy on the Graph app. This is the only external recipient in the project, now that the soft-deletion email is internal-only (D-10). ✅ 2026-11-11: confirmed by j.fernandez (`<owner>`).
 
 ## Dependencies
 - [[Story - Report labels and unmatched warning fixed]] (the corrected labels appear in this email).

@@ -12,7 +12,7 @@ size: M
 ---
 # Story: Backfill the container-era runs
 ## User Story
-**As** Michelle (data owner), **I want** the 4 container-era SQLite runs (2026-08-12, 09-01, 10-01, 10-28) loaded into Postgres with matching row counts and checksums, **so that** the historical data is preserved in the new system of record before cutover.
+**As** `<owner>` (data owner), **I want** the 4 container-era SQLite runs (2026-08-12, 09-01, 10-01, 10-28) loaded into Postgres with matching row counts and checksums, **so that** the historical data is preserved in the new system of record before cutover.
 
 ## Acceptance Criteria
 - [ ] **Given** the Postgres schema exists, **when** the backfill script `Dev/backfill.py --source data/2026-10-28` is executed, **then** it loads `scrub_ods.db` (raw_data → raw_snapshot_202610) and `scrub_staging.db` (all stage tables → corresponding Postgres partitions), creates a `pipeline_run` row with `trigger='backfill'`, and computes the raw_snapshot_checksum (verified by querying `pipeline_run` and checking `trigger='backfill'`)

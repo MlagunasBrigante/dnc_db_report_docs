@@ -12,7 +12,7 @@ size: M
 ---
 # Story: Patch pass reprocesses a run's failed items
 ## User Story
-**As** Michelle (pipeline owner), **I want** a scheduled patch pass (or manual `once --patch <run_id>`) to retry only the failed items from a specific run, **so that** transient API errors are healed automatically without re-running the entire pipeline.
+**As** `<owner>` (pipeline owner), **I want** a scheduled patch pass (or manual `once --patch <run_id>`) to retry only the failed items from a specific run, **so that** transient API errors are healed automatically without re-running the entire pipeline.
 
 ## Acceptance Criteria
 - [ ] **Given** a completed run with unresolved failed items (e.g. run_id `abc-123` has 3 failed Stage 4 tagging requests), **when** `python run.py --patch abc-123` is executed, **then** it queries `failed_items WHERE run_id='abc-123' AND resolved_at IS NULL`, retries only those 3 leads, and updates `failed_items.resolved_at` for successes or increments `attempts` for continued failures (verified by querying `failed_items` before and after)

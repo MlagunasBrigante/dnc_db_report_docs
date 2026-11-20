@@ -12,7 +12,7 @@ size: M
 ---
 # Story: Backups and restore drill for the dnc database
 
-> [!todo] Michelle — action needed
+> [!todo] `<owner>` — action needed
 > - [ ] Choose the backup target (cloud and/or external SSD).
 > - [ ] Store the backup encryption key in the team password manager, with a second copy.
 
@@ -24,10 +24,10 @@ size: M
 - [ ] **Given** a retention policy (e.g. 30 daily and 12 monthly, aligned with [[Story - Retention policy for lead data]] once it exists), **when** backups age, **then** old ones are pruned and the most recent ones are always kept.
 - [ ] **Given** a backup fails, **when** its service exits non-zero, **then** the shared `OnFailure=` notifier sends an email and a Teams alert. A missing backup is never silent.
 - [ ] **Given** the latest backup, **when** the **restore drill** runs (into a scratch database), **then** row counts per table and the `pipeline_run` checksums match production, and the restore steps are written down in the runbook. **This drill happens before the physical cutover.**
-- [ ] The backup encryption key or password is stored where it can be recovered by someone other than Michelle (e.g. the team's password manager), with a second copy.
+- [ ] The backup encryption key or password is stored where it can be recovered by someone other than `<owner>` (e.g. the team's password manager), with a second copy.
 
 ## Open questions
-- [ ] #open-question Backup target: cloud, external SSD, or both? Settle near this story (Michelle, 2026-10-29).
+- [ ] #open-question Backup target: cloud, external SSD, or both? Settle near this story (`<owner>`, 2026-10-29).
 
 ## Notes
 - **Added 2026-10-29** from the pre-mortem (risk R6): the process and the database live on one machine, and S5 is archiving, not backup.

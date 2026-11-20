@@ -11,7 +11,7 @@ gaps: []
 > At the **start of this sprint**, re-run **Prioritize & De-risk** (scrum-scoping Phase 4): MoSCoW the stories (their `moscow` property is `tbd` until then), re-run the pre-mortem and update [[Prioritization and Risk Register]].
 
 > [!tip] Soft, flexible deadlines (risk R16)
-> Michelle's biggest risk is getting stuck or overwhelmed in S3–S4. Each milestone/story gets a **soft target date** set at sprint start; deadlines can slide by agreement. **Nudges:** a weekly check-in nudge ("what's the next small step?") and a nudge 3 days before each soft date. If a milestone stalls for 2 weeks, split it into smaller steps rather than push harder.
+> `<owner>`'s biggest risk is getting stuck or overwhelmed in S3–S4. Each milestone/story gets a **soft target date** set at sprint start; deadlines can slide by agreement. **Nudges:** a weekly check-in nudge ("what's the next small step?") and a nudge 3 days before each soft date. If a milestone stalls for 2 weeks, split it into smaller steps rather than push harder.
 
 ## Description
 A custom web application displaying the S3-validated metrics from PostgreSQL. Built with Streamlit, Dash or Bokeh (tech choice deferred to a spike story). May be hosted on the ITServer or on `autobot` (Ubuntu, Docker + NPM reverse proxy + n8n) — undecided. **Docker is always the runtime.**
@@ -48,12 +48,12 @@ The dashboard reads directly from PostgreSQL (same machine as the process if hos
 **Alternative split (if Story 3 feels too large):** split by **persona** or **metric category** (e.g., "compliance metrics" vs "operational metrics" vs "lead-quality metrics"), so each story delivers a coherent view to one stakeholder group.
 
 ### Cynefin calibration
-**Complicated** (known unknowns, sense-analyze-respond). The stack choice and hosting decision are unknowns, but solvable with a spike. Once decided, building a read-only dashboard from PostgreSQL is a solved problem. Keep the spike time-boxed (3–5 days); if it runs long, escalate the decision to Michelle rather than extending the exploration.
+**Complicated** (known unknowns, sense-analyze-respond). The stack choice and hosting decision are unknowns, but solvable with a spike. Once decided, building a read-only dashboard from PostgreSQL is a solved problem. Keep the spike time-boxed (3–5 days); if it runs long, escalate the decision to `<owner>` rather than extending the exploration.
 
 ### Split evaluation
 Three stories is light for an epic. If the spike reveals significant hosting complexity (e.g., `autobot` networking, SSL, auth), split Story 2 into "dashboard running locally in Docker" + "dashboard deployed and accessible." If Story 3 grows (8+ metrics), split by metric category or add a fourth story for polish (error states, loading indicators, responsive layout).
 
-> [!check] Before closing this epic, verify Michelle's actions were actually done
+> [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [ ] Decide the dashboard stack and host after the spike. — [[Story - Spike dashboard stack and hosting]]
 
 ## Child user stories

@@ -25,7 +25,7 @@ Every stage records the items (pages, batches, leads) it couldn't process. A sch
 |---|---|---|
 | Independent | ⚠️ | Depends on Epic - PostgreSQL system of record (needs run_id, stages tables) but independent of scheduling/cutover |
 | Negotiable | ✅ | Could start with fewer stages (e.g. Stage 4 tagging only), but all 4 data-touching stages need it |
-| Valuable | ✅ | Michelle sees every failure and knows which leads weren't tagged; compliance risk eliminated |
+| Valuable | ✅ | `<owner>` sees every failure and knows which leads weren't tagged; compliance risk eliminated |
 | Estimable | ✅ | 3 stories, each testable by injecting failures |
 | Testable | ✅ | Inject API errors, verify failed-items records, run patch pass, check unresolved count in alert |
 

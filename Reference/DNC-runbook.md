@@ -9,7 +9,7 @@ tags: [project/dnc-cron-scrub, reference, runbook, operations]
 ---
 # DNC Pipeline Runbook — Response Guide for Alerts
 
-> **Purpose:** Defines who acts on each alert type, through which channel, and the steps to take. Written for the IT on-call (owner m.lagunas, backup e.cervera).
+> **Purpose:** Defines who acts on each alert type, through which channel, and the steps to take. Written for the IT on-call (owner `<owner>`, backup e.cervera).
 
 ---
 
@@ -17,12 +17,12 @@ tags: [project/dnc-cron-scrub, reference, runbook, operations]
 
 | Alert Type | Owner | Backup | Response Time | Channels |
 |------------|-------|--------|---------------|----------|
-| **Error** (run failed) | m.lagunas | e.cervera | **Next business day** | Email (TO: `it.admin@`, owner; CC: `j.fernandez@`, `e.cervera@`), Teams (dedicated channel) |
-| **Warning** (run succeeded with warnings) | m.lagunas | e.cervera | Urgent warnings: **next business day**; informational: **within the week** | Email (TO: `it.admin@`, owner; CC: `j.fernandez@`, `e.cervera@`), Teams (dedicated channel) |
-| **Alert-delivery failure** (one or both channels failed) | m.lagunas | e.cervera | **Next business day** | Whichever channel worked, or logs only if both failed |
+| **Error** (run failed) | `<owner>` | e.cervera | **Next business day** | Email (TO: `it.admin@`, owner; CC: `j.fernandez@`, `e.cervera@`), Teams (dedicated channel) |
+| **Warning** (run succeeded with warnings) | `<owner>` | e.cervera | Urgent warnings: **next business day**; informational: **within the week** | Email (TO: `it.admin@`, owner; CC: `j.fernandez@`, `e.cervera@`), Teams (dedicated channel) |
+| **Alert-delivery failure** (one or both channels failed) | `<owner>` | e.cervera | **Next business day** | Whichever channel worked, or logs only if both failed |
 | **Success** (run completed) | — | — | No action required; archive the report | Email (TO: business + team), Teams (dedicated channel) |
 
-**Backup acts when m.lagunas is out** — m.lagunas informs them directly.
+**Backup acts when `<owner>` is out** — `<owner>` informs them directly.
 
 ---
 
@@ -52,7 +52,7 @@ The pipeline completed successfully. All stages (ingest → scrub → tag → re
 The run completed but emitted WARNING, ERROR, or CRITICAL log messages. Stages 1–5 finished, but something needs review.
 
 ### Who acts
-**Owner:** m.lagunas | **Backup:** e.cervera (when m.lagunas is out)
+**Owner:** `<owner>` | **Backup:** e.cervera (when `<owner>` is out)
 
 ### Response time
 - **Urgent warnings** (see table below): **next business day**
@@ -121,7 +121,7 @@ docker run --rm --env-file Dev/.env \
 The pipeline failed with an unhandled exception. The run did not complete.
 
 ### Who acts
-**Owner:** m.lagunas | **Backup:** e.cervera (when m.lagunas is out)
+**Owner:** `<owner>` | **Backup:** e.cervera (when `<owner>` is out)
 
 ### Response time
 **Next business day**
@@ -165,7 +165,7 @@ Same as §2.3 above — test with `--dry-run` first, then real run.
 ### Escalation path
 
 If the error is unclear or requires LawRuler/Azure admin access:
-- **LawRuler credentials:** m.lagunas (owner)
+- **LawRuler credentials:** `<owner>` (owner)
 - **Azure app registration (O365/Teams):** j.fernandez (M365 admin)
 - **Soft-deletion request approval:** Matt / Brad (escalation path, risk R5)
 
@@ -183,7 +183,7 @@ If the error is unclear or requires LawRuler/Azure admin access:
 One or both alert channels (email, Teams) failed to deliver an alert (success, warning, or error).
 
 ### Who acts
-**Owner:** m.lagunas | **Backup:** e.cervera (when m.lagunas is out)
+**Owner:** `<owner>` | **Backup:** e.cervera (when `<owner>` is out)
 
 ### Response time
 **Next business day**
@@ -270,7 +270,7 @@ data/<YYYY-MM-DD>/processed/
 3. If failed (403/404): the webhook may be deleted or the creator's account disabled.
 
 **Restore:**
-1. m.lagunas: create a new workflow in the dedicated channel:
+1. `<owner>`: create a new workflow in the dedicated channel:
    - Teams → Channel → `…` → **Workflows** → **Send webhook alerts to a channel**
    - Copy the webhook URL
 2. Update `TEAMS_WEBHOOK_URL` in `Dev/.env`
@@ -280,7 +280,7 @@ data/<YYYY-MM-DD>/processed/
 
 #### 4.4.3 Recreate the container (after .env change)
 
-**Confirm with m.lagunas before running this command** — it stops the live scheduler:
+**Confirm with `<owner>` before running this command** — it stops the live scheduler:
 
 ```bash
 cd /path/to/dnc-cron-scrub
@@ -305,7 +305,7 @@ docker logs dnc-scrub | tail -10   # Should show "Scheduler started" + "Next run
 Monthly internal review email listing DNC leads without opt-in and litigators to soft-delete. Subject: `[For review] DNC soft-deletion request — <date>`.
 
 ### Who acts
-**Owner:** m.lagunas
+**Owner:** `<owner>`
 
 ### Response time
 **By the removal deadline: run date + 6 days** (scheduled run on the 1st → the 7th: patch on 3rd, watchdog on 5th, removal by 7th; an ad-hoc run on the 10th → the 16th). The date is printed in the report and the email subject.
@@ -319,7 +319,7 @@ Monthly internal review email listing DNC leads without opt-in and litigators to
 
 **Important:**
 - Recipients are internal only (`SOFT_DELETE_RECIPIENTS` TO, `SOFT_DELETE_CC` CC) and must be on the allowlist (`SOFT_DELETE_ALLOWED_DOMAINS`, default `briganteimmigration.com`).
-- The job never emails LawRuler directly — m.lagunas forwards after review.
+- The job never emails LawRuler directly — `<owner>` forwards after review.
 - **Coming in S6 (optional):** Automated soft-deletion (only if D-07 = automate).
 
 ---
@@ -394,7 +394,7 @@ The following are **not available in S1** but will be added in S2:
 | **ITServer cutover** | PostgreSQL system of record, systemd scheduling, AlmaLinux host | S2 |
 | **Historical backfill** | Notebook-era run history (2025-05 → 2026-07) imported into PostgreSQL | S2 |
 
-**For now:** manual re-runs replace the patch pass; check `docker logs dnc-scrub` instead of systemd; all runs are on m.lagunas's Mac (Docker Desktop), not ITServer.
+**For now:** manual re-runs replace the patch pass; check `docker logs dnc-scrub` instead of systemd; all runs are on `<owner-mac>` (Docker Desktop), not ITServer.
 
 ---
 
@@ -404,10 +404,10 @@ The following are **not available in S1** but will be added in S2:
 Every quarter (first week of January, April, July, October), review the pipeline's memory consumption from the persistent memory log to catch regressions or growth trends early.
 
 ### Who acts
-**Owner:** m.lagunas
+**Owner:** `<owner>`
 
 ### When
-**First week of each quarter** (recurring Outlook event owned by m.lagunas)
+**First week of each quarter** (recurring Outlook event owned by `<owner>`)
 
 ### What to do
 
@@ -466,7 +466,7 @@ Every quarter (first week of January, April, July, October), review the pipeline
 
 ---
 
-## 11. Never Do This Without m.lagunas
+## 11. Never Do This Without `<owner>`
 
 - **Delete or recreate the `dnc-scrub` container** — it runs the scheduler; stopping it stops the monthly cadence.
 - **Move or remove `data/`** — it holds the run history and is bind-mounted into the container; moving it breaks the mount.
@@ -480,10 +480,10 @@ Every quarter (first week of January, April, July, October), review the pipeline
 | Alert | Who | When | What |
 |-------|-----|------|------|
 | ✅ **Success** | — | — | No action; archive |
-| ⚠️ **Warning** | m.lagunas (e.cervera backup) | Urgent: next business day; informational: within the week | Check log excerpt; classify warning; re-run if critical |
-| ❌ **Error** | m.lagunas (e.cervera backup) | Next business day | Check log + traceback; fix cause; re-run |
-| 🔕 **Alert-delivery failure** | m.lagunas (e.cervera backup) | Next business day | Check logs; restore failed channel; recreate container if needed |
-| 📋 **Soft-deletion review** | m.lagunas | By the deadline in the email (the 7th for the scheduled run) | Review CSVs; forward to LawRuler team manually |
+| ⚠️ **Warning** | `<owner>` (e.cervera backup) | Urgent: next business day; informational: within the week | Check log excerpt; classify warning; re-run if critical |
+| ❌ **Error** | `<owner>` (e.cervera backup) | Next business day | Check log + traceback; fix cause; re-run |
+| 🔕 **Alert-delivery failure** | `<owner>` (e.cervera backup) | Next business day | Check logs; restore failed channel; recreate container if needed |
+| 📋 **Soft-deletion review** | `<owner>` | By the deadline in the email (the 7th for the scheduled run) | Review CSVs; forward to LawRuler team manually |
 
 **Logs:** `data/<date>/logs/run.log` or `docker logs dnc-scrub`  
 **Reports:** `data/<date>/processed/*.xlsx`  

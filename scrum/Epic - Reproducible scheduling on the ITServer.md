@@ -24,7 +24,7 @@ Replace the in-container scheduler (whose next-run state lives only in memory) w
 |---|---|---|
 | Independent | ⚠️ | Depends on Epic - Failures captured and patched (patch pass must exist) but otherwise standalone |
 | Negotiable | ✅ | Could deploy without the watchdog initially; the 1st + 3rd timers are the core |
-| Valuable | ✅ | Michelle knows the job will run even if the server reboots, and the watchdog catches stuck/missing runs |
+| Valuable | ✅ | `<owner>` knows the job will run even if the server reboots, and the watchdog catches stuck/missing runs |
 | Estimable | ✅ | 3 stories, each is one .service + .timer pair + install script update |
 | Testable | ✅ | Verify by checking timer list, simulating a reboot (Persistent triggers), deliberately missing a run (watchdog fires) |
 

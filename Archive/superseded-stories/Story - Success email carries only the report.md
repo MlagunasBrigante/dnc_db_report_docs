@@ -23,7 +23,7 @@ size: M
 - [ ] Verified with one real run that the success email arrives in the mailbox with the correctly sized zip.
 
 ## Notes
-- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th.
+- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **`<owner>`**, backup **e.cervera**, who acts when `<owner>` is out (`<owner>` informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that `<owner>` sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th.
 - **Code references** (verified against `Dev/run.py`):
   - Zip creation: `run.py:1163-1169` (`os.walk(output_dir)`) — zips everything including `scrub_ods.db`
   - Success email attachment: `run.py:1208-1209` — attaches inline without size check
@@ -33,7 +33,7 @@ size: M
   - Upload session: 3–150 MB (chunked, ≤ 4 MB per PUT)
   - Default max message size: 35 MB (tenant-configurable)
 - The 10-28 report was 0.66 MB XLSX + 0.93 MB CSV = ~1.6 MB zipped. A size guard is insurance for growth; the expected size fits inline.
-- Do not fail the run if the attachment is too large — alert in the body and log; Michelle can retrieve from the output directory.
+- Do not fail the run if the attachment is too large — alert in the body and log; `<owner>` can retrieve from the output directory.
 
 ## Dependencies
 None — can start immediately.

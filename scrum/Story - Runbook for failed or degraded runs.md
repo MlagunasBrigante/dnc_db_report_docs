@@ -11,8 +11,8 @@ size: S
 ---
 # Story: Runbook for failed or degraded runs
 
-> [!todo] Michelle — action needed
-> - [x] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out. ✅ 2026-11-11: done (Michelle).
+> [!todo] `<owner>` — action needed
+> - [x] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out. ✅ 2026-11-11: done (`<owner>`).
 
 ## User Story
 **As** the IT on-call, **I want** a written runbook stating who acts on each alert type, through which channel, and the steps to take, **so that** I know immediately what to do when a DNC alert arrives.
@@ -25,13 +25,13 @@ size: S
 - [x] The runbook is committed to `Docs/Reference/DNC-runbook.md` and linked from the project README.
 
 ## Notes
-- **Approved by Michelle 2026-11-05.** Log messages in the runbook were checked against the code and corrected (successful retries log at DEBUG only; no `Config validation failed` line exists). The e.cervera briefing above stays open as Michelle's action.
+- **Approved by `<owner>` 2026-11-05.** Log messages in the runbook were checked against the code and corrected (successful retries log at DEBUG only; no `Config validation failed` line exists). The e.cervera briefing above stays open as `<owner>`'s action.
 - **Watchdog heartbeat (Q9):** the runbook includes "No watchdog heartbeat in Teams by the end of the 5th → check `systemctl status dnc-scrub-watchdog.timer` / `journalctl` on the ITServer" and "DNC watchdog FAILED alert → …".
-- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th. The runbook names the owner and the backup and gives each alert type its response time.
+- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **`<owner>`**, backup **e.cervera**, who acts when `<owner>` is out (`<owner>` informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that `<owner>` sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th. The runbook names the owner and the backup and gives each alert type its response time.
 - **Gap reference**: GAP-21 — "No runbook for failed or degraded runs (DNCUP-4)".
 - **Jira**: DNCUP-4 (originally "Runbook for DNC scrub failures") maps to this story; close DNCUP-4 when this story is done.
 - **Scope**: S1 runbook covers alert types (success, warning, error, alert-delivery failure), who acts, and immediate actions. The S2 watchdog, patch pass, and scheduler recovery are out of scope for S1 but should be noted as "coming in S2" where relevant.
-- **Personas** (from scope): Michelle (IT & Data lead, pipeline owner, compliance/legal owner), IT on-call.
+- **Personas** (from scope): `<owner>` (IT & Data lead, pipeline owner, compliance/legal owner), IT on-call.
 - **Channels**: email (today), Teams (by end of S1).
 - **Alert types**:
   - Success — no action

@@ -7,7 +7,7 @@ gaps: [GAP-13, GAP-25]
 ---
 # Epic: Cutover to the ITServer
 ## Description
-Move the job and data from Michelle's Mac to the AlmaLinux ITServer. The old Mac container is retired, and the first scheduled run on the 1st completes successfully on the ITServer. Cutover acceptance criteria are defined collaboratively with Michelle before the move (e.g. parallel run comparison, alert verification). The physical cutover is not rushed — this epic closes S2 only after quality is proven.
+Move the job and data from `<owner-mac>` to the AlmaLinux ITServer. The old Mac container is retired, and the first scheduled run on the 1st completes successfully on the ITServer. Cutover acceptance criteria are defined collaboratively with `<owner>` before the move (e.g. parallel run comparison, alert verification). The physical cutover is not rushed — this epic closes S2 only after quality is proven.
 
 ## Gaps closed
 - **GAP-13**: Mac sleep pauses runs (19 h on 10-01, 56 min late start on 10-28) — ITServer is a server, stays on
@@ -20,7 +20,7 @@ Move the job and data from Michelle's Mac to the AlmaLinux ITServer. The old Mac
 |---|---|---|
 | Independent | ⚠️ | Depends on every other S2 epic (Postgres, failures, scheduling, backfill must all be done) |
 | Negotiable | ✅ | Acceptance criteria are deferred; could be as simple as "one successful run" or as thorough as "parallel Mac + ITServer runs with diff" |
-| Valuable | ✅ | Michelle's Mac is freed; job reliability improves (no sleep); PII off OneDrive |
+| Valuable | ✅ | `<owner-mac>` is freed; job reliability improves (no sleep); PII off OneDrive |
 | Estimable | ⚠️ | Story 1 (define criteria) is a decision story, quick; Story 2 (cutover + first run) is concrete but depends on Story 1's criteria |
 | Testable | ⚠️ | The acceptance criteria themselves define the test |
 
@@ -32,7 +32,7 @@ Earlier patterns rejected:
 - Pattern 7 (Simple/Complex) — the complexity is in the preparation (other epics), not in the cutover itself
 
 ### Cynefin calibration
-**Story 1 (define criteria): Complicated** — the options are known (parallel run, alert test, data diff), but Michelle's risk tolerance and the legal/compliance bar aren't yet stated.
+**Story 1 (define criteria): Complicated** — the options are known (parallel run, alert test, data diff), but `<owner>`'s risk tolerance and the legal/compliance bar aren't yet stated.
 
 **Story 2 (cutover): Complicated** — assuming the other S2 epics are done, cutover is: rsync data/, docker pull on the ITServer, systemctl start, watch the first run. The unknowns are environmental (will the ITServer's Postgres credentials, Docker setup, and network reach LawRuler/dncscrub/Graph all work?), not conceptual.
 
@@ -40,7 +40,7 @@ Earlier patterns rejected:
 - **Does it reveal low-value work?** No — cutover is the point of S2.
 - **Are the sizes roughly equal?** Story 1 is XS (a meeting + a doc update), Story 2 is Small-to-Medium (cutover + verification); imbalance is acceptable given Story 1's nature.
 
-> [!check] Before closing this epic, verify Michelle's actions were actually done
+> [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [ ] Choose the backup target (cloud and/or external SSD). — [[Story - Backups and restore drill for the dnc database]]
 > - [ ] Store the backup encryption key in the team password manager, with a second copy. — [[Story - Backups and restore drill for the dnc database]]
 > - [ ] Decide the cutover acceptance criteria. — [[Story - Define cutover acceptance criteria]]

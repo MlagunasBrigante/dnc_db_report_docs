@@ -10,7 +10,7 @@ tags: [project/dnc-cron-scrub, reference, postgresql, itserver, setup, docker]
 ---
 # ITServer PostgreSQL 17 Setup for DNC Pipeline (Docker)
 
-> **Purpose:** Step-by-step guide for Michelle to set up PostgreSQL 17 in its own Docker container on the ITServer, create the dedicated `dnc` database, roles, schemas, and tables. Run this once during the S2 migration, before the first pipeline execution with `POSTGRES_DSN` set.
+> **Purpose:** Step-by-step guide for `<owner>` to set up PostgreSQL 17 in its own Docker container on the ITServer, create the dedicated `dnc` database, roles, schemas, and tables. Run this once during the S2 migration, before the first pipeline execution with `POSTGRES_DSN` set.
 
 ---
 
@@ -421,7 +421,7 @@ docker exec -it dnc-postgres psql -U postgres -c \
 ```
 Expected: four rows, all with `has_password | t`.
 
-- **`dnc_owner`**: for Michelle (DDL changes, schema migrations)
+- **`dnc_owner`**: for `<owner>` (DDL changes, schema migrations)
 - **`dnc_writer`**: for the pipeline container (write runs + snapshots)
 - **`dnc_reader`**: for read-only analysis, S3 statistics, S4 dashboard
 - **`dnc_archive`**: for S5 archiving (detach/export closed partitions)
@@ -490,7 +490,7 @@ Prompts for the dnc_reader password. **Verified structure (2026-11-18):**
 
 ## Step 10: Configure the pipeline's `.env` on the ITServer
 
-The ITServer `.env` is a NEW file you create there with `chmod 600` (start from `<clone>/.env.example`), never a copy of the Mac's `.env`, never committed. **Credentials decision D-26 (2026-11-19, Michelle):** the ITServer `.env` uses the same LawRuler/O365/dncscrub accounts as the Mac for now, typed by hand from the password manager into a new file, never a copy of the Mac's `.env`, never committed. R2/D-20 stay open (LawRuler user decision end of S2); any later rotation must update both Mac and ITServer.
+The ITServer `.env` is a NEW file you create there with `chmod 600` (start from `<clone>/.env.example`), never a copy of the Mac's `.env`, never committed. **Credentials decision D-26 (2026-11-19, `<owner>`):** the ITServer `.env` uses the same LawRuler/O365/dncscrub accounts as the Mac for now, typed by hand from the password manager into a new file, never a copy of the Mac's `.env`, never committed. R2/D-20 stay open (LawRuler user decision end of S2); any later rotation must update both Mac and ITServer.
 
 **Create the file:**
 
@@ -769,7 +769,7 @@ docker rm dnc-postgres
 # Remove the socket volume
 docker volume rm dnc-pgsocket
 
-# Remove the data directory (only after Michelle confirms — it's the legal record)
+# Remove the data directory (only after <owner> confirms — it's the legal record)
 # DO NOT RUN without explicit approval:
 # rm -rf <pg-data-dir>
 ```

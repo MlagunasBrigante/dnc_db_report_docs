@@ -11,11 +11,11 @@ size: S
 ---
 # Story: Spike LawRuler soft-delete via API
 
-> [!todo] Michelle — action needed
+> [!todo] `<owner>` — action needed
 > - [ ] Agree a test lead with the LawRuler account manager; decide D-07 after the spike.
 
 ## User Story
-**As** Michelle, **I want** a time-boxed investigation (max 2 days) into whether and how the LawRuler API can soft-delete leads, **so that** I can decide (D-07) whether to automate the monthly removals or keep the email request to the LawRuler team.
+**As** `<owner>`, **I want** a time-boxed investigation (max 2 days) into whether and how the LawRuler API can soft-delete leads, **so that** I can decide (D-07) whether to automate the monthly removals or keep the email request to the LawRuler team.
 
 ## Acceptance Criteria
 - [ ] **Given** the LawRuler API (`api-legalcrmapp.aspx`, the Custom Report API) and the LawRuler team, **when** the spike ends, **then** a short recommendation in `Docs/Reference/` answers:
@@ -23,7 +23,7 @@ size: S
   - What are the rate limits?
   - What audit trail does LawRuler keep?
 - [ ] **Given** a test lead agreed with the LawRuler team, **when** the call is exercised (if supported), **then** the lead is soft-deleted and restored successfully.
-- [ ] **Given** the recommendation, **when** Michelle reviews it, **then** D-07 is decided and, if "automate", follow-up stories are split.
+- [ ] **Given** the recommendation, **when** `<owner>` reviews it, **then** D-07 is decided and, if "automate", follow-up stories are split.
 
 ## Notes
 - Starts only after S5. The removal deadline stays "by the 7th of <month>", in line with the run → patch → watchdog cadence.

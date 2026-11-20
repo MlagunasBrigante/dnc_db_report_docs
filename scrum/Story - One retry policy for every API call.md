@@ -22,7 +22,7 @@ size: M
 - [ ] **Given** an item fails and then succeeds on a later attempt, **when** the run completes, **then** it is **not** counted as a warning or failure; it only shows up in a DEBUG-level attempt log.
 - [ ] **Given** injected failures (mocked 500 on a Stage-1 page, timeout on a Stage-2 batch, connection error on a Stage-4 lead, 503 on the token call), **when** the tests run, **then** each produces exactly one failed-item event after the configured attempts, and recovered calls produce none. Verified by unit tests plus one `once --dry-run` with injection.
 
-- [ ] **Outage pause (circuit breaker; added 2026-10-30 at Michelle's request).**
+- [ ] **Outage pause (circuit breaker; added 2026-10-30 at `<owner>`'s request).**
   - **Given** a stage (pages, batches or leads) hits 20 failed items in a row, **when** the breaker trips, **then** it pauses 15 minutes and probes with the next item. A failed probe triggers the next pause straight away.
   - **Given** 3 pauses without recovery, **when** the breaker opens, **then** the stage stops calling the API and records every remaining item as a failed item marked "deferred: <API> unavailable", with an ERROR log and an alert. The run still finishes and reports; it is not marked failed.
   - All three thresholds are overridable from `.env` (`OUTAGE_CONSECUTIVE_FAILURES`, `OUTAGE_PAUSE_SECONDS`, `OUTAGE_MAX_PAUSES`).
@@ -32,7 +32,7 @@ size: M
 ## Notes
 - **Verified 2026-11-02** with the dry-run `data/_dryrun/2026-11-02T194943Z/` (image built from `main` @ `b3b5a85`): the run completed with no failed items; retry, failed-item and outage-breaker behaviour is covered by 40 unit tests (injected 5xx, timeouts, connection errors, 4xx, token 503, breaker pauses and open). It hasn't yet been seen against a real LawRuler failure; the next real run will show that. Small follow-up: the failed-items summary should log even when the count is 0 (now: silent).
 - **Why the outage pause:** with LawRuler's patient retry settings, a full outage costs about 225 s per lead (about 97 s before this story), so a 7.7k-lead month would run for weeks. The breaker caps an outage at roughly an hour per stage. Deferred items go to the S2 patch pass on the 3rd.
-- **Branch:** `s1/patch/one-retry-policy`. Michelle renamed the branches on 2026-10-30. The other two are `s1/fix/info-logs-secret-masking` and `s1/fix/remove-session-cookie`.
+- **Branch:** `s1/patch/one-retry-policy`. `<owner>` renamed the branches on 2026-10-30. The other two are `s1/fix/info-logs-secret-masking` and `s1/fix/remove-session-cookie`.
 - **Today, three separately coded loops with different rules, plus one call with none (GAP-26):**
   - Stage 1 page `run.py:282-304`: retries timeouts and connection errors only, 5/10/20 s; a non-200 response `break`s (GAP-09).
   - Stage 2 batch `run.py:513-535`: retries 429/5xx, 1/2/4 s; when retries run out the batch is skipped (GAP-10).

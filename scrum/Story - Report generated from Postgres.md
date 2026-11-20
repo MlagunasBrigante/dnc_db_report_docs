@@ -12,7 +12,7 @@ size: S
 ---
 # Story: Report generated from Postgres
 ## User Story
-**As** Michelle (pipeline owner), **I want** the Stage 5 Excel/CSV report built from Postgres instead of SQLite, **so that** the entire pipeline reads and writes one system of record and I can verify the Postgres schema is correct by comparing reports.
+**As** `<owner>` (pipeline owner), **I want** the Stage 5 Excel/CSV report built from Postgres instead of SQLite, **so that** the entire pipeline reads and writes one system of record and I can verify the Postgres schema is correct by comparing reports.
 
 ## Acceptance Criteria
 - [ ] **Given** a run completes and writes to Postgres, **when** Stage 5 report generation executes, **then** it queries `leads_with_tags_YYYYMM` (and joins to other tables as needed) instead of reading from SQLite, and produces `leads_with_tags_YYYY-MM-DD.xlsx` and `.csv` (verified by inspecting run.py and confirming no `sqlite3` imports remain in the report stage)

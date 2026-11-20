@@ -12,7 +12,7 @@ size: S
 ---
 # Story: Watchdog on the 5th
 ## User Story
-**As** Michelle (pipeline owner), **I want** a watchdog that alerts if no successful run occurred this month, unresolved items remain, or a run is still going after 4 days, **so that** silent failures and stuck runs are caught automatically.
+**As** `<owner>` (pipeline owner), **I want** a watchdog that alerts if no successful run occurred this month, unresolved items remain, or a run is still going after 4 days, **so that** silent failures and stuck runs are caught automatically.
 
 ## Acceptance Criteria
 - [ ] **Given** the repo is updated with the watchdog units, **when** `Dev/deploy/install.sh` is executed, **then** it installs `dnc-scrub-watchdog.service` and `dnc-scrub-watchdog.timer` to `/etc/systemd/system/`, and enables the timer (verified by `systemctl list-timers` showing `dnc-scrub-watchdog.timer` with next run on the 5th at 08:00 UTC)
@@ -26,7 +26,7 @@ size: S
 ## Notes
 - **Decided 2026-10-29 (stories interview Q9):** the watchdog sends a monthly heartbeat even when all is clear; its own failure is escalated through `OnFailure=` to email and Teams; it also checks that the soft-deletion request was sent. This closes the "who watches the watchdog" gap, since a silent watchdog can no longer look like a healthy month.
 - The same `OnFailure=` notifier should be attached to the monthly run and patch-pass units ([[Story - Monthly run from versioned systemd units]], [[Story - Scheduled patch pass on the 3rd]]), so a crash at the systemd level is never silent either.
-- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th.
+- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **`<owner>`**, backup **e.cervera**, who acts when `<owner>` is out (`<owner>` informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that `<owner>` sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th.
 - **Unit files:** `dnc-scrub-watchdog.service` and `dnc-scrub-watchdog.timer` (OnCalendar=*-*-05 08:00:00 UTC, Persistent=true)
 - **Watchdog script:** `Dev/deploy/watchdog.py` or equivalent; queries Postgres and calls the existing email + Teams alert functions
 - **Alert channel:** Reuses the existing S1 email + Teams infrastructure; subject line "DNC Watchdog Alert"

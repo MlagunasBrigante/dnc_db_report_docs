@@ -12,7 +12,7 @@ size: S
 ---
 # Story: Profile legacy runs against the stage contract
 ## User Story
-**As** Michelle (data owner), **I want** a compatibility report for each of the 20 legacy runs (May 2025–July 2026) showing which are loadable as-is, which need mapping, and which are incompatible, **so that** I know what history can be preserved without forcing lossy conversions.
+**As** `<owner>` (data owner), **I want** a compatibility report for each of the 20 legacy runs (May 2025–July 2026) showing which are loadable as-is, which need mapping, and which are incompatible, **so that** I know what history can be preserved without forcing lossy conversions.
 
 ## Acceptance Criteria
 - [ ] **Given** the legacy runs in `data/legacy/` (1st_run, 2nd_run, 3rd_run, 4th_run, plus 16 dated runs 2025-12-09 → 2026-07-01), **when** `Dev/profile_legacy.py` is executed, **then** it produces a JSON or CSV report `legacy-compatibility-report.json` with one row per run (verified by checking the file exists and has 20 rows)

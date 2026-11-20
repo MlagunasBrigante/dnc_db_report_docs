@@ -26,7 +26,7 @@ size: S
 ## Notes
 - **Decided 2026-10-29 (stories interview Q3):** a separate internal "action list" email. It's sent only when there's something to act on and never goes to the external report recipient. From S4, the dashboard may replace it.
 - Volume reference: 184 known litigators as of 2025-08-04 (`Docs/Archive/DNC Short Report 2025-08-04.md`). Monthly incremental lists are expected to be much smaller.
-- **Recipient(s): to be named by Michelle** (who performs the soft-deletes today). Until named, it defaults to the alert owner (Michelle).
+- **Recipient(s): to be named by `<owner>`** (who performs the soft-deletes today). Until named, it defaults to the alert owner (`<owner>`).
 - Litigator definition: not a case, DNC, not Single Opt-In, Litigator, and Status not in `ACTIVE_PROCESS_STATUSES` (`run.py:50-71`). Decision D-01 (soft vs hard delete) may change the action wording later.
 
 ## Dependencies

@@ -36,9 +36,9 @@ Earlier patterns rejected:
 **Low uncertainty** — All documentation locations and Jira tickets are known; the per-stage I/O contract is visible in the code and run report; README updates are text edits; Jira re-scoping is a mapping exercise.
 
 ### Split evaluation
-Each story delivers value to a different persona: the per-stage reference doc serves the S2 schema designer and future maintainers; the README updates serve new contributors; the Jira re-scoping serves the backlog consumer (Michelle); the sync fix serves the Jira↔vault automation. Sizes are S to M; all are vertical (each closes one documentation gap end-to-end).
+Each story delivers value to a different persona: the per-stage reference doc serves the S2 schema designer and future maintainers; the README updates serve new contributors; the Jira re-scoping serves the backlog consumer (`<owner>`); the sync fix serves the Jira↔vault automation. Sizes are S to M; all are vertical (each closes one documentation gap end-to-end).
 
-> [!check] Before closing this epic, verify Michelle's actions were actually done
+> [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [x] Review the README rewrite. — [[Story - README, Jira and vault references re-scoped]]
 
 ## Child user stories

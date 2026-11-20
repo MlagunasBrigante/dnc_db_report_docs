@@ -42,14 +42,14 @@ Earlier patterns rejected:
 ### Split evaluation
 Each story delivers observable value to the IT & Data lead: emails without oversized attachments arrive, Teams channel exists, any alert-delivery failure raises a visible alarm, runbook exists for who acts on what. Sizes are reasonably equal (1-4 AC each); no pure infrastructure stories.
 
-> [!check] Before closing this epic, verify Michelle's actions were actually done
+> [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [ ] D-17 (2026-11-10): S2 started with this epic still open; finish its remaining stories in December.
 > - [x] Create the dedicated Teams channel and share its team and channel IDs (needed before this story starts). ✅ done ([[Story - Teams alert channel]] closed). — [[Story - Teams alert channel]]
 > - [x] If the spike needs admin consent for a Graph permission, request it from j.fernandez (M365 admin). ✅ 2026-11-05: not needed. — [[Story - Spike Teams posting through Graph]]
-> - [x] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out. ✅ 2026-11-11: done (Michelle). — [[Story - Runbook for failed or degraded runs]]
+> - [x] Brief e.cervera that they're the backup, will receive error alerts, and should act when you're out. ✅ 2026-11-11: done (`<owner>`). — [[Story - Runbook for failed or degraded runs]]
 > - [x] Identify our LawRuler account manager (name, address, domain). ✅ 2026-11-05: Lindsey Humphreys. — [[Story - Soft-deletion request to the LawRuler team]]
 > - [ ] Until then, forward each monthly request yourself. — [[Story - Soft-deletion request to the LawRuler team]]
-> - [x] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. ✅ 2026-11-11: confirmed by j.fernandez (Michelle). — [[Story - Monthly report email as a summary table]]
+> - [x] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. ✅ 2026-11-11: confirmed by j.fernandez (`<owner>`). — [[Story - Monthly report email as a summary table]]
 > - [ ] Run the container recreate command on the Mac and set the wake/no-sleep schedule. — [[Story - Mac run-night safeguards until cutover]]
 
 ## Child user stories

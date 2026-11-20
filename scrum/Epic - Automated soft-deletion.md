@@ -11,7 +11,7 @@ gaps: []
 > At the **start of this sprint**, re-run **Prioritize & De-risk** (scrum-scoping Phase 4): MoSCoW the stories (their `moscow` property is `tbd` until then), re-run the pre-mortem and update [[Prioritization and Risk Register]].
 
 ## Description
-Today, and through S5, leads to remove (DNC without opt-in, plus litigators) are soft-deleted **by the LawRuler team on email request** ([[Story - Soft-deletion request to the LawRuler team]]). This epic would let the job perform those soft-deletes itself through the LawRuler API, keeping the "by the 7th of <month>" commitment without manual work. **It starts only after S5**, and only if Michelle decides to automate (D-07).
+Today, and through S5, leads to remove (DNC without opt-in, plus litigators) are soft-deleted **by the LawRuler team on email request** ([[Story - Soft-deletion request to the LawRuler team]]). This epic would let the job perform those soft-deletes itself through the LawRuler API, keeping the "by the 7th of <month>" commitment without manual work. **It starts only after S5**, and only if `<owner>` decides to automate (D-07).
 
 ## Open questions
 - [ ] #open-question **D-07:** automate the soft-deletion, or keep the email request? Decided after the spike.
@@ -38,7 +38,7 @@ Today, and through S5, leads to remove (DNC without opt-in, plus litigators) are
 - **Reveals low-value work?** Yes. If the spike finds no API support, the epic closes with "stay manual".
 - **Equal sizes?** N/A until after the spike.
 
-> [!check] Before closing this epic, verify Michelle's actions were actually done
+> [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [ ] Agree a test lead with the LawRuler account manager; decide D-07 after the spike. — [[Story - Spike LawRuler soft-delete via API]]
 
 ## Child user stories

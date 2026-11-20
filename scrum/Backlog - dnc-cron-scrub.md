@@ -11,7 +11,7 @@ created: 2026-10-29
 
 Sprints are sequential. Each one starts only when the previous one is stable. All code is developed as if it already runs on the AlmaLinux ITServer (Docker, systemd, local PostgreSQL), even though the job stays on the Mac until the S2 cutover.
 
-> **Review gates (mandatory, Michelle):** annotate the epic files first (**Satisfactory Epics?**), then the story files (**Satisfactory Stories?**). Annotate in the files, not in chat. The next pass only touches what you annotate.
+> **Review gates (mandatory, `<owner>`):** annotate the epic files first (**Satisfactory Epics?**), then the story files (**Satisfactory Stories?**). Annotate in the files, not in chat. The next pass only touches what you annotate.
 
 > **Open questions** live in the story or epic that needs them, tagged `#open-question`. Search that tag in Obsidian to list them. They're answered when that story starts, not before.
 
@@ -79,7 +79,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
 
 > S3–S6: at each sprint start, re-run **Prioritize & De-risk** (MoSCoW + pre-mortem). Stories carry `moscow: tbd` until then.
 
-## S3 — Statistics: data readiness and modeling (Michelle leads)
+## S3 — Statistics: data readiness and modeling (`<owner>` leads)
 - [ ] [[Epic - Data readiness for modeling]]: milestones M1–M5 are go/no-go checkpoints
     - [ ] [[Story - M1 Data and pipeline audit]]
     - [ ] [[Story - M2 Notes ingested and preprocessing aligned]]

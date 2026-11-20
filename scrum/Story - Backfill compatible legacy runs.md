@@ -12,7 +12,7 @@ size: M
 ---
 # Story: Backfill compatible legacy runs
 ## User Story
-**As** Michelle (data owner), **I want** the legacy runs marked 'loadable' or 'needs_mapping' in the compatibility report to be loaded into Postgres, **so that** S3 has as much historical data as possible for statistical modeling.
+**As** `<owner>` (data owner), **I want** the legacy runs marked 'loadable' or 'needs_mapping' in the compatibility report to be loaded into Postgres, **so that** S3 has as much historical data as possible for statistical modeling.
 
 ## Acceptance Criteria
 - [ ] **Given** the compatibility report from Story - Profile legacy runs, **when** the report shows N runs as 'loadable', **then** the backfill script `Dev/backfill.py --legacy` loads those N runs into Postgres with row counts and checksums matching the source (verified by querying `pipeline_run WHERE trigger='legacy_backfill'` and counting rows)

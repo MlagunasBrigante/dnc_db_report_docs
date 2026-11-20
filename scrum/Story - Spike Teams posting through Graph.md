@@ -11,7 +11,7 @@ size: S
 ---
 # Story: Spike Teams posting through Graph
 
-> [!todo] Michelle — action needed
+> [!todo] `<owner>` — action needed
 > - [x] If the spike needs admin consent for a Graph permission, request it from j.fernandez (M365 admin). ✅ 2026-11-05: not needed (Workflows webhook, no Graph permission).
 
 ## User Story
@@ -26,9 +26,9 @@ size: S
 - [ ] Time-boxed to 1 day; if Graph API access is blocked or requires a tenant-wide permission the app cannot get, the recommendation states "use email only" and the Teams alert channel story is dropped.
 
 ## Notes
-- **Approved by Michelle 2026-11-05:** Teams goes through a Workflows webhook (`TEAMS_WEBHOOK_URL`).
-- **Spike written 2026-11-05:** [[teams-graph-spike]]. Graph **can't** post channel or chat messages with our app-only (client-credentials) token: `ChannelMessage.Send` is delegated-only, and the application permission is for migration only (verified on Microsoft Learn). Office 365 Connectors were retired in May 2026. Recommendation: a **Teams Workflows webhook** (`TEAMS_WEBHOOK_URL` in `.env`, Adaptive Card POST). It needs no Graph permission or admin consent. Waiting on Michelle's approval and the webhook URL.
-- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **Michelle**, backup **e.cervera**, who acts when Michelle is out (Michelle informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that Michelle sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th. The target is a **channel**, so the spike answers which Graph permission lets the app post to a channel, verified with the microsoft-learn MCP.
+- **Approved by `<owner>` 2026-11-05:** Teams goes through a Workflows webhook (`TEAMS_WEBHOOK_URL`).
+- **Spike written 2026-11-05:** [[teams-graph-spike]]. Graph **can't** post channel or chat messages with our app-only (client-credentials) token: `ChannelMessage.Send` is delegated-only, and the application permission is for migration only (verified on Microsoft Learn). Office 365 Connectors were retired in May 2026. Recommendation: a **Teams Workflows webhook** (`TEAMS_WEBHOOK_URL` in `.env`, Adaptive Card POST). It needs no Graph permission or admin consent. Waiting on `<owner>`'s approval and the webhook URL.
+- **Alert routing (decided 2026-10-29, stories interview Q1):** owner **`<owner>`**, backup **e.cervera**, who acts when `<owner>` is out (`<owner>` informs them). Email goes **to** `it.admin@` and the owner, **CC** `j.fernandez@` and `e.cervera@` (same domain as `it.admin@`; recipients from `Dev/.env`, e.g. `EMAIL_RECIPIENTS_*` plus a new `EMAIL_CC`). Teams goes to a **dedicated channel that `<owner>` sets up**, not a 1:1 chat. Response times: **errors, alert-delivery failures and watchdog alerts** are acted on the next business day; **warnings and unresolved items** within the week, before the patch pass on the 3rd or the watchdog on the 5th. The target is a **channel**, so the spike answers which Graph permission lets the app post to a channel, verified with the microsoft-learn MCP.
 - **Code reference** (verified against `Dev/run.py`):
   - `_get_o365_account`: `run.py:1120` — existing Graph connector using O365 library and client credentials flow
 - **Scope decision open item 3**: "The connector (credentials in `Dev/.env`) and the Graph calling code (email feature) already exist. To verify with `microsoft-learn` during the S1 story: which Graph permission lets the app post to a Teams channel or chat, since app-only posting has restrictions."

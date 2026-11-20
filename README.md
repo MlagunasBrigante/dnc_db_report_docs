@@ -2,11 +2,11 @@
 
 Planning, reference and run-history docs for the **DNC Scrub Pipeline**. Every month the pipeline scrubs LawRuler lead phone numbers against dncscrub.com, tags the matching leads in LawRuler, builds an Excel/CSV report and sends results through Microsoft 365.
 
-The code lives in a separate repo, [`dnc_db_report`](https://github.com/BriganteLaw/dnc_db_report) (the `Dev/` folder). Its `README.md` covers stages, env vars, volumes and Docker usage. This repo ([`dnc_db_report_docs`](https://github.com/MlagunasBrigante/dnc_db_report_docs)) holds documentation only, no code.
+The code lives in a separate repo, [`dnc_db_report`](https://github.com/BriganteLaw/dnc_db_report) (the `Dev/` folder). Its `README.md` covers stages, env vars, volumes and Docker usage. This repo ([`dnc_db_report_docs`](https://github.com/`<docs-repo-owner>`/dnc_db_report_docs)) holds documentation only, no code.
 
 ## Current state
 
-- **Production:** the `dnc-scrub` Docker container on Michelle's Mac fires at 02:00 UTC on the 1st of every month. Each run is stored in SQLite under `data/{date}/`.
+- **Production:** the `dnc-scrub` Docker container on `<owner-mac>` fires at 02:00 UTC on the 1st of every month. Each run is stored in SQLite under `data/{date}/`.
 - **Plan:** re-scoped on 2026-10-29. The goal is a monthly scrub that is reliable, observable and auditable on the AlmaLinux ITServer with PostgreSQL, followed by statistical modeling, a metrics dashboard and archiving. The physical cutover is deliberately not rushed.
 
 ## Layout
@@ -41,8 +41,8 @@ The code lives in a separate repo, [`dnc_db_report`](https://github.com/Brigante
 - **Files are named by type:** `Epic - <outcome>.md`, `Story - <outcome>.md`, `Decision - <topic>.md`, `DNC Run Report YYYY-MM-DD.md`.
 - **Frontmatter properties:** stories carry `type`, `epic`, `sprint`, `moscow`, `status`, `gaps`, `jira` (legacy, left empty) and `size`. Priority comes from the `moscow` property. Stories in S3–S6 stay at `moscow: tbd` until that sprint's prioritization pass.
 - **Open questions** are tagged `#open-question` inside the story or epic that needs them, and are answered when that story starts.
-- **Owner actions:** Michelle's to-dos are `[!todo]` callouts in stories. Each epic has a `[!check]` list that confirms those to-dos were done before the epic closes.
-- **Reviews:** annotate directly in the files (`> [!question]`, `> [!warning]`, `**MICHELLE:** …`) rather than in chat. The next pass handles only what was annotated.
+- **Owner actions:** `<owner>`'s to-dos are `[!todo]` callouts in stories. Each epic has a `[!check]` list that confirms those to-dos were done before the epic closes.
+- **Reviews:** annotate directly in the files (`> [!question]`, `> [!warning]`, `**<owner>:** …`) rather than in chat. The next pass handles only what was annotated.
 - **Links:** notes are written for Obsidian and use `[[wikilinks]]`, which GitHub shows as plain text. Browse in Obsidian for working links.
 - **Jira:** deprecated on 2026-10-29. Scrum lives only in this repo; the old `DNCUP` keys survive as historical references.
 

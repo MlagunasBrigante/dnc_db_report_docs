@@ -16,13 +16,13 @@ size: M
 
 ## Acceptance Criteria
 - [ ] **Given** [[Story - Stage 4 stops reloading the full lead history]] is done and stable for at least one monthly run, **when** this story starts, **then** its lessons are written down and a short investigation names what Stage 2 holds in memory and why. On 10-28, Stage 2's mean was 744 MiB, and the Stage 1 data was likely still referenced.
-- [ ] **Given** the investigation, **when** the change ships, **then** Stage 2's mean memory is lower than the baseline in the memory log, with a target agreed with Michelle after the investigation, using the same formula as Stage 4.
+- [ ] **Given** the investigation, **when** the change ships, **then** Stage 2's mean memory is lower than the baseline in the memory log, with a target agreed with `<owner>` after the investigation, using the same formula as Stage 4.
 - [ ] **Given** the change, **when** a real run completes, **then** scrub results and batch checkpointing are unchanged: same results on the same input; kill and restart mid-Stage 2 resumes without re-scrubbing completed batches.
 - [ ] **Resilience and stability win over the memory target**, as in Stage 4.
 
 ## Notes
 - **Observation 2026-11-10 (real run, no Stage 2 change yet):** Stage 2 mean 648 MiB vs 744 baseline (−13%) after the DataFrame releases from the Stage 4 story, on a small pass (2,905 phones, 6 s). Per AC1 this story still starts after Stage 4 is stable on a monthly run (Dec 1).
-- **Priority 2** (Michelle, 2026-10-29): attended only after Stage 4 is stabilized and its key design lessons are learned.
+- **Priority 2** (`<owner>`, 2026-10-29): attended only after Stage 4 is stabilized and its key design lessons are learned.
 - Focus is the **mean**; peaks only if manual runs show them to be non-negligible.
 - Replaces the scaffolded "Stage 1 streams pages instead of holding them" story. Stage 1 has the lowest mean (409 MiB) and isn't prioritized; it's revisited only if the quarterly memory review shows growth.
 

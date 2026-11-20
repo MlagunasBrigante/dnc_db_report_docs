@@ -91,7 +91,7 @@ python3 Dev/tools/scrub_historic_logs.py --data-dir data --delete-originals \
   --approved-report Docs/Reference/historic-log-scrubbing-report.md
 ```
 
-> [!todo] Michelle — action needed
+> [!todo] `<owner>` — action needed
 > - [ ] Review this report and spot-check a few `*.info.log` copies.
 > - [ ] Approve, then run the delete command above on the Mac.
 > - [ ] After deletion: confirm the originals are gone and the copies remain.

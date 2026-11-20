@@ -6,7 +6,7 @@ tags: [project/dnc-cron-scrub, doc-sync]
 ---
 # Doc-sync log
 
-Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each run aligns the docs to `Dev` `main`: it auto-fixes factual drift and lists judgment calls under **Needs Michelle**. Newest entry on top. The job stops once the project is marked finished (project `README.md` status `✅ Done`/`🔴 Closed`, or the folder moved to `Projects/_Closed/`).
+Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each run aligns the docs to `Dev` `main`: it auto-fixes factual drift and lists judgment calls under **Needs `<owner>`**. Newest entry on top. The job stops once the project is marked finished (project `README.md` status `✅ Done`/`🔴 Closed`, or the folder moved to `Projects/_Closed/`).
 
 > [!info]- Job definition (schedule `0 7 * * 1-5`, skill `obsidian`, deliver `local`)
 > Daily documentation-sync job for the dnc-cron-scrub project. Run autonomously (no questions). Keep output terse and factual.
@@ -37,7 +37,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 >
 > Step 3, auto-fix factual drift only (items a to e) with minimal targeted edits in the existing style. Edit Dev/README.md and Dev/.env.example only when the code repo's current branch is main; otherwise list the proposed edit in the report. .env.example holds placeholders only.
 >
-> Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs Michelle** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
+> Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs `<owner>`** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
 
 <!-- entries below, newest first -->
 
@@ -46,7 +46,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 **Auto-fixed:**
 - `Dev/README.md:322` Verification tool: now streams via server-side cursor with the shared checksum, compares checksum + row count; exit codes 0 match / 1 mismatch / 2 usage, connection or unknown run (`tools/verify_raw_snapshot.py:14-17,73-141,162`). Dev on `main`.
 - `Docs/README.md:23`: D-01…23 → D-01…25 (`Docs/scrum/DNC Update - Scope.md:233-234`).
-**Needs Michelle:**
+**Needs `<owner>`:**
 - [[Story - Raw snapshot and run record land in Postgres]] still `in-review`; story:56 says the GAP-34 follow-up is "in progress" on `s2/fix/gap-34-streaming-checksum`, but it is merged to main (967308d). GAP-34 row (`Scope.md:205`) has no fixed note. Update branch line + GAP-34 resolution; set `done` once verified on the ITServer.
 - `schema/000_roles_and_database.sql:3` header still says "PostgreSQL 13.23+", while `001_raw_snapshot.sql`/`verify_raw_snapshot.sql` now say 17+ (D-23). Fix the header on the next code branch.
 - Carried over: project `README.md:87-88` § Open Gaps lists D-04 as pending and [[Decision - Dedicated PostgreSQL database]] as "proposed" (decided via D-04/D-18); D-23…25 not mentioned. Edit by hand.
@@ -59,7 +59,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 **Auto-fixed:**
 - `Dev/README.md:381` Output Structure: + `processed/.run_id` (Postgres run UUID, reused on resume, only with `POSTGRES_DSN`) (`dnc/pg_store.py:136-147,191,260`; `dnc/run_paths.py:36`). Dev on `main`.
 - `Docs/README.md:23`: D-01…22 → D-01…23 (`Docs/scrum/DNC Update - Scope.md:232`).
-**Needs Michelle:**
+**Needs `<owner>`:**
 - [[Story - Raw snapshot and run record land in Postgres]] is `in-review` but merged to main (1bdd6b9). Its GAP-34 `#open-question` (one streaming checksum, story:58) is still open, and the code still hashes in arrival order (`dnc/pg_store.py:276-279`) vs sorted `canonical_checksum` (`:71`). Set `done` only after GAP-34 is settled or moved to its own story.
 - D-23 (PG 17 in its own container, `Scope.md:232`) vs commit b94aa56 "Fix DDL for PG13 compatibility" and `.env.example:158` socket DSN example (`host=/var/run/postgresql`): check the socket form still applies to a containerised server.
 - Project `README.md` § Open Gaps: carried over (D-04 still listed pending; [[Decision - Dedicated PostgreSQL database]] still "proposed", accepted via D-18 `Scope.md:226`); D-23 not mentioned. Edit by hand.
@@ -72,9 +72,9 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 **Commits since last sync:** 1 (65ac7d2…399841a): `399841a` Minor changes in README — lands the 2026-11-12 proposed `Dev/README.md` edits (`CODE_VERSION`/`RUN_TRIGGER` rows, `data/metrics/` layout, Memory Log Backfill). 1 file, +13/−3.
 **Auto-fixed:**
 - `Docs/README.md:23`: GAP-01…33 / D-01…21 → GAP-01…34 / D-01…22 (`Docs/scrum/DNC Update - Scope.md:205,231`).
-- `Docs/README.md:5`: code repo link `MlagunasBrigante/dnc_db_report` → `BriganteLaw/dnc_db_report` (`git -C Dev remote -v`, `CLAUDE.md:23`).
-**Needs Michelle:**
-- `README.md` (project) § Open Gaps is stale: lists D-04 as pending (decided no, `Scope.md:213`) and says [[Decision - Dedicated PostgreSQL database]] is "proposed, awaiting Michelle" (accepted via D-18, `Scope.md:226`, note `status: accepted`). Outside the job's audit scope; update the bullets by hand.
+- `Docs/README.md:5`: code repo link `<docs-repo-owner>/dnc_db_report` → `BriganteLaw/dnc_db_report` (`git -C Dev remote -v`, `CLAUDE.md:23`).
+**Needs `<owner>`:**
+- `README.md` (project) § Open Gaps is stale: lists D-04 as pending (decided no, `Scope.md:213`) and says [[Decision - Dedicated PostgreSQL database]] is "proposed, awaiting `<owner>`" (accepted via D-18, `Scope.md:226`, note `status: accepted`). Outside the job's audit scope; update the bullets by hand.
 - Dev working tree is on `s2/feat/raw-snapshot-postgres`, not `main`; `Dev/README.md`/`.env.example` would only be edited from main (no drift found this run, so no proposed edits).
 - Carried over: D-19 row still starts with `||` (`Scope.md:228`); GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (`Scope.md:200-202`).
 - Checks clean: status table vs story `status` (24 rows), backlog ticks vs `status`, 14 epics / 53 stories, wikilinks resolve; GAP-34 is in the raw-snapshot story's `gaps`.
@@ -87,7 +87,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 - `Dev/README.md` Maintenance Tools: + Memory Log Backfill (`tools/backfill_memory_log.py:1-11,125-129`).
 - `README.md` (project): Current Status synced to story `status` (4 in-review → done; +6 rows: 4 done, 2 in-review); Point line updated; Key Resources code repo → `BriganteLaw/dnc_db_report` (`git remote -v`, `CLAUDE.md:23`).
 - `Docs/README.md:23`: GAP-01…29 / D-01…10 → GAP-01…33 / D-01…21 (`Docs/scrum/DNC Update - Scope.md:167-229`).
-**Needs Michelle:**
+**Needs `<owner>`:**
 - `Docs/scrum/DNC Update - Scope.md:227`: D-19 row starts with `||`, so it renders broken (decision register is off-limits to the job). Fix the pipe by hand.
 - GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (Scope:200-202); now on main (22b652d, 6039c78, f576f8d). Update the wording if you want it to say main.
 - `tools/backfill_memory_log.py:125` hard-codes `/workspace/vault/...` (sandbox only); fine as a one-off, otherwise add `--data-dir`.
@@ -105,7 +105,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 - `Dev/README.md:345`: per-stage metrics are on the Teams **success** card only, not warning (`run.py:2355` passes `metrics`; `send_warning_teams_alert` `run.py:1908` has no metrics arg).
 - `Dev/README.md` Local Development: added test command (`pytest.ini`, `requirements-dev.txt`).
 - `README.md` (project): Current Status +1 row, [[Story - Per-stage duration and memory in every run]] 🔍 In Review; Point line updated.
-**Needs Michelle:**
+**Needs `<owner>`:**
 - Stories `in-review` but merged on main: Per-stage duration and memory (a3ca7c5, efe2647; container recreated, story line 24), Alert delivery failure (fa17869), Teams alert channel (405d125). Move to `merged — pending Mac verification` if review is done.
 - `CLAUDE.md:34,36` (edit blocked again, protected file): `dnc/` helper list stale (add alert delivery, config check/failure alerts, Teams, soft-delete request, run status/outcome, stage metrics, log excerpt, report email/summary); `Docs/Reference/` row says runbook + I/O spec "not written yet" but `DNC-runbook.md`, `pipeline-stages-reference.md` exist. Edit by hand.
 - `Dev/README.md:62,69,104,106,114,169`: paths still `Projects/DNC-Update/...`; confirm the live `dnc-scrub` mount, then update.
@@ -122,7 +122,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 - `Dev/.env.example`: commented retry-policy defaults block; commented `SCHEDULE_CRON` default (`Dockerfile:10`).
 - `README.md` (project): Current Status table synced to story `status` (+6 rows: 3 done, 3 in-review; report email now "awaiting first real run with business recipients"); Point line updated.
 - `Docs/README.md:23`, Backlog intro line 10: D-01…09 → D-01…10 (`Docs/scrum/DNC Update - Scope.md:214`).
-**Needs Michelle:**
+**Needs `<owner>`:**
 - Yesterday's `Dev/README.md`/`.env.example` fixes were never committed and are gone from the working tree (redone above). Commit them on main this time.
 - `CLAUDE.md:34,36` (edit blocked, protected file): `dnc/` helper list stale (add alert delivery, Teams, soft-delete request, run status/outcome, config check, log excerpt, report email/summary); `Docs/Reference/` row says runbook and I/O spec "not written yet", but `DNC-runbook.md` and `pipeline-stages-reference.md` exist. Edit by hand.
 - Teams alert channel + Alert delivery failure stories are `in-review` but merged on main (405d125, 0bc3dd5, 05df099). Move to `merged — pending Mac verification` if review is done.
@@ -139,7 +139,7 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 - `Dev/.env.example`: commented retry-policy defaults block; O365 comment "email/Teams" → email only, enabled when any O365_* set (`run.py:1675`).
 - `README.md` (project): Current Status table synced to story `status` (9 done, 2 merged-pending); Point line updated to match.
 - `Docs/README.md`: 52→53 stories; GAP-01…29, D-01…09 (`Docs/scrum/DNC Update - Scope.md:199,213`). Backlog intro: same GAP/D ranges.
-**Needs Michelle:**
+**Needs `<owner>`:**
 - `CLAUDE.md` Layout row: `dnc/` helper list is stale (now also config check, fault injection, log excerpt, report email/summary, run outcome). Edit blocked (protected agent-instruction file); apply by hand. Branch examples (`s1/patch/one-retry-policy`) still valid.
 - `Dev/README.md:62,69,104,106,114,143`: paths still `Projects/DNC-Update/...`; `Projects/DNC-Update/data/` still exists, so the live `dnc-scrub` mount likely still points there. Confirm the mount (`docker inspect dnc-scrub`), then update the README or recreate the container.
 - 4 Story files are not linked from the Backlog (57 files vs 53 listed), all `to-do`: Success email carries only the report, Litigator action list for soft-deletes, Rotate exposed credentials and purge git history, Stage 1 streams pages instead of holding them. Delete if superseded or add to the Backlog.
@@ -153,4 +153,4 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 ## 2026-11-02: Dev main b3b5a85 (baseline)
 **Commits since last sync:** first baseline (manual doc-maintenance pass in chat).
 **Auto-fixed:** see the progress note in [[Story - README, Jira and vault references re-scoped]].
-**Needs Michelle:** review both READMEs; decisions D-01…D-06 have no owner or date; PostgreSQL placement decision still proposed.
+**Needs `<owner>`:** review both READMEs; decisions D-01…D-06 have no owner or date; PostgreSQL placement decision still proposed.

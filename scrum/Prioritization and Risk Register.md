@@ -18,7 +18,7 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 - **Why:** the sprint sequence is locked and the team is small, so the open question is what's essential inside each sprint, not numeric scoring. RICE's "reach" means little for an internal pipeline.
 - **Alternative:** Cost of Delay, if a hard compliance deadline appears (e.g. Legal sets a date).
 - **Reassess when:** a sprint starts, a decision item (D-01…D-07) lands, or a monthly run reveals a new gap.
-- Michelle's judgment overrides the labels: they drive the conversation, they don't decide it.
+- `<owner>`'s judgment overrides the labels: they drive the conversation, they don't decide it.
 - Labels live in each story's `moscow` property.
 
 ### S1 — Gap-closing
@@ -52,7 +52,7 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 **Order table:**
 | Order | Must (17) |
 |---|---|
-| 1 | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; Michelle creates DB + roles) |
+| 1 | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; `<owner>` creates DB + roles) |
 | 2 | [[Story - All stages write to Postgres with lineage]] (foundation for failures & backfill) |
 | 3 | [[Story - Closed months become read-only]] · [[Story - Report generated from Postgres]] (parallel after 2) |
 | 4 | [[Story - Failed items captured per stage]] (after all stages in PG) |
@@ -70,11 +70,11 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 ### S3–S6
 `moscow: tbd`, prioritized at each sprint start.
 
-## 2. Michelle's resource checklist (nudge list)
-Resources the Should items need from Michelle. Claude nudges for these at S1 kickoff and before each dependent story starts.
+## 2. `<owner>`'s resource checklist (nudge list)
+Resources the Should items need from `<owner>`. Claude nudges for these at S1 kickoff and before each dependent story starts.
 - [x] Create the **dedicated Teams channel** and share its team and channel identifiers → [[Story - Teams alert channel]]
-- [x] Brief **e.cervera** that they're the backup and will receive error alerts. ✅ 2026-11-11: done (Michelle). → [[Story - Runbook for failed or degraded runs]]
-- [x] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app): Michelle can (2026-11-02); rotation deferred, D-08 → [[Story - Rotate exposed credentials and retire the old repo]]
+- [x] Brief **e.cervera** that they're the backup and will receive error alerts. ✅ 2026-11-11: done (`<owner>`). → [[Story - Runbook for failed or degraded runs]]
+- [x] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app): `<owner>` can (2026-11-02); rotation deferred, D-08 → [[Story - Rotate exposed credentials and retire the old repo]]
 - [x] Approve the historic-log summary report before originals are deleted: approved 2026-11-09 (D-15) → [[Story - Scrub secrets from historic run logs]]
 - [x] Review the README rewrite: approved 2026-11-10 → [[Story - README, Jira and vault references re-scoped]] (Jira deprecated 2026-10-29)
 - [x] Identify the **LawRuler account manager**: Lindsey Humphreys (2026-11-05) → [[Story - Soft-deletion request to the LawRuler team]]
@@ -93,31 +93,31 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 
 | # | Risk | Category | P | I | Score | Owner | Trigger | Status |
 |---|---|---|---|---|---|---|---|---|
-| R16 | **Michelle gets stuck or overwhelmed in S3–S4** (statistics plus dashboard on her own) | People | 4 | 4 | **16** | Michelle | A milestone has no progress for 2 weeks, or a soft date slides twice | Active |
-| R1 | One person owns pipeline, development and statistics across 6 sprints | People | 4 | 4 | **16** | Michelle | S1 not done by the Jan 1 run, or Michelle out more than a week | Active |
-| R3 | LawRuler API flakiness or changes break a stage | External | 4 | 3 | **12** | Michelle | Unresolved items rise; new error types | Monitoring. Re-score when [[Story - Patch pass reprocesses a run's failed items]] and [[Story - Unresolved items reach the alerts]] close (Michelle, 2026-11-11: planned mitigations don't lower a score until they ship). |
-| R5 | The "removed by the 7th" promise isn't kept | External | 4 | 3 | **12** | Michelle + LawRuler account manager (Lindsey Humphreys) | Request not acknowledged by the 5th; requested leads present in the next snapshot | Active |
-| R2 | Exposed credentials are misused before rotation | Technical | 2 | 5 | 10 | Michelle | Unknown LawRuler/Graph activity; rotation not done by mid-Nov | Graph secret rotated 2026-11-11. LawRuler OAuth client secret not rotatable (global/static), accepted. LawRuler API username/password pending: Michelle reports team decision at end of S2 (D-20). 2026-11-11: P reduced 3→2 (most credentials addressed). 2026-11-19 (D-26): same credentials also on the ITServer `.env` (chmod 600) for setup; risk stays open |
-| R6 | Legal record has no off-machine backup | Technical | 2 | 5 | 10 | Michelle | No backup before cutover | Mitigated by story (S2 Must, not built yet). Re-score when [[Story - Backups and restore drill for the dnc database]] closes (Michelle, 2026-11-11). |
-| R7 | Backfill or migration corrupts the legal record | Technical | 2 | 5 | 10 | Michelle | Row-count or checksum mismatch | Monitoring |
-| R8 | Lead-level data reaches an external recipient | Process | 2 | 5 | 10 | Michelle | Allowlist error logged; external recipient added | Monitoring |
-| R9 | Database setup undecided or no admin rights, so S2 is blocked | Process | 3 | 3 | 9 | Michelle | Open questions unanswered at S2 start | Closed 2026-11-10 (D-18: dedicated DB; Michelle creates DB + roles) |
-| R11 | Scope creep across 6 sprints | Process | 3 | 3 | 9 | Michelle | Stories added mid-sprint without the gate | Monitoring |
-| R19 | Mac and ITServer diverge during S2 migration (dual maintenance) | Process | 3 | 3 | 9 | Michelle | Mac Dec 1 run uses old code; ITServer tests use new schema | Active |
-| R21 | Michelle sole DB admin; no backup person for DB operations | People | 3 | 3 | 9 | Michelle | Michelle unavailable during migration or post-cutover issue | Active |
-| R12 | Late n8n decision (D-04) flips the S2 design | Process | 2 | 4 | 8 | Michelle | D-04 open at S2 start | Closed 2026-11-10 (D-04 = no) |
-| R13 | Deleted logs later needed as legal evidence | Process | 2 | 4 | 8 | Michelle | Legal request references a pre-2026-11 run | Monitoring |
-| R18 | Testing on production `dnc` DB via test table risks data corruption | Process | 2 | 4 | 8 | Michelle | Test code touches real partitions; bad transaction rollback | Active |
-|| R20 | Michelle lacks Docker/systemd access on ITServer | Process | 2 | 4 | 8 | Michelle | Install script fails with permission errors | Active. 2026-11-13: Docker confirmed (29.3.0, Compose v5.1.0); systemd/sudo still unconfirmed. 2026-11-19: sudo confirmed (Michelle installed git with `dnf`); likelihood lowered in practice, but systemd unit install not yet exercised — keep open until the systemd story runs. |
-| R22 | PostgreSQL 17 reaches end of life (2029-11-08) without a planned major upgrade | Technical | 2 | 4 | 8 | Michelle | 2029-05-01 with no upgrade plan | Open. Reminder: plan the upgrade to the newest supported major (expected 22, released ~Sep 2029) in 2029; major upgrades need pg_upgrade or dump/restore (D-23). |
-| R4 | Mac runs miss a month before cutover (sleep, folder rename) | Technical | 2 | 2 | 4 | Michelle | No run folder by the 2nd | Downgraded: about a month of buffer; handled by a Could story |
+| R16 | **`<owner>` gets stuck or overwhelmed in S3–S4** (statistics plus dashboard on her own) | People | 4 | 4 | **16** | `<owner>` | A milestone has no progress for 2 weeks, or a soft date slides twice | Active |
+| R1 | One person owns pipeline, development and statistics across 6 sprints | People | 4 | 4 | **16** | `<owner>` | S1 not done by the Jan 1 run, or `<owner>` out more than a week | Active |
+| R3 | LawRuler API flakiness or changes break a stage | External | 4 | 3 | **12** | `<owner>` | Unresolved items rise; new error types | Monitoring. Re-score when [[Story - Patch pass reprocesses a run's failed items]] and [[Story - Unresolved items reach the alerts]] close (`<owner>`, 2026-11-11: planned mitigations don't lower a score until they ship). |
+| R5 | The "removed by the 7th" promise isn't kept | External | 4 | 3 | **12** | `<owner>` + LawRuler account manager (Lindsey Humphreys) | Request not acknowledged by the 5th; requested leads present in the next snapshot | Active |
+| R2 | Exposed credentials are misused before rotation | Technical | 2 | 5 | 10 | `<owner>` | Unknown LawRuler/Graph activity; rotation not done by mid-Nov | Graph secret rotated 2026-11-11. LawRuler OAuth client secret not rotatable (global/static), accepted. LawRuler API username/password pending: `<owner>` reports team decision at end of S2 (D-20). 2026-11-11: P reduced 3→2 (most credentials addressed). 2026-11-19 (D-26): same credentials also on the ITServer `.env` (chmod 600) for setup; risk stays open |
+| R6 | Legal record has no off-machine backup | Technical | 2 | 5 | 10 | `<owner>` | No backup before cutover | Mitigated by story (S2 Must, not built yet). Re-score when [[Story - Backups and restore drill for the dnc database]] closes (`<owner>`, 2026-11-11). |
+| R7 | Backfill or migration corrupts the legal record | Technical | 2 | 5 | 10 | `<owner>` | Row-count or checksum mismatch | Monitoring |
+| R8 | Lead-level data reaches an external recipient | Process | 2 | 5 | 10 | `<owner>` | Allowlist error logged; external recipient added | Monitoring |
+| R9 | Database setup undecided or no admin rights, so S2 is blocked | Process | 3 | 3 | 9 | `<owner>` | Open questions unanswered at S2 start | Closed 2026-11-10 (D-18: dedicated DB; `<owner>` creates DB + roles) |
+| R11 | Scope creep across 6 sprints | Process | 3 | 3 | 9 | `<owner>` | Stories added mid-sprint without the gate | Monitoring |
+| R19 | Mac and ITServer diverge during S2 migration (dual maintenance) | Process | 3 | 3 | 9 | `<owner>` | Mac Dec 1 run uses old code; ITServer tests use new schema | Active |
+| R21 | `<owner>` sole DB admin; no backup person for DB operations | People | 3 | 3 | 9 | `<owner>` | `<owner>` unavailable during migration or post-cutover issue | Active |
+| R12 | Late n8n decision (D-04) flips the S2 design | Process | 2 | 4 | 8 | `<owner>` | D-04 open at S2 start | Closed 2026-11-10 (D-04 = no) |
+| R13 | Deleted logs later needed as legal evidence | Process | 2 | 4 | 8 | `<owner>` | Legal request references a pre-2026-11 run | Monitoring |
+| R18 | Testing on production `dnc` DB via test table risks data corruption | Process | 2 | 4 | 8 | `<owner>` | Test code touches real partitions; bad transaction rollback | Active |
+|| R20 | `<owner>` lacks Docker/systemd access on ITServer | Process | 2 | 4 | 8 | `<owner>` | Install script fails with permission errors | Active. 2026-11-13: Docker confirmed (29.3.0, Compose v5.1.0); systemd/sudo still unconfirmed. 2026-11-19: sudo confirmed (`<owner>` installed git with `dnf`); likelihood lowered in practice, but systemd unit install not yet exercised — keep open until the systemd story runs. |
+| R22 | PostgreSQL 17 reaches end of life (2029-11-08) without a planned major upgrade | Technical | 2 | 4 | 8 | `<owner>` | 2029-05-01 with no upgrade plan | Open. Reminder: plan the upgrade to the newest supported major (expected 22, released ~Sep 2029) in 2029; major upgrades need pg_upgrade or dump/restore (D-23). |
+| R4 | Mac runs miss a month before cutover (sleep, folder rename) | Technical | 2 | 2 | 4 | `<owner>` | No run folder by the 2nd | Downgraded: about a month of buffer; handled by a Could story |
 | R14 | Graph won't allow app-only posting to Teams | External | 3 | 2 | 6 | j.fernandez | Spike result | Monitoring |
-| R15 | Memory work destabilizes the run | Technical | 2 | 3 | 6 | Michelle | Restart test fails; results differ before vs after | Monitoring |
-| R17 | PostgreSQL 13.23 partition management or syntax differs from newer versions | Technical | 2 | 3 | 6 | Michelle | DDL fails on PG 13; partition closing errors | Retired 2026-11-13: target is PostgreSQL 17 (D-23). |
+| R15 | Memory work destabilizes the run | Technical | 2 | 3 | 6 | `<owner>` | Restart test fails; results differ before vs after | Monitoring |
+| R17 | PostgreSQL 13.23 partition management or syntax differs from newer versions | Technical | 2 | 3 | 6 | `<owner>` | DDL fails on PG 13; partition closing errors | Retired 2026-11-13: target is PostgreSQL 17 (D-23). |
 
 ### Mitigation cards (score ≥ 12), accepted 2026-10-29: we'll try not to need them
 **R16 — Overwhelm in S3–S4 | 16**
-- **Owner:** Michelle (Claude nudges)
+- **Owner:** `<owner>` (Claude nudges)
 - **Trigger:** no milestone progress for 2 weeks, or a soft date slides twice.
 - **Mitigation:**
   - **soft, flexible deadlines** per milestone, set at sprint start, which can slide by agreement;
@@ -127,23 +127,23 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 - **Residual:** 3×3 = 9.
 
 **R1 — Key-person dependency | 16**
-- **Owner:** Michelle
-- **Trigger:** S1 not done by the Jan 1 run, or Michelle out more than a week.
+- **Owner:** `<owner>`
+- **Trigger:** S1 not done by the Jan 1 run, or `<owner>` out more than a week.
 - **Mitigation:** e.cervera shadows one S1 story end to end; the runbook and per-stage documentation are written early; stories stay small enough to hand over.
 - **Contingency:** pause S3–S6 and keep only the S1 Must items moving.
 - **Residual:** 3×3 = 9.
 
 **R2 — Exposed credentials | 10** (reduced from 15, 2026-11-11)
-- **Owner:** Michelle
+- **Owner:** `<owner>`
 - **Trigger:** unknown LawRuler or Graph activity; rotation not done by mid-November.
 - **Mitigation:** the rotation story goes first; count secret matches in the historic logs to confirm the inventory; credentials that other flows depend on get recurring reminders until rotated.
-- **2026-11-11 (D-20):** Graph secret rotated; LawRuler OAuth client secret not rotatable (global/static on LawRuler's side), accepted. LawRuler API username/password pending: Michelle discusses with team, reports at end of S2.
+- **2026-11-11 (D-20):** Graph secret rotated; LawRuler OAuth client secret not rotatable (global/static on LawRuler's side), accepted. LawRuler API username/password pending: `<owner>` discusses with team, reports at end of S2.
 - **2026-11-19 (D-26):** the same LawRuler, O365 and dncscrub credentials were typed into a new ITServer `.env` (chmod 600, owner `it.admin`) for the Postgres setup dry-run. A second host now holds them, so any later rotation must update both the Mac and the ITServer. Risk stays open until the D-20 decision.
 - **Contingency:** revoke access immediately and review provider audit logs.
 - **Residual:** 2×5 = 10, while some credentials are still pending because other flows depend on them.
 
 **R3 — LawRuler flakiness | 12**
-- **Owner:** Michelle
+- **Owner:** `<owner>`
 - **Trigger:** unresolved items rise; new error types.
 - **Mitigation:** shared retry policy, failed-item events, patch pass (S2), unresolved items in alerts.
 - **2026-11-11:** score kept at 12 until the S2 patch pass and unresolved-items alerts ship.
@@ -151,17 +151,17 @@ Resources the Should items need from Michelle. Claude nudges for these at S1 kic
 - **Residual:** 4×2 = 8.
 
 **R5 — "Removed by the 7th" | 12**
-- **Owner:** Michelle + LawRuler account manager (Lindsey Humphreys, identified 2026-11-05)
+- **Owner:** `<owner>` + LawRuler account manager (Lindsey Humphreys, identified 2026-11-05)
 - **Trigger:** request not acknowledged by the 5th.
-- **Mitigation:** identify the account manager before the first automated request; the watchdog checks the request was sent; Michelle forwards it until then.
+- **Mitigation:** identify the account manager before the first automated request; the watchdog checks the request was sent; `<owner>` forwards it until then.
 - **Contingency:** escalate through Matt or Brad; soften the wording to "Removal requested" until delivery is reliable.
 - **Residual:** 2×3 = 6.
 
 ## 4. Monitoring schedule
 | Frequency | Activity | Owner | Output |
 |---|---|---|---|
-| Monthly, on the 5th after the watchdog | Quick register review: did any trigger fire? | Michelle | Status column updated |
-| Weekly during S3–S4 | Check-in nudge (R16) | Claude → Michelle | Next small step |
-| Each sprint start (S2–S6) | Re-run Phase 4: MoSCoW + pre-mortem | Michelle | This file updated |
-| Quarterly (with the memory review) | Full reassessment | Michelle + e.cervera | Revised register |
+| Monthly, on the 5th after the watchdog | Quick register review: did any trigger fire? | `<owner>` | Status column updated |
+| Weekly during S3–S4 | Check-in nudge (R16) | Claude → `<owner>` | Next small step |
+| Each sprint start (S2–S6) | Re-run Phase 4: MoSCoW + pre-mortem | `<owner>` | This file updated |
+| Quarterly (with the memory review) | Full reassessment | `<owner>` + e.cervera | Revised register |
 | On trigger | Activate contingency; note it in the run report | Risk owner | Incident note |

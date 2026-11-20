@@ -24,7 +24,7 @@ size: M
 - This story is a **drill** — it proves the mechanism works without committing to a real archival (the production partition stays live). Story 3 automates the real archival.
 - If the retention policy (Story 1) specifies multiple tiers (e.g., "disk for 2 years, then cloud"), this story tests the **first tier only** (disk). Testing the second tier (cloud migration) can be deferred to a future story if needed.
 - Legal traceability requirements: the checksum is **mandatory** (it proves the archive wasn't corrupted), and the restore drill is **mandatory** (an untested backup is a rumor). Both are acceptance criteria, not nice-to-haves.
-- If the archive target is cloud, choose a provider and configure access during this story — do not defer it to Story 3. Options: S3, Azure Blob, Backblaze B2, or a `restic` repository. If the choice stalls, escalate to Michelle.
+- If the archive target is cloud, choose a provider and configure access during this story — do not defer it to Story 3. Options: S3, Azure Blob, Backblaze B2, or a `restic` repository. If the choice stalls, escalate to `<owner>`.
 - The manifest (list of archived months, checksums, and locations) should be machine-readable (JSON, CSV, or a database table) so Story 3's automation can query it.
 - Output: one month archived and restored successfully, with checksums verified at every step, and the procedure documented in the repo.
 

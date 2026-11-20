@@ -22,7 +22,7 @@ Stop DEBUG-level logging from writing secrets and full HTTP request bodies to ru
 | Criterion | Rating | Notes |
 |---|---|---|
 | Independent | ✅ | No technical dependency on other S1 epics |
-| Negotiable | ✅ | Historic log scrubbing (delete vs redact) is open for Michelle's call |
+| Negotiable | ✅ | Historic log scrubbing (delete vs redact) is open for `<owner>`'s call |
 | Valuable | ✅ | Security & compliance owner can trust that secrets are not leaking and have been rotated |
 | Estimable | ✅ | Log size, secret locations, and redaction patterns are known from the run report and legacy file inspection |
 | Testable | ✅ | Grep historic and new logs for known secret patterns (client_secret, Bearer, passwords); verify rotated credentials work |
@@ -45,12 +45,12 @@ Earlier patterns rejected:
 ### Split evaluation
 Each story delivers value to the compliance/legal owner: INFO logs are lean and safe, hardcoded secrets are gone, historic exposure is remediated, rotated credentials work. Sizes vary (S to L) because git-history purge and rotation are inherently larger, but all are vertical (each closes a security exposure end-to-end).
 
-> [!check] Before closing this epic, verify Michelle's actions were actually done
-> - [x] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app). Michelle can (2026-11-02); rotation deferred, D-08. — [[Story - Rotate exposed credentials and retire the old repo]]
-> - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `MlagunasBrigante`, after the `git bundle` backup is verified. — [[Story - Rotate exposed credentials and retire the old repo]]
+> [!check] Before closing this epic, verify `<owner>`'s actions were actually done
+> - [x] Confirm who can rotate each credential (LawRuler admin, dncscrub, Entra app). `<owner>` can (2026-11-02); rotation deferred, D-08. — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `<docs-repo-owner>`, after the `git bundle` backup is verified. — [[Story - Rotate exposed credentials and retire the old repo]]
 > - [x] Set the recurring reminders for any credential that can't be rotated yet. Monthly D-08 Outlook reminder, 2026-11-10. — [[Story - Rotate exposed credentials and retire the old repo]]
 > - [x] Approve the summary report before any original log is deleted. Approved and done 2026-11-09 (19 deleted). — [[Story - Scrub secrets from historic run logs]]
-> - [ ] LawRuler API username & password: Michelle reports the team's decision at the end of S2 (D-20). — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [ ] LawRuler API username & password: `<owner>` reports the team's decision at the end of S2 (D-20). — [[Story - Rotate exposed credentials and retire the old repo]]
 
 ## Child user stories
 - [[Story - INFO logs with secret masking]]

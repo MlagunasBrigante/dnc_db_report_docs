@@ -55,8 +55,8 @@ Each story delivers value to the IT & Data lead: page errors can't truncate down
 - [[Story - Per-stage duration and memory in every run]]
 
 > [!check] Before closing this epic
-> - [x] Nudge Michelle about [[Story - Rotate exposed credentials and retire the old repo]] (deferred, D-08): rotate the shared credentials and update every flow, or create a dedicated account for this pipeline. Done: monthly D-08 Outlook reminder (2026-11-10); story carried to S2.
+> - [x] Nudge `<owner>` about [[Story - Rotate exposed credentials and retire the old repo]] (deferred, D-08): rotate the shared credentials and update every flow, or create a dedicated account for this pipeline. Done: monthly D-08 Outlook reminder (2026-11-10); story carried to S2.
 
 ## Dependencies / sequencing
-**Start with [[Story - One retry policy for every API call]]** (added 2026-10-29 at Michelle's request). The page and batch stories build on its failed-item event.
+**Start with [[Story - One retry policy for every API call]]** (added 2026-10-29 at `<owner>`'s request). The page and batch stories build on its failed-item event.
 The config-validation story should complete early (fail-fast principle). The per-stage instrumentation story feeds the memory-optimization epic (GAP-18), so it should complete before memory work starts. All other stories are independent.

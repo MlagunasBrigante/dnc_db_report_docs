@@ -411,7 +411,7 @@ tags: [project/dnc-cron-scrub, reference, stages]
 
 ## Stage 5b: Soft-deletion Request Email
 
-> **Note:** This is a distinct email from the main report email. It is sent after Stage 5 report generation and before the Stage 6 alerts (before the warning snapshot, so an unset/blocked recipient or a send failure reaches the alert email; `run.py:2301-2313`). Subject: `[For review] DNC soft-deletion request — <report_date>`. Recipients: internal only (`SOFT_DELETE_RECIPIENTS` TO, `SOFT_DELETE_CC` CC), allowlisted by domain (`SOFT_DELETE_ALLOWED_DOMAINS`, default `briganteimmigration.com`). Michelle reviews and forwards to the LawRuler team manually (D-10).
+> **Note:** This is a distinct email from the main report email. It is sent after Stage 5 report generation and before the Stage 6 alerts (before the warning snapshot, so an unset/blocked recipient or a send failure reaches the alert email; `run.py:2301-2313`). Subject: `[For review] DNC soft-deletion request — <report_date>`. Recipients: internal only (`SOFT_DELETE_RECIPIENTS` TO, `SOFT_DELETE_CC` CC), allowlisted by domain (`SOFT_DELETE_ALLOWED_DOMAINS`, default `briganteimmigration.com`). `<owner>` reviews and forwards to the LawRuler team manually (D-10).
 
 ### Inputs
 

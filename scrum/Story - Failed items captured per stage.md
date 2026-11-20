@@ -12,7 +12,7 @@ size: S
 ---
 # Story: Failed items captured per stage
 ## User Story
-**As** Michelle (pipeline owner), **I want** the failed-item events already emitted by the shared retry policy ([[Story - One retry policy for every API call]], S1) to be persisted in Postgres for every stage (pages, batches, leads), **so that** I can see which specific items failed and nothing is silently skipped.
+**As** `<owner>` (pipeline owner), **I want** the failed-item events already emitted by the shared retry policy ([[Story - One retry policy for every API call]], S1) to be persisted in Postgres for every stage (pages, batches, leads), **so that** I can see which specific items failed and nothing is silently skipped.
 
 ## Acceptance Criteria
 - [ ] **Given** Stage 1 encounters a LawRuler page fetch error (simulated by mocking a 500 response for page 42), **when** the run completes, **then** the `failed_items` table contains a row with `(run_id, stage='stage1', item_key='page_42', error='HTTP 500', attempts=3)` and the run does not abort (verified by querying `failed_items` and checking that the run's status is still 'completed')
