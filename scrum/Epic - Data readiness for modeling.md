@@ -64,6 +64,7 @@ Five stories is appropriate for a Complex sprint with go/no-go gates. If M3 fail
 > [!check] Before closing this epic, verify Michelle's actions were actually done
 > - [ ] Feed your notes on preprocessing into the project. — [[Story - M2 Notes ingested and preprocessing aligned]]
 > - [ ] Define the M3 quality criteria ("is the data clean enough?"). — [[Story - M3 Data quality gate]]
+> - [ ] Reminder from S2 (D-20): has Michelle updated the decision on rotating the LawRuler API username & password? If not, ask before S3 work starts. — [[Story - Rotate exposed credentials and retire the old repo]]
 
 ## Child user stories
 - [[Story - M1 Data and pipeline audit]]

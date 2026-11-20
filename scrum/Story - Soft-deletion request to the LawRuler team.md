@@ -13,7 +13,7 @@ size: M
 # Story: Soft-deletion request to the LawRuler team
 
 > [!todo] Michelle — action needed
-> - [ ] Identify our LawRuler account manager (name, address, domain).
+> - [x] Identify our LawRuler account manager (name, address, domain). ✅ 2026-11-05: Lindsey Humphreys.
 > - [ ] Until then, forward each monthly request yourself.
 
 ## User Story

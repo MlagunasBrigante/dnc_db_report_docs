@@ -4,6 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - PostgreSQL system of record]]"
 sprint: S2
 moscow: must
+s2_order: 2
 status: to-do
 gaps: []
 jira: ""
@@ -15,7 +16,7 @@ size: M
 
 ## Acceptance Criteria
 - [ ] **Given** the raw_snapshot schema from Story - Raw snapshot exists, **when** run.py executes Stages 2–4, **then** it writes to partitioned tables `cleaned_phones_YYYYMM`, `scrub_batches_YYYYMM`, `scrub_results_YYYYMM`, `scrub_results_translated_YYYYMM`, `leads_with_tags_YYYYMM`, all partitioned by run month (verified by `\d+` showing partitions and FKs)
-- [ ] **Given** the tables are created, **when** a row is inserted into `scrub_results`, **then** its `cleaned_phone_id` FK references `cleaned_phones(id)`, and `cleaned_phones.raw_snapshot_id` references `raw_snapshot(id)`, forming a complete lineage chain (verified by `\d scrub_results` showing FK constraints and a test query joining through the chain)
+- [ ] **Given** the tables are created, **when** a row is inserted into `scrub_results`, **then** its `cleaned_phone_id` FK references `cleaned_phones(id)`, and `cleaned_phones` has a foreign key to `raw_snapshot` by `(snapshot_month, run_id, lead_id, phone)`, forming a complete lineage chain (verified by `\d scrub_results` showing FK constraints and a test query joining through the chain)
 - [ ] **Given** Stage 2 scrub fails for some batches (simulated by injecting an API error), **when** the run completes, **then** `scrub_batches` records both successful and failed batches, and `scrub_results` rows have NULLable FKs (no FK to scrub_results if the phone wasn't scrubbed) — this handles GAP-10 silent skips (verified by querying `scrub_batches WHERE status='failed'` and `scrub_results WHERE scrub_result_id IS NULL`)
 - [ ] **Given** all stages write to Postgres, **when** the Stage 5 report generation reads from `leads_with_tags_YYYYMM`, **then** the row counts and sample lead IDs match the SQLite-era `leads_with_tags` table for the same run (verified by side-by-side diff of 2026-10-28 SQLite vs Postgres)
 - [ ] **Given** a run writes to multiple partitioned tables, **when** each table's DDL is reviewed, **then** every table has `(run_id, lead_id, phone)` uniqueness where applicable and a `created_at TIMESTAMPTZ DEFAULT NOW()` audit column (verified by inspection of Dev/schema/*.sql)
@@ -26,9 +27,10 @@ size: M
 ## Notes
 - **Input:** S1 DNCUP-5 per-stage inputs/outputs document defines the schema for all stage tables
 - **Per-run uniqueness:** `(run_id, lead_id, phone)` prevents duplicates within a run but allows the same lead to appear in different monthly runs
-- **FK strategy:** Surrogate keys (`id SERIAL`) as PKs; FKs reference parent stage's `id`, plus `run_id` for partition pruning
+- **FK strategy:** Surrogate keys (`id SERIAL`) as PKs for downstream tables; `cleaned_phones` references `raw_snapshot` by the composite key `(snapshot_month, run_id, lead_id, phone)` (FK to the partitioned parent, allowed since PG12); other stage tables reference parent stage's `id`, plus `run_id` for partition pruning. Per D-24 (2026-11-13): any unique key/PK on a partitioned table must include its partition column.
 - **NULLable FKs:** Where upstream stages can fail (e.g. a lead with no scrub result because the batch failed), the FK is `NULL` — this is legal and expected
 - **Partition creation:** Either auto-created by Postgres 10+ declarative partitioning (CREATE TABLE ... PARTITION OF) or pre-created by a migration script for each month; document the approach in Docs/
+- **`pipeline_run.status` / `finished_at` are never written yet** (2026-11-13 branch review of `s2/feat/raw-snapshot-postgres`, finding #13): the raw-snapshot story creates both columns (`Dev/schema/001_raw_snapshot.sql`) but only Stage 1 writes to `pipeline_run`, so they stay NULL and the `status` column in `schema/verify_raw_snapshot.sql` is always empty. Set them when the run's final stage completes or fails, as part of this story.
 
 ## Dependencies
 - [[Story - Raw snapshot and run record land in Postgres]] (raw_snapshot and pipeline_run must exist)

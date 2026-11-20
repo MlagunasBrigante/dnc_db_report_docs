@@ -4,6 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - PostgreSQL system of record]]"
 sprint: S2
 moscow: must
+s2_order: 3
 status: to-do
 gaps: []
 jira: ""

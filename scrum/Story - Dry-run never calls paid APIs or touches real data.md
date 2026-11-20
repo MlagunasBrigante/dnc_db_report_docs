@@ -32,7 +32,7 @@ size: M
 - Branch: `s1/fix/dry-run-no-paid-calls`.
 
 > [!todo] Michelle — action needed
-> - [ ] Choose a test recipient for `DRYRUN_EMAIL_RECIPIENTS` (e.g. yourself), or leave it unset to skip emails in dry-runs.
+> - [x] Choose a test recipient for `DRYRUN_EMAIL_RECIPIENTS` (e.g. yourself), or leave it unset to skip emails in dry-runs. ✅ 2026-11-11: done (Michelle).
 > - [ ] After the first fixed dry-run, check the dncscrub account shows no new usage.
 
 ## Dependencies

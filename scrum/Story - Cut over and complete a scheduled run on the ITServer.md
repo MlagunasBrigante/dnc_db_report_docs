@@ -4,6 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Cutover to the ITServer]]"
 sprint: S2
 moscow: must
+s2_order: 13
 status: to-do
 gaps: [GAP-13, GAP-25]
 jira: ""

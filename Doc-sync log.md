@@ -1,7 +1,7 @@
 ---
 type: log
 project: dnc-cron-scrub
-last_synced_dev_commit: efe26472877bc5ab14b7d942551106937f05056c
+last_synced_dev_commit: 967308d84480aa69642e387d73ac341d081eddb2
 tags: [project/dnc-cron-scrub, doc-sync]
 ---
 # Doc-sync log
@@ -40,6 +40,61 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 > Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs Michelle** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
 
 <!-- entries below, newest first -->
+
+## 2026-11-18: Dev main 967308d
+**Commits since last sync:** 4 (1bdd6b9…967308d): `bd682a3` PG 17 composite PK on `raw_snapshot`, skip-if-stored resume · `d6b7454` skip-if-stored rollback fix, SECURITY DEFINER `pg_temp` · `04d42b0` Updated for Postgres 17 (README/.env.example: `dnc-pgsocket` volume) · `967308d` GAP-34 shared `StreamingChecksum`, streaming verify tool, `sql.Identifier` schema names. 7 files, +823/−190.
+**Auto-fixed:**
+- `Dev/README.md:322` Verification tool: now streams via server-side cursor with the shared checksum, compares checksum + row count; exit codes 0 match / 1 mismatch / 2 usage, connection or unknown run (`tools/verify_raw_snapshot.py:14-17,73-141,162`). Dev on `main`.
+- `Docs/README.md:23`: D-01…23 → D-01…25 (`Docs/scrum/DNC Update - Scope.md:233-234`).
+**Needs Michelle:**
+- [[Story - Raw snapshot and run record land in Postgres]] still `in-review`; story:56 says the GAP-34 follow-up is "in progress" on `s2/fix/gap-34-streaming-checksum`, but it is merged to main (967308d). GAP-34 row (`Scope.md:205`) has no fixed note. Update branch line + GAP-34 resolution; set `done` once verified on the ITServer.
+- `schema/000_roles_and_database.sql:3` header still says "PostgreSQL 13.23+", while `001_raw_snapshot.sql`/`verify_raw_snapshot.sql` now say 17+ (D-23). Fix the header on the next code branch.
+- Carried over: project `README.md:87-88` § Open Gaps lists D-04 as pending and [[Decision - Dedicated PostgreSQL database]] as "proposed" (decided via D-04/D-18); D-23…25 not mentioned. Edit by hand.
+- Carried over: GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (`Scope.md:200-202`); now on main.
+- Docs repo has ~30 uncommitted files (Scope, epics, stories, README) and untracked `Reference/ITServer PostgreSQL setup.md` (cited by `Dev/README.md:245`, `.env.example:161`). Commit when ready.
+- Checks clean: status table vs story `status` (24 rows), backlog ticks vs `status` (67 boxes), 14 epics / 53 stories, GAP-01…34, wikilinks resolve, env vars (`POSTGRES_DSN`, `POSTGRES_SCHEMA`, `CODE_VERSION`) documented; no new TODO/FIXME in the diff.
+
+## 2026-11-17: Dev main 1bdd6b9
+**Commits since last sync:** 22 (399841a…1bdd6b9): merge of `s2/feat/raw-snapshot-postgres`: PG DDL (`schema/000_roles_and_database.sql`, `001_raw_snapshot.sql`, `verify_raw_snapshot.sql`), `dnc/pg_store.py` + Stage 1 hook, `tools/verify_raw_snapshot.py`, DSN password masking, `psycopg[binary]==3.2.3`, Dockerfile copies `tools/`, review fixes. 13 files, +1744/−1. README/.env.example already document `POSTGRES_DSN`/`POSTGRES_SCHEMA` (`dnc/pg_store.py:44-58`).
+**Auto-fixed:**
+- `Dev/README.md:381` Output Structure: + `processed/.run_id` (Postgres run UUID, reused on resume, only with `POSTGRES_DSN`) (`dnc/pg_store.py:136-147,191,260`; `dnc/run_paths.py:36`). Dev on `main`.
+- `Docs/README.md:23`: D-01…22 → D-01…23 (`Docs/scrum/DNC Update - Scope.md:232`).
+**Needs Michelle:**
+- [[Story - Raw snapshot and run record land in Postgres]] is `in-review` but merged to main (1bdd6b9). Its GAP-34 `#open-question` (one streaming checksum, story:58) is still open, and the code still hashes in arrival order (`dnc/pg_store.py:276-279`) vs sorted `canonical_checksum` (`:71`). Set `done` only after GAP-34 is settled or moved to its own story.
+- D-23 (PG 17 in its own container, `Scope.md:232`) vs commit b94aa56 "Fix DDL for PG13 compatibility" and `.env.example:158` socket DSN example (`host=/var/run/postgresql`): check the socket form still applies to a containerised server.
+- Project `README.md` § Open Gaps: carried over (D-04 still listed pending; [[Decision - Dedicated PostgreSQL database]] still "proposed", accepted via D-18 `Scope.md:226`); D-23 not mentioned. Edit by hand.
+- Carried over: GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (`Scope.md:200-202`); now on main.
+- Not changed by design: `Dev/README.md:320` "no new log noise" vs the INFO "Postgres writing disabled" line (`dnc/pg_store.py:368`), kept per review #7 (story:39).
+- Resolved: `tools/backfill_memory_log.py` sandbox path is now noted in code (86ce5c1) and README; D-19 row pipe fixed.
+- Checks clean: status table vs story `status` (24 rows), backlog ticks vs `status` (67 boxes), 14 epics / 53 stories, GAP-01…34, wikilinks resolve. `Reference/ITServer PostgreSQL setup.md` (cited by `Dev/README.md:320`) is untracked in Docs.
+
+## 2026-11-13: Dev main 399841a
+**Commits since last sync:** 1 (65ac7d2…399841a): `399841a` Minor changes in README — lands the 2026-11-12 proposed `Dev/README.md` edits (`CODE_VERSION`/`RUN_TRIGGER` rows, `data/metrics/` layout, Memory Log Backfill). 1 file, +13/−3.
+**Auto-fixed:**
+- `Docs/README.md:23`: GAP-01…33 / D-01…21 → GAP-01…34 / D-01…22 (`Docs/scrum/DNC Update - Scope.md:205,231`).
+- `Docs/README.md:5`: code repo link `MlagunasBrigante/dnc_db_report` → `BriganteLaw/dnc_db_report` (`git -C Dev remote -v`, `CLAUDE.md:23`).
+**Needs Michelle:**
+- `README.md` (project) § Open Gaps is stale: lists D-04 as pending (decided no, `Scope.md:213`) and says [[Decision - Dedicated PostgreSQL database]] is "proposed, awaiting Michelle" (accepted via D-18, `Scope.md:226`, note `status: accepted`). Outside the job's audit scope; update the bullets by hand.
+- Dev working tree is on `s2/feat/raw-snapshot-postgres`, not `main`; `Dev/README.md`/`.env.example` would only be edited from main (no drift found this run, so no proposed edits).
+- Carried over: D-19 row still starts with `||` (`Scope.md:228`); GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (`Scope.md:200-202`).
+- Checks clean: status table vs story `status` (24 rows), backlog ticks vs `status`, 14 epics / 53 stories, wikilinks resolve; GAP-34 is in the raw-snapshot story's `gaps`.
+
+## 2026-11-12: Dev main 65ac7d2
+**Commits since last sync:** 27 (e54ddd1…65ac7d2): README paths → `dnc-cron-scrub/Dev` (GAP-23), memory log + quarterly review (`dnc/memory_log.py`, `tools/backfill_memory_log.py`), historic-log scrubbing tool, Stage 4 lean working set, GAP-30 deadline = run date + 6 days, code-review fixes 1–9 (GAP-31/32/33), `GIT_SHA` build arg → `CODE_VERSION`. 32 files, +2929/−173.
+**Auto-fixed:**
+- `Dev/README.md` env table: + `CODE_VERSION` (`Dockerfile:7-8`, `run.py:2446`), + `RUN_TRIGGER` (`scheduler.py:46`, `run.py:2120`).
+- `Dev/README.md` Output Structure: + `data/metrics/memory_log.csv` and dry-run `_dryrun/<ts>/metrics/` (`run.py:2436-2440`).
+- `Dev/README.md` Maintenance Tools: + Memory Log Backfill (`tools/backfill_memory_log.py:1-11,125-129`).
+- `README.md` (project): Current Status synced to story `status` (4 in-review → done; +6 rows: 4 done, 2 in-review); Point line updated; Key Resources code repo → `BriganteLaw/dnc_db_report` (`git remote -v`, `CLAUDE.md:23`).
+- `Docs/README.md:23`: GAP-01…29 / D-01…10 → GAP-01…33 / D-01…21 (`Docs/scrum/DNC Update - Scope.md:167-229`).
+**Needs Michelle:**
+- `Docs/scrum/DNC Update - Scope.md:227`: D-19 row starts with `||`, so it renders broken (decision register is off-limits to the job). Fix the pipe by hand.
+- GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (Scope:200-202); now on main (22b652d, 6039c78, f576f8d). Update the wording if you want it to say main.
+- `tools/backfill_memory_log.py:125` hard-codes `/workspace/vault/...` (sandbox only); fine as a one-off, otherwise add `--data-dir`.
+- Session cookie: `Dev/README.md` `LAWRULER_SESSION_COOKIE` row + project `README.md` Open Gaps still say "verify on a real run" though the cookie story is `done`; reword or close.
+- `Docs/README.md:37` S6 "only if D-07 = automate" vs D-07 decided (Scope:215); check wording.
+- Resolved since last sync: `law_ruler_client_id/secret` now validated (`dnc/config_check.py:11-12`); README paths moved (e54ddd1); stale `CLAUDE.md` helper list is gone.
+- Uncommitted: `Dev/README.md` (on main), `Docs/README.md` + this log; project `README.md` is outside both repos.
 
 ## 2026-11-09: Dev main efe2647
 **Commits since last sync:** 6 (9afc77b…efe2647): alert-delivery gaps (success message, config-failure Teams alert, `dnc/config_failure_alerts.py`), per-stage duration/memory tracking (`dnc/stage_metrics.py`), review fixes. 10 files, +1456/−175. The 2026-11-06 README/.env.example fixes are now on main.

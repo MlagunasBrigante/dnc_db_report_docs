@@ -4,6 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Reproducible scheduling on the ITServer]]"
 sprint: S2
 moscow: must
+s2_order: 7
 status: to-do
 gaps: [GAP-12]
 jira: ""

@@ -14,7 +14,12 @@ Move the pipeline's data layer from SQLite to PostgreSQL on the ITServer. Each s
 - **GAP-08** (partial — recording is fixed; patch pass comes in Epic - Failures captured and patched): Failed tagging requests recorded as DONE — S1 fixed the status recording; S2 adds the patch pass
 
 ## Key decisions
-- [[Decision - Dedicated PostgreSQL database]]: dedicated `dnc` database vs tables in the existing DB; role layout and socket connection (proposed, awaiting Michelle)
+- [[Decision - Dedicated PostgreSQL database]]: dedicated `dnc` database (accepted 2026-11-10, D-18); role layout and socket connection
+- **D-19 (2026-11-11):** no Postgres writes from the Mac; writing is enabled during the migration and tested on the ITServer in a test table of the `dnc` database. Target PostgreSQL 13.23. Target amended by D-23 (2026-11-13): PostgreSQL 17 in a container.
+- **D-21 (2026-11-11):** Raw snapshot design: JSONB row storage, canonical checksum, dnc_test schema for testing, run identity semantics. Implementation calls (Claude, 2026-11-11; not Michelle's decisions): partition creation via SECURITY DEFINER function, psycopg 3 COPY, non-fatal Postgres write failures during S2 — see [[Story - Raw snapshot and run record land in Postgres]].
+- **D-22 (2026-11-12):** the legal raw snapshot can't be deleted as a side effect: the `raw_snapshot → pipeline_run` foreign key no longer cascades on delete (default NO ACTION), and `dnc_archive` is read-only (SELECT) until its detach/export capability is designed in S5 / [[Story - Closed months become read-only]] (e.g. a SECURITY DEFINER function owned by `dnc_owner`; `DETACH PARTITION` needs table ownership, not UPDATE/DELETE). `dnc_writer` keeps UPDATE on `pipeline_run` for the post-stream count and checksum.
+- **D-23 (2026-11-13):** PostgreSQL 17 in its own Docker container on the ITServer (not the existing PG13 server); amends D-19 and D-18.
+- **D-24 (2026-11-13):** raw_snapshot primary key = composite `(snapshot_month, run_id, lead_id, phone)`, no surrogate id; one index instead of two, key = legal fact, downstream tables small so 4-column FKs are cheap.
 
 ## Open questions (to answer before [[Story - Raw snapshot and run record land in Postgres]] starts)
 - [x] #open-question **What does the existing database on the ITServer hold, and will S3/S4 need to join DNC data with it?** ✅ 2026-11-10: no joins needed → dedicated `dnc` database (D-18). If no, the dedicated `dnc` database wins outright. If yes, weigh the cross-database joins against the isolation benefits. See [[Decision - Dedicated PostgreSQL database]].

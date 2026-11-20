@@ -4,6 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Failures captured and patched]]"
 sprint: S2
 moscow: must
+s2_order: 5
 status: to-do
 gaps: [GAP-11]
 jira: ""

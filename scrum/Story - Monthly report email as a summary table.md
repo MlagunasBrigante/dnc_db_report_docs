@@ -15,9 +15,9 @@ size: S
 > [!todo] Michelle — action needed
 > - [x] Confirm the 2026-11-10 report email body showed the summary table only (no lead rows, no attachments). Confirmed 2026-11-10.
 > - [x] Set `REPORT_RECIPIENTS_TO` in `Dev/.env`. Done 2026-11-10.
-> - [ ] Set `REPORT_RECIPIENTS_CC` too (AC4 lists m.lagunas@, j.fernandez@, e.cervera@ in CC), if not done.
+> - [x] Set `REPORT_RECIPIENTS_CC` too (AC4 lists m.lagunas@, j.fernandez@, e.cervera@ in CC), if not done. ✅ 2026-11-11: done (Michelle).
 > - [x] After merging `s1/fix/removal-deadline`: rebuild and recreate `dnc-scrub` so Dec 1 uses the new recipients and the GAP-30 deadline. Done 2026-11-10 (main `b9607c6`, 317 tests in the image).
-> - [ ] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`.
+> - [x] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. ✅ 2026-11-11: confirmed by j.fernandez (Michelle).
 
 ## User Story
 **As** a report recipient (management and the team), **I want** the monthly report email to show the run's summary table (counts and actions) in the email body, with no attachments, **so that** I can read the month's DNC outcome at a glance, and the email can never fail because of its size.
@@ -30,6 +30,7 @@ size: S
 - [ ] **Given** a real run, **when** delivery is checked, **then** an internal recipient (Michelle, CC) confirms it arrived, and the external recipient's copy isn't bounced (no NDR in the `it.admin@` sender mailbox).
 
 ## Notes
+- **2026-11-11:** TO/CC now set in `.env`. Delivery to business recipients still to be proven by the Dec 1 run. The scheduled `dnc-scrub` container must be recreated to pick up the new `.env`.
 - **2026-11-10:** Michelle confirmed the report body showed the summary table (AC1–AC3 ticked). `REPORT_RECIPIENTS_TO` set in `.env` (not read by the agent). AC4–AC5 close on the Dec 1 run: recipients in the log line `Success email sent to [...] (CC: ...)` and no NDR for the external copy. **GAP-30 fixed** on `s1/fix/removal-deadline` (`b9607c6`, 313 tests): deadline = run date + 6 days in the report labels, the soft-deletion subject and body; README, runbook and stage reference updated.
 - **Real run 2026-11-10:** `REPORT_RECIPIENTS_TO` is not set in `Dev/.env`, so the report went to the fallback success recipients (`it.admin@`, `m.lagunas@`), not the business list; no attachments logged on the success email; xlsx/csv written to `data/2026-11-10/processed/`. AC4–AC5 still open: Michelle sets `REPORT_RECIPIENTS_TO`/`REPORT_RECIPIENTS_CC` in `.env` (after j.fernandez confirms external sending), recreates `dnc-scrub`; Dec 1 verifies delivery. AC1–AC3 tick once Michelle confirms the email body showed the summary table and no lead data.
 - **Mailbox confirmed by Michelle 2026-11-05**: the report email arrived as an HTML table with no attachments. Still open: set `REPORT_RECIPIENTS_TO`/`_CC` once j.fernandez confirms external sending, then check delivery on the next real run (December 1) with no NDR.
@@ -48,7 +49,7 @@ size: S
 - Renamed from "Success email carries only the report" (2026-10-29).
 
 ## Open questions
-- [ ] #open-question Can `it.admin@briganteimmigration.com` send to the external domain **`jordanbelfort.com`** (`matt.hirschberg@`)? Ask j.fernandez to check Exchange transport rules, outbound policy and any app access policy on the Graph app. This is the only external recipient in the project, now that the soft-deletion email is internal-only (D-10).
+- [x] #open-question Can `it.admin@briganteimmigration.com` send to the external domain **`jordanbelfort.com`** (`matt.hirschberg@`)? Ask j.fernandez to check Exchange transport rules, outbound policy and any app access policy on the Graph app. This is the only external recipient in the project, now that the soft-deletion email is internal-only (D-10). ✅ 2026-11-11: confirmed by j.fernandez (Michelle).
 
 ## Dependencies
 - [[Story - Report labels and unmatched warning fixed]] (the corrected labels appear in this email).

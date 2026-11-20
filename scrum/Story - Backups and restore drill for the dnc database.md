@@ -5,6 +5,7 @@ epic: "[[Epic - Cutover to the ITServer]]"
 sprint: S2
 status: to-do
 moscow: must
+s2_order: 12
 gaps: [GAP-25]
 jira: ""
 size: M

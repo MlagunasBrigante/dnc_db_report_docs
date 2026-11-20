@@ -12,6 +12,9 @@ tags: [project/dnc-cron-scrub, decision, postgresql]
 > **Proposal:** create a dedicated `dnc` database on the ITServer's existing PostgreSQL server (same server, new database) instead of adding the DNC tables to an existing database.
 > **Applies to:** S2 · [[Epic - PostgreSQL system of record]] · [[Story - Raw snapshot and run record land in Postgres]]
 
+> [!note] Amended 2026-11-13 (D-23)
+> The dnc database now runs on its own PostgreSQL 17 server in a Docker container on the ITServer, so the "same server" statements below (shared version, shared WAL/point-in-time recovery, shared upgrades) no longer apply; the database/role separation reasoning still holds.
+
 ## What's the same either way
 Both options run on **the same PostgreSQL server** (the same Postgres installation on the ITServer). So these are identical:
 - shared CPU, RAM and disk
@@ -49,7 +52,7 @@ The choice is only about **how separate the DNC data is inside that server.**
 | `dnc_owner` | Owns the tables, runs the DDL (Michelle) | Table changes only through reviewed scripts |
 | `dnc_writer` | The job: insert into stage tables; update only open partitions and `failed_items` | Closed months stay read-only |
 | `dnc_reader` | Read-only (S3 statistics, S4 dashboard) | Analysis can't change data |
-| `dnc_archive` | Detaches and exports closed partitions (S5) | The only role that can touch closed months |
+| `dnc_archive` | Detaches and exports closed partitions (S5). Until then **SELECT only** (D-22): detach/export comes as a reviewed capability (e.g. a SECURITY DEFINER function owned by `dnc_owner`), never as standing UPDATE/DELETE grants | The only role that can touch closed months |
 | Connection | Postgres Unix socket (`/var/run/postgresql`) mounted into the container; password auth, password only in `Dev/.env` | No database port exposed; requires the job and the DB on the same machine (current plan) |
 
 ## Open points before deciding
@@ -59,3 +62,4 @@ The choice is only about **how separate the DNC data is inside that server.**
 ## Decision log
 - 2026-10-29 — Proposed by Claude in the stories interview (Q8). Michelle's initial preference was the existing DB; she asked for this justification note before deciding.
 - 2026-11-10 — **Accepted** (Michelle): S3/S4 don't need joins with the existing database, so the dedicated `dnc` database wins outright. The database doesn't exist yet; Michelle creates it and the `dnc_*` roles from the DDL guide (D-18).
+- 2026-11-12 — **Amended** (Michelle, D-22): `dnc_archive` is read-only (SELECT) until S5 designs detach/export, and snapshot rows no longer cascade-delete with their `pipeline_run` row, so the legal record can't be edited or wiped as a side effect.
