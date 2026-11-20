@@ -60,7 +60,7 @@ Earlier patterns rejected:
 
 > [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [x] Answer the two database questions in the epic and settle the dedicated-DB decision. (2026-11-10, D-18) — [[Story - Raw snapshot and run record land in Postgres]]
-> - [ ] Create the database objects on the ITServer using the DDL guide. — [[Story - Raw snapshot and run record land in Postgres]]
+> - [x] Create the database objects on the ITServer using the DDL guide. (2026-11-20, guide Steps 1–11, both schemas, dry-run + verify) — [[Story - Raw snapshot and run record land in Postgres]]
 
 ## Child user stories
 - [[Story - Raw snapshot and run record land in Postgres]]

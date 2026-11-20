@@ -47,6 +47,9 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 ### S2 — Technical migration
 **Re-run:** 2026-11-11
 
+> [!info] Where S2 stands (handoff 2026-11-20)
+> Order 1 ([[Story - Raw snapshot and run record land in Postgres]]) done except AC4 (resume check pending); next by order = order 2 ([[Story - All stages write to Postgres with lineage]]). Open owner items: (a) move backups story (order 12, [[Story - Backups and restore drill for the dnc database]]) ahead of backfill stories (orders 8–10)? Claude recommends yes (R7: legal record loaded before tested backup exists); question already in backups story. (b) ITServer systemd/sudo access (R20; Docker confirmed). (c) Backup target (cloud/SSD/both) + encryption key with second copy (blocks order 12, cutover). (d) Cutover acceptance criteria (blocks orders 11, 13). (e) LawRuler API username/password decision (D-20/D-26, due end of S2). (f) Outlook reminder for PG17 upgrade (EOL 2029-11-08; R22 trigger 2029-05-01). Housekeeping: stale local branches `verify/tmp`, `verify/y`, `verify/s1-merge`; merged `s2/feat/raw-snapshot-postgres`, `s2/feat/raw-snapshot-pg17` can be deleted (owner's call). Mac run 2026-12-01 02:00 UTC untouched.
+
 **MoSCoW confirmation:** All 17 stories are `moscow: must` (no changes proposed).
 
 **Order table:**
@@ -80,7 +83,7 @@ Resources the Should items need from `<owner>`. Claude nudges for these at S1 ki
 - [x] Identify the **LawRuler account manager**: Lindsey Humphreys (2026-11-05) → [[Story - Soft-deletion request to the LawRuler team]]
 
 ### S2
-- [ ] Create the `dnc` database and `dnc_*` roles on the ITServer using the DDL guide → [[Story - Raw snapshot and run record land in Postgres]]
+- [x] Create the `dnc` database and `dnc_*` roles on the ITServer using the DDL guide → [[Story - Raw snapshot and run record land in Postgres]] ✅ 2026-11-20: guide Steps 1–11 executed end to end (both schemas, dry-run + verify MATCH)
 - [x] Confirm ITServer access for Docker operations (pull, run, volume mounts) → [[Story - Monthly run from versioned systemd units]] ✅ 2026-11-13: Docker 29.3.0 + Compose v5.1.0, daemon reachable as it.admin
 - [ ] Confirm ITServer access for systemd unit installation (requires sudo/root) → [[Story - Monthly run from versioned systemd units]]
 - [ ] Choose the backup target (cloud storage and/or external SSD) → [[Story - Backups and restore drill for the dnc database]]
@@ -108,7 +111,7 @@ Resources the Should items need from `<owner>`. Claude nudges for these at S1 ki
 | R12 | Late n8n decision (D-04) flips the S2 design | Process | 2 | 4 | 8 | `<owner>` | D-04 open at S2 start | Closed 2026-11-10 (D-04 = no) |
 | R13 | Deleted logs later needed as legal evidence | Process | 2 | 4 | 8 | `<owner>` | Legal request references a pre-2026-11 run | Monitoring |
 | R18 | Testing on production `dnc` DB via test table risks data corruption | Process | 2 | 4 | 8 | `<owner>` | Test code touches real partitions; bad transaction rollback | Active |
-|| R20 | `<owner>` lacks Docker/systemd access on ITServer | Process | 2 | 4 | 8 | `<owner>` | Install script fails with permission errors | Active. 2026-11-13: Docker confirmed (29.3.0, Compose v5.1.0); systemd/sudo still unconfirmed. 2026-11-19: sudo confirmed (`<owner>` installed git with `dnf`); likelihood lowered in practice, but systemd unit install not yet exercised — keep open until the systemd story runs. |
+| R20 | `<owner>` lacks Docker/systemd access on ITServer | Process | 2 | 4 | 8 | `<owner>` | Install script fails with permission errors | Active. 2026-11-13: Docker confirmed (29.3.0, Compose v5.1.0); systemd/sudo still unconfirmed. 2026-11-19: sudo confirmed (`<owner>` installed git with `dnf`); likelihood lowered in practice, but systemd unit install not yet exercised — keep open until the systemd story runs. |
 | R22 | PostgreSQL 17 reaches end of life (2029-11-08) without a planned major upgrade | Technical | 2 | 4 | 8 | `<owner>` | 2029-05-01 with no upgrade plan | Open. Reminder: plan the upgrade to the newest supported major (expected 22, released ~Sep 2029) in 2029; major upgrades need pg_upgrade or dump/restore (D-23). |
 | R4 | Mac runs miss a month before cutover (sleep, folder rename) | Technical | 2 | 2 | 4 | `<owner>` | No run folder by the 2nd | Downgraded: about a month of buffer; handled by a Could story |
 | R14 | Graph won't allow app-only posting to Teams | External | 3 | 2 | 6 | j.fernandez | Spike result | Monitoring |
