@@ -26,6 +26,7 @@ size: M
 ## Notes
 - **Acceptance criteria (2026-11-20):** judged by D-31 criteria 2–5 from [[Story - Define cutover acceptance criteria]] (alert test, full first cycle 1st/3rd/5th, rollback, container-era backfill).
 - **Phase 2 since 2026-11-20 (D-32):** the parallel run and the move of the monthly job to the ITServer happen earlier, in [[Story - Parallel run and early host move to the ITServer]]. This story is now the switch, on the same host, from the image's own scheduler to the systemd timers and the Postgres pipeline, judged by D-31 criteria 2–5.
+- **Phase 1 done 2026-11-23:** the ITServer runs the monthly job in a persistent `dnc-scrub` container (data `/home/it.admin/dnc/data`, D-33); rollback steps in [[DNC-runbook]] § 0. The Mac's run history stays on the Mac; no data moves from the ITServer to the Mac (D-34).
 - **Cutover checklist (based on Story - Define cutover acceptance criteria):**
   1. Parallel run comparison (Mac vs ITServer) — optional if deferred by `<owner>`
   2. Alert verification (email + Teams) — required

@@ -32,15 +32,15 @@ It runs today as the `dnc-scrub` Docker container on `<owner-mac>` and stores ea
   - Docker (always the default runtime)
   - systemd for scheduling
   - the server's existing local PostgreSQL
-- The job keeps running on the Mac until the physical cutover. **The physical cutover is not rushed;** quality and tests take priority over speed.
+- The job ran on the Mac until the early host move (2026-11-23, D-32); since then it runs on the ITServer in the image's own scheduler, and phase 2 of the cutover switches it to systemd and the Postgres pipeline. **The physical cutover is not rushed;** quality and tests take priority over speed.
 - PostgreSQL is already installed on the ITServer. `<owner>` creates the database objects, with guidance; this project only defines the tables.
 
 ## Infrastructure
 | Machine | OS | Role |
 |---|---|---|
-| ITServer | AlmaLinux | Runs the process **and** PostgreSQL (same machine). Runtime: Docker. |
+| ITServer | AlmaLinux | Runs the process **and** PostgreSQL (same machine). Runtime: Docker. Production host since 2026-11-23. |
 | `autobot` | Ubuntu | **No role** in the process. Possible host for the dashboard (late stage, undecided). |
-| `<owner-mac>` | macOS | Current production host until cutover. |
+| `<owner-mac>` | macOS | Production host until 2026-11-23; now rollback only (`dnc-scrub` stopped, not removed). |
 
 Because the process and the database are on the same machine, **n8n is not part of the data path.** n8n only becomes relevant if the pure-n8n rewrite decision (D-04) is taken.
 
