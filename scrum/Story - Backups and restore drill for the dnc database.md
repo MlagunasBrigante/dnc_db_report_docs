@@ -27,7 +27,8 @@ size: M
 - [ ] The backup encryption key or password is stored where it can be recovered by someone other than `<owner>` (e.g. the team's password manager), with a second copy.
 
 ## Open questions
-- [ ] #open-question Backup target: cloud, external SSD, or both? Settle near this story (`<owner>`, 2026-10-29). **Leaning 2026-11-20 (`<owner>`, not final):** Azure Blob Storage, probably a cold tier. Still open: the final tier and where the encryption key and its second copy live.
+- [x] ✅ 2026-11-23 (`<owner>`, D-35): **external SSD** plugged into the ITServer, mounted only during the backup (Azure Blob lean dropped). Residual risk accepted: losing the whole server (theft, fire, ransomware reaching attached drives) loses the backups too; R6 is re-scored when this story ships, not closed. Encryption key: **Vaultwarden (autobot) + a sealed offline copy**. ~~#open-question~~ Backup target: cloud, external SSD, or both?
+- Stays at order 8 (D-35, path B: the systemd story keeps its dependency on order 2). Align the first AC ("off the ITServer") with the SSD decision when the story starts.
 
 ## Notes
 - **Azure cold storage, facts to plan with (Microsoft Learn, [Access tiers for blob data](https://learn.microsoft.com/azure/storage/blobs/access-tiers-overview), checked 2026-11-20):** cool 30 days, cold 90 days, archive 180 days minimum retention; deleting, overwriting or re-tiering earlier is billed pro rata as early deletion. Cool and cold are online (millisecond reads, higher per-GB read cost); archive is offline and needs rehydration of up to 15 hours before a restore can even start. Nightly dumps pruned after 30 days must not sit in a tier with a longer minimum (or the prune is billed as early deletion); the restore drill must be timed against the tier's read latency. Migrating old records later: see the note in [[Epic - Archiving closed months]].

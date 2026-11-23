@@ -34,5 +34,11 @@ size: M
 ## Open questions
 - [x] ✅ 2026-11-20 (`<owner>`, D-33): data stays at `/home/it.admin/dnc/data` mounted at `/data`, clone at `/home/it.admin/dnc/git_container/dnc_db_report`; align this story's ACs (`/srv/dnc-scrub/...`, `/app/data`) when it starts. ~~#open-question~~ **Production paths on the ITServer** (found 2026-11-20): the ACs here use `/srv/dnc-scrub/...` mounted at `/app/data`, while the setup run used `/home/it.admin/dnc/data` mounted at `/data` (see [[ITServer PostgreSQL setup]] Step 11). Settle the production data and clone paths when this story starts, then align this story and [[Story - Cut over and complete a scheduled run on the ITServer]].
 
+- [x] ✅ 2026-11-23 (`<owner>`, D-35): **dependency kept (path B)**; this story stays at order 7, after order 2. ~~#open-question~~ **Drop the dependency on order 2?** (2026-11-23, D-35) This story is pulled ahead of order 2 so backups can ship sooner, and the timer should replace the in-container scheduler before 2026-12-01. That only works if the dependency below is dropped. Reasoning: this story moves the *clock* (who starts the run), order 2 changes the *engine* (what the run does); the unit runs whatever image is current, so it works with today's pipeline and picks up order 2 after a rebuild. The original dependency was sequencing, not a technical need. Risk if dropped: a wrongly configured unit fails on Dec 1 → guarded by keeping `dnc-scrub` running until the timer passes one dry-run through the service. If kept: systemd and backups wait for order 2, the switch moves to Jan 1, R6 stays open longer. Awaiting `<owner>`.
+
+## Notes (2026-11-23, D-35)
+- The service must also mount the `dnc-pgsocket` volume (order 1 writes the raw snapshot to Postgres); align the `docker run` AC with the production paths of D-33.
+- Switch rule (kept from the path-A analysis): retire the in-container scheduler (stop `dnc-scrub`) only after one dry-run through `dnc-scrub-run.service` passes, so a month is never left without a scheduler.
+
 ## Dependencies
-- [[Story - All stages write to Postgres with lineage]] (the pipeline must be fully functional before scheduling it)
+- [[Story - All stages write to Postgres with lineage]] (the pipeline must be fully functional before scheduling it) — kept 2026-11-23 (D-35, path B)
