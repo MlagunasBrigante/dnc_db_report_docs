@@ -27,7 +27,7 @@ Sprints are sequential. Each one starts only when the previous one is stable. Al
     - [x] [[Story - Spike Teams posting through Graph]]
     - [x] [[Story - Teams alert channel]]
     - [x] [[Story - Alert delivery failure raises an alert]]
-    - [ ] [[Story - Mac run-night safeguards until cutover]]  (Could)
+    - [x] [[Story - Mac run-night safeguards until cutover]]  (Could)
     - [x] [[Story - Runbook for failed or degraded runs]]
 - [ ] [[Epic - Lean and secret-free logs]]
     - [x] [[Story - INFO logs with secret masking]]

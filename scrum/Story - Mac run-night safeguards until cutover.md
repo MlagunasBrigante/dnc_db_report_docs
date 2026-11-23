@@ -3,7 +3,7 @@ type: story
 project: dnc-cron-scrub
 epic: "[[Epic - Reliable alerts]]"
 sprint: S1
-status: in-review
+status: done
 moscow: could
 gaps: [GAP-12, GAP-13]
 jira: ""
@@ -13,7 +13,7 @@ size: S
 
 > [!todo] `<owner>` — action needed
 > - [x] Run the container recreate command on the Mac and set the wake/no-sleep schedule.
-> - Moot since 2026-11-23: the Mac no longer runs the monthly job ([[Story - Parallel run and early host move to the ITServer]]); close or retire this story (`<owner>` to decide). #open-question
+> - Moot since 2026-11-23: the Mac no longer runs the monthly job ([[Story - Parallel run and early host move to the ITServer]]); retired 2026-11-23 (`<owner>`): closed as `done` without the remaining items; the Mac container stays stopped for rollback only. ~~#open-question~~
 > - [ ] Keep the Mac awake and on power on Nov 30 from 19:45 (Mexico City) until the run finishes.
 > - [ ] Morning of Dec 2: confirm `data/2026-12-01/logs/run.log` ends with the final status line; otherwise run `once` by hand.
 

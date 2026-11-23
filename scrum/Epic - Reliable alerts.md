@@ -50,7 +50,7 @@ Each story delivers observable value to the IT & Data lead: emails without overs
 > - [x] Identify our LawRuler account manager (name, address, domain). ✅ 2026-11-05: Lindsey Humphreys. — [[Story - Soft-deletion request to the LawRuler team]]
 > - [ ] Until then, forward each monthly request yourself. — [[Story - Soft-deletion request to the LawRuler team]]
 > - [x] Ask j.fernandez to confirm the tenant allows external sending from `it.admin@` to `jordanbelfort.com`. ✅ 2026-11-11: confirmed by j.fernandez (`<owner>`). — [[Story - Monthly report email as a summary table]]
-> - [ ] Run the container recreate command on the Mac and set the wake/no-sleep schedule. — [[Story - Mac run-night safeguards until cutover]]
+> - [x] Run the container recreate command on the Mac and set the wake/no-sleep schedule. (Story retired 2026-11-23.) — [[Story - Mac run-night safeguards until cutover]]
 
 ## Child user stories
 - [[Story - Mac run-night safeguards until cutover]] (Could; added 2026-10-29)
