@@ -47,14 +47,18 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 ### S2 — Technical migration
 **Re-run:** 2026-11-11
 
-> [!info] Where S2 stands (handoff 2026-11-20)
-> Order 1 ([[Story - Raw snapshot and run record land in Postgres]]) done except AC4 (resume check pending); next by order = order 2 ([[Story - All stages write to Postgres with lineage]]). Open owner items: (a) move backups story (order 12, [[Story - Backups and restore drill for the dnc database]]) ahead of backfill stories (orders 8–10)? Claude recommends yes (R7: legal record loaded before tested backup exists); question already in backups story. (b) ITServer systemd/sudo access (R20; Docker confirmed). (c) Backup target (cloud/SSD/both) + encryption key with second copy (blocks order 12, cutover). (d) Cutover acceptance criteria (blocks orders 11, 13). (e) LawRuler API username/password decision (D-20/D-26, due end of S2). (f) Outlook reminder for PG17 upgrade (EOL 2029-11-08; R22 trigger 2029-05-01). Housekeeping: stale local branches `verify/tmp`, `verify/y`, `verify/s1-merge`; merged `s2/feat/raw-snapshot-postgres`, `s2/feat/raw-snapshot-pg17` can be deleted (owner's call). Mac run 2026-12-01 02:00 UTC untouched.
+> [!info] Where S2 stands (updated 2026-11-20)
+> Order 1 ([[Story - Raw snapshot and run record land in Postgres]]) done 2026-11-20 (AC4 passed on the ITServer, guide § 12c). Order 0 ([[Story - Parallel run and early host move to the ITServer]]) done 2026-11-23: comparison identical, the ITServer is the production host. Next by order = order 2 ([[Story - All stages write to Postgres with lineage]]).
+> Open owner items: (b) systemd unit install not yet exercised on the ITServer (R20; sudo and Docker confirmed). (c) Backup target (cloud/SSD/both) + encryption key with a second copy: blocks order 8 and, through D-28, every backfill and the cutover. (d) Cutover acceptance criteria decided (D-31, D-32). (g) Order 0 blockers: parallel-run date, interim off-machine copy of ITServer runs, production data path.
+> Settled 2026-11-20: (a) backups moved before the backfills (D-28); (e) LawRuler API username/password kept until the last sprint (D-29); (f) Outlook reminder for the PostgreSQL 17 upgrade set.
+> Housekeeping (owner's call): local branches `verify/tmp`, `verify/y`, `verify/s1-merge`, the merged `s2/feat/raw-snapshot-postgres`, `s2/feat/raw-snapshot-pg17` and the merged `s1/*` branches can be deleted. Mac run 2026-12-01 02:00 UTC untouched.
 
-**MoSCoW confirmation:** All 17 stories are `moscow: must` (no changes proposed).
+**MoSCoW confirmation:** All 17 stories are `moscow: must` (no changes proposed). 2026-11-20: +1 Must, order 0 (D-32).
 
 **Order table:**
-| Order | Must (17) |
+| Order | Must (18) |
 |---|---|
+| 0 | [[Story - Parallel run and early host move to the ITServer]] (added 2026-11-20, D-32; before 2026-12-01, ahead of every other S2 story) |
 | 1 | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; `<owner>` creates DB + roles) |
 | 2 | [[Story - All stages write to Postgres with lineage]] (foundation for failures & backfill) |
 | 3 | [[Story - Closed months become read-only]] · [[Story - Report generated from Postgres]] (parallel after 2) |
@@ -62,13 +66,13 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 | 5 | [[Story - Patch pass reprocesses a run's failed items]] (enables scheduling) |
 | 6 | [[Story - Unresolved items reach the alerts]] (completes failure epic) |
 | 7 | [[Story - Monthly run from versioned systemd units]] (systemd foundation + install script) |
-| 8 | [[Story - Scheduled patch pass on the 3rd]] · [[Story - Watchdog on the 5th]] · [[Story - Backfill the container-era runs]] (parallel after 7/schema) |
-| 9 | [[Story - Profile legacy runs against the stage contract]] (learning story) |
-| 10 | [[Story - Backfill compatible legacy runs]] (after profiling) |
-| 11 | [[Story - Define cutover acceptance criteria]] (decision before cutover prep) |
-| 12 | [[Story - Backups and restore drill for the dnc database]] (before cutover; R6 mitigation) |
+| 8 | [[Story - Scheduled patch pass on the 3rd]] · [[Story - Watchdog on the 5th]] · [[Story - Backups and restore drill for the dnc database]] (parallel after 7; backups before any backfill, D-28; R6/R7 mitigation) |
+| 9 | [[Story - Backfill the container-era runs]] (after backups) |
+| 10 | [[Story - Profile legacy runs against the stage contract]] (learning story) |
+| 11 | [[Story - Backfill compatible legacy runs]] (after profiling) |
+| 12 | [[Story - Define cutover acceptance criteria]] (decision before cutover prep) — ✅ done 2026-11-20 (D-31, D-32) |
 | 13 | [[Story - Cut over and complete a scheduled run on the ITServer]] (last; physical move) |
-| 14 | [[Story - Rotate exposed credentials and retire the old repo]] (unblocked: GitHub deletion, archive redaction; LR API username/password decision at end of S2 per D-20) |
+| 14 | [[Story - Rotate exposed credentials and retire the old repo]] (unblocked: GitHub deletion, archive redaction; LR API username/password kept until the last sprint, D-29) |
 
 ### S3–S6
 `moscow: tbd`, prioritized at each sprint start.
@@ -86,10 +90,10 @@ Resources the Should items need from `<owner>`. Claude nudges for these at S1 ki
 - [x] Create the `dnc` database and `dnc_*` roles on the ITServer using the DDL guide → [[Story - Raw snapshot and run record land in Postgres]] ✅ 2026-11-20: guide Steps 1–11 executed end to end (both schemas, dry-run + verify MATCH)
 - [x] Confirm ITServer access for Docker operations (pull, run, volume mounts) → [[Story - Monthly run from versioned systemd units]] ✅ 2026-11-13: Docker 29.3.0 + Compose v5.1.0, daemon reachable as it.admin
 - [ ] Confirm ITServer access for systemd unit installation (requires sudo/root) → [[Story - Monthly run from versioned systemd units]]
-- [ ] Choose the backup target (cloud storage and/or external SSD) → [[Story - Backups and restore drill for the dnc database]]
+- [ ] Choose the backup target (cloud storage and/or external SSD) → [[Story - Backups and restore drill for the dnc database]] (leaning 2026-11-20: Azure Blob, probably a cold tier; not final)
 - [ ] Store the backup encryption key in the team password manager (with second copy) → [[Story - Backups and restore drill for the dnc database]]
-- [ ] Define the cutover acceptance criteria (parallel run, alert test, data diff) → [[Story - Define cutover acceptance criteria]]
-- [ ] Decide LawRuler API username & password rotation: rotate all flows or dedicated account (team decision at end of S2, D-20) → [[Story - Rotate exposed credentials and retire the old repo]]
+- [x] Define the cutover acceptance criteria (parallel run, alert test, data diff) → [[Story - Define cutover acceptance criteria]] ✅ 2026-11-20 (D-31, D-32)
+- [x] Decide LawRuler API username & password rotation → [[Story - Rotate exposed credentials and retire the old repo]] ✅ 2026-11-20 (D-29): keep the current user for now; reviewed in the last sprint (S6), reminder in [[Epic - Automated soft-deletion]]
 
 ## 3. Risk register (pre-mortem, 2026-10-29)
 *These scores are relative estimates to help prioritize; they are not actuarial predictions.* P = probability, I = impact (1–5).
@@ -100,19 +104,19 @@ Resources the Should items need from `<owner>`. Claude nudges for these at S1 ki
 | R1 | One person owns pipeline, development and statistics across 6 sprints | People | 4 | 4 | **16** | `<owner>` | S1 not done by the Jan 1 run, or `<owner>` out more than a week | Active |
 | R3 | LawRuler API flakiness or changes break a stage | External | 4 | 3 | **12** | `<owner>` | Unresolved items rise; new error types | Monitoring. Re-score when [[Story - Patch pass reprocesses a run's failed items]] and [[Story - Unresolved items reach the alerts]] close (`<owner>`, 2026-11-11: planned mitigations don't lower a score until they ship). |
 | R5 | The "removed by the 7th" promise isn't kept | External | 4 | 3 | **12** | `<owner>` + LawRuler account manager (Lindsey Humphreys) | Request not acknowledged by the 5th; requested leads present in the next snapshot | Active |
-| R2 | Exposed credentials are misused before rotation | Technical | 2 | 5 | 10 | `<owner>` | Unknown LawRuler/Graph activity; rotation not done by mid-Nov | Graph secret rotated 2026-11-11. LawRuler OAuth client secret not rotatable (global/static), accepted. LawRuler API username/password pending: `<owner>` reports team decision at end of S2 (D-20). 2026-11-11: P reduced 3→2 (most credentials addressed). 2026-11-19 (D-26): same credentials also on the ITServer `.env` (chmod 600) for setup; risk stays open |
-| R6 | Legal record has no off-machine backup | Technical | 2 | 5 | 10 | `<owner>` | No backup before cutover | Mitigated by story (S2 Must, not built yet). Re-score when [[Story - Backups and restore drill for the dnc database]] closes (`<owner>`, 2026-11-11). |
-| R7 | Backfill or migration corrupts the legal record | Technical | 2 | 5 | 10 | `<owner>` | Row-count or checksum mismatch | Monitoring |
+| R2 | Exposed credentials are misused before rotation | Technical | 2 | 5 | 10 | `<owner>` | Unknown LawRuler/Graph activity; rotation not done by mid-Nov | Graph secret rotated 2026-11-11. LawRuler OAuth client secret not rotatable (global/static), accepted. LawRuler API username/password: kept as is until the last sprint, reviewed there (D-29, 2026-11-20). 2026-11-11: P reduced 3→2 (most credentials addressed). 2026-11-19 (D-26): same credentials also on the ITServer `.env` (chmod 600) for setup; risk stays open |
+| R6 | Legal record has no off-machine backup | Technical | 2 | 5 | 10 | `<owner>` | No backup before cutover | 2026-11-20 (D-32): the host move comes before the backups story, so ITServer runs need an interim off-machine copy ([[Story - Parallel run and early host move to the ITServer]]). 2026-11-23 (D-34): no interim copy; data never leaves the ITServer by design, so the legal record sits on one host until the backups story ships (order 8). Mitigated by story (S2 Must, not built yet). Re-score when [[Story - Backups and restore drill for the dnc database]] closes (`<owner>`, 2026-11-11). |
+| R7 | Backfill or migration corrupts the legal record | Technical | 2 | 5 | 10 | `<owner>` | Row-count or checksum mismatch | Monitoring. 2026-11-20 (D-28): backups + restore drill now ordered before every backfill; score unchanged until it ships. |
 | R8 | Lead-level data reaches an external recipient | Process | 2 | 5 | 10 | `<owner>` | Allowlist error logged; external recipient added | Monitoring |
 | R9 | Database setup undecided or no admin rights, so S2 is blocked | Process | 3 | 3 | 9 | `<owner>` | Open questions unanswered at S2 start | Closed 2026-11-10 (D-18: dedicated DB; `<owner>` creates DB + roles) |
 | R11 | Scope creep across 6 sprints | Process | 3 | 3 | 9 | `<owner>` | Stories added mid-sprint without the gate | Monitoring |
-| R19 | Mac and ITServer diverge during S2 migration (dual maintenance) | Process | 3 | 3 | 9 | `<owner>` | Mac Dec 1 run uses old code; ITServer tests use new schema | Active |
+| R19 | Mac and ITServer diverge during S2 migration (dual maintenance) | Process | 3 | 3 | 9 | `<owner>` | Mac Dec 1 run uses old code; ITServer tests use new schema | Active. 2026-11-20 (D-32): ends when the ITServer takes over (target before 2026-12-01). |
 | R21 | `<owner>` sole DB admin; no backup person for DB operations | People | 3 | 3 | 9 | `<owner>` | `<owner>` unavailable during migration or post-cutover issue | Active |
 | R12 | Late n8n decision (D-04) flips the S2 design | Process | 2 | 4 | 8 | `<owner>` | D-04 open at S2 start | Closed 2026-11-10 (D-04 = no) |
 | R13 | Deleted logs later needed as legal evidence | Process | 2 | 4 | 8 | `<owner>` | Legal request references a pre-2026-11 run | Monitoring |
 | R18 | Testing on production `dnc` DB via test table risks data corruption | Process | 2 | 4 | 8 | `<owner>` | Test code touches real partitions; bad transaction rollback | Active |
 | R20 | `<owner>` lacks Docker/systemd access on ITServer | Process | 2 | 4 | 8 | `<owner>` | Install script fails with permission errors | Active. 2026-11-13: Docker confirmed (29.3.0, Compose v5.1.0); systemd/sudo still unconfirmed. 2026-11-19: sudo confirmed (`<owner>` installed git with `dnf`); likelihood lowered in practice, but systemd unit install not yet exercised — keep open until the systemd story runs. |
-| R22 | PostgreSQL 17 reaches end of life (2029-11-08) without a planned major upgrade | Technical | 2 | 4 | 8 | `<owner>` | 2029-05-01 with no upgrade plan | Open. Reminder: plan the upgrade to the newest supported major (expected 22, released ~Sep 2029) in 2029; major upgrades need pg_upgrade or dump/restore (D-23). |
+| R22 | PostgreSQL 17 reaches end of life (2029-11-08) without a planned major upgrade | Technical | 2 | 4 | 8 | `<owner>` | 2029-05-01 with no upgrade plan | Open. Reminder: plan the upgrade to the newest supported major (expected 22, released ~Sep 2029) in 2029; major upgrades need pg_upgrade or dump/restore (D-23). ✅ 2026-11-20: Outlook reminder set (`<owner>`). |
 | R4 | Mac runs miss a month before cutover (sleep, folder rename) | Technical | 2 | 2 | 4 | `<owner>` | No run folder by the 2nd | Downgraded: about a month of buffer; handled by a Could story |
 | R14 | Graph won't allow app-only posting to Teams | External | 3 | 2 | 6 | j.fernandez | Spike result | Monitoring |
 | R15 | Memory work destabilizes the run | Technical | 2 | 3 | 6 | `<owner>` | Restart test fails; results differ before vs after | Monitoring |
@@ -141,7 +145,7 @@ Resources the Should items need from `<owner>`. Claude nudges for these at S1 ki
 - **Trigger:** unknown LawRuler or Graph activity; rotation not done by mid-November.
 - **Mitigation:** the rotation story goes first; count secret matches in the historic logs to confirm the inventory; credentials that other flows depend on get recurring reminders until rotated.
 - **2026-11-11 (D-20):** Graph secret rotated; LawRuler OAuth client secret not rotatable (global/static on LawRuler's side), accepted. LawRuler API username/password pending: `<owner>` discusses with team, reports at end of S2.
-- **2026-11-19 (D-26):** the same LawRuler, O365 and dncscrub credentials were typed into a new ITServer `.env` (chmod 600, owner `it.admin`) for the Postgres setup dry-run. A second host now holds them, so any later rotation must update both the Mac and the ITServer. Risk stays open until the D-20 decision.
+- **2026-11-19 (D-26):** the same LawRuler, O365 and dncscrub credentials were typed into a new ITServer `.env` (chmod 600, owner `it.admin`) for the Postgres setup dry-run. A second host now holds them, so any later rotation must update both the Mac and the ITServer. Risk stays open until the LawRuler user is reviewed in the last sprint (D-29, 2026-11-20).
 - **Contingency:** revoke access immediately and review provider audit logs.
 - **Residual:** 2×5 = 10, while some credentials are still pending because other flows depend on them.
 

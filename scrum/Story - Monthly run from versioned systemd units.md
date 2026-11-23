@@ -6,7 +6,7 @@ sprint: S2
 moscow: must
 s2_order: 7
 status: to-do
-gaps: [GAP-12]
+gaps: [GAP-12, GAP-37]
 jira: ""
 size: M
 ---
@@ -30,6 +30,9 @@ size: M
 - **Volume mounts:** The service unit must mount `data/` and `Dev/.env` so the container has access to the run history and secrets
 - **Logging:** systemd journal captures stdout/stderr; no need for separate log forwarding in S2
 - **Deprecating scheduler.py:** The in-container scheduler (`Dev/scheduler.py`) is replaced by systemd; either delete it or add a warning that it's no longer the production path
+
+## Open questions
+- [x] ✅ 2026-11-20 (`<owner>`, D-33): data stays at `/home/it.admin/dnc/data` mounted at `/data`, clone at `/home/it.admin/dnc/git_container/dnc_db_report`; align this story's ACs (`/srv/dnc-scrub/...`, `/app/data`) when it starts. ~~#open-question~~ **Production paths on the ITServer** (found 2026-11-20): the ACs here use `/srv/dnc-scrub/...` mounted at `/app/data`, while the setup run used `/home/it.admin/dnc/data` mounted at `/data` (see [[ITServer PostgreSQL setup]] Step 11). Settle the production data and clone paths when this story starts, then align this story and [[Story - Cut over and complete a scheduled run on the ITServer]].
 
 ## Dependencies
 - [[Story - All stages write to Postgres with lineage]] (the pipeline must be fully functional before scheduling it)

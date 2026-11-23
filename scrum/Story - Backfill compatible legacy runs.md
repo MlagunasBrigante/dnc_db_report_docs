@@ -4,7 +4,7 @@ project: dnc-cron-scrub
 epic: "[[Epic - Historical backfill]]"
 sprint: S2
 moscow: must
-s2_order: 10
+s2_order: 11
 status: to-do
 gaps: [GAP-25]
 jira: ""

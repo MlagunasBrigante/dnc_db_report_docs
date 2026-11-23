@@ -6,7 +6,7 @@ sprint: S1
 moscow: must
 s1_order: 5
 status: done
-gaps: [GAP-15]
+gaps: [GAP-15, GAP-38]
 jira: ""
 size: S
 ---

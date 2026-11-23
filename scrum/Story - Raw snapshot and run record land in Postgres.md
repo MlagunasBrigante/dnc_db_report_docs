@@ -5,7 +5,7 @@ epic: "[[Epic - PostgreSQL system of record]]"
 sprint: S2
 moscow: must
 s2_order: 1
-status: in-review
+status: done
 gaps: [GAP-18, GAP-34]
 jira: ""
 size: M
@@ -13,14 +13,14 @@ size: M
 # Story: Raw snapshot and run record land in Postgres
 > [!todo] `<owner>` — action needed
 > - [x] Answer the two database questions in the epic and settle the dedicated-DB decision. (2026-11-10, D-18)
-> - [x] Create the database objects on the ITServer using the DDL guide. (2026-11-18, guide Steps 1–9)
-> - [ ] Run the AC4 resume check on the ITServer.
+> - [x] Create the database objects on the ITServer using the DDL guide. (2026-11-20, guide Steps 1–11, both schemas, dry-run + verify MATCH)
+> - [x] Run the AC4 resume check on the ITServer (guide § 12c, with the run's values filled in). ✅ 2026-11-20: passed on the second attempt (see Notes, AC4 evidence). First attempt 2026-11-20 stopped on the unfilled `<YYYY-MM-DD of the run>` placeholder (`ValueError` in `strptime`) before any database call, so its unchanged before/after values prove nothing yet.
 >
 > **AC4: how it can be shown (checked against the code 2026-11-20):**
 > - **No CLI resume path exists on the ITServer before cutover.** A dry-run always gets a fresh `data/_dryrun/<UTC timestamp>/` folder and ignores `OUTPUT_DIR` (`Dev/dnc/run_paths.py` `get_run_paths`), so it can never resume a stored run; a real run (which resumes `data/<date>/`) is not allowed on the ITServer before cutover (D-19).
 > - What the skip looks like when it happens: INFO `Raw snapshot for run <run_id> already stored; skipping` (`Dev/dnc/pg_store.py`), with `pipeline_run.started_at`, `raw_row_count` and `raw_snapshot_checksum` unchanged.
 > - Already proven by unit tests: `test_stored_run_skips_write` (no COPY, no UPDATE, rollback, INFO) and `test_failure_mid_copy_rolls_back` (one transaction, nothing partial is committed).
-> - [ ] #open-question **How should AC4 be accepted?** Options: **(A, recommended)** accept the unit tests now and re-check the skip on the first real ITServer run that resumes (during cutover); **(B)** a one-off check on the ITServer: call the Stage 1 hook inside the pipeline image against the already-stored dry-run's `.run_id` (only works if that dry-run's folder and `scrub_ods.db` were not cleaned up) and compare the three `pipeline_run` values before/after; **(C)** a small code change so a dry-run can resume a named `_dryrun/` folder (new behaviour, needs its own branch + review).
+> - [x] ✅ 2026-11-20 (`<owner>`): **B**, the one-off check in guide § 12c; AC4 closes when it passes. ~~#open-question~~ **How should AC4 be accepted?** Options: **(A, recommended)** accept the unit tests now and re-check the skip on the first real ITServer run that resumes (during cutover); **(B)** a one-off check on the ITServer: call the Stage 1 hook inside the pipeline image against the already-stored dry-run's `.run_id` (only works if that dry-run's folder and `scrub_ods.db` were not cleaned up) and compare the three `pipeline_run` values before/after; **(C)** a small code change so a dry-run can resume a named `_dryrun/` folder (new behaviour, needs its own branch + review).
 
 ## User Story
 **As** `<owner>` (pipeline owner), **I want** each monthly run's raw LawRuler snapshot and its metadata stored in PostgreSQL with a SHA-256 checksum, **so that** I have an immutable legal record of what was ingested and can trace every downstream result back to the original data.
@@ -29,7 +29,7 @@ size: M
 - [x] **Given** a fresh PostgreSQL database on the ITServer, **when** `<owner>` runs the provided DDL script, **then** the `pipeline_run` table and the partitioned `raw_snapshot` table are created in both `dnc` and `dnc_test` schemas without error (verified by `\d+ pipeline_run` and `\d+ raw_snapshot` in each schema showing the expected columns, the composite primary key `(snapshot_month, run_id, lead_id, phone)`, and partition structure, and by querying the partition list)
 - [x] **Given** the schema is deployed, **when** run.py executes Stage 1 on the ITServer as a dry-run (forced into dnc_test per D-19), **then** it writes one `pipeline_run` row (run_id UUID, trigger, start_time, code_version from git SHA, raw_snapshot_checksum per D-21(b)) and all raw rows to the `raw_snapshot_YYYYMM` partition for that month with lead_id, phone, and the full row as JSONB payload (verified by row count matching the SQLite-era `raw_data` count for the same run)
 - [x] **Given** a completed run, **when** `Dev/tools/verify_raw_snapshot.py` recomputes the canonical checksum from the stored rows, **then** it matches the checksum in `pipeline_run` (verified by the script's exit code and output)
-- [ ] **Given** the pipeline writes to Postgres, **when** the same run folder is resumed and that run already has a stored snapshot (checksum recorded in pipeline_run), **then** the raw write is skipped and pipeline_run's started_at, row count and checksum are unchanged (verified by log message and stable values); **and given** a previous attempt failed mid-write, **then** the snapshot is written in full and verifies (D-21(d))
+- [x] **Given** the pipeline writes to Postgres, **when** the same run folder is resumed and that run already has a stored snapshot (checksum recorded in pipeline_run), **then** the raw write is skipped and pipeline_run's started_at, row count and checksum are unchanged (verified by log message and stable values); **and given** a previous attempt failed mid-write, **then** the snapshot is written in full and verifies (D-21(d)) ✅ 2026-11-20: skip verified on the ITServer (guide § 12c); failed-mid-write half accepted by `<owner>` on unit-test evidence plus the 2026-11-19 real rollback (see Notes, AC4 evidence)
 - [x] **Given** `<owner>` needs to create the schema, **when** she reads the step-by-step guide [[ITServer PostgreSQL setup]], **then** it tells her the dedicated database name, the roles to create, the DDL to run, how to create the test schema, and how to grant the pipeline's service account access (verified by `<owner>`'s review or by a second reader executing the steps on a scratch Postgres). ✅ 2026-11-20: `<owner>` executed the guide end to end on the ITServer (Steps 1–11, both schemas, dry-run + verify MATCH); deviations folded into the guide.
 - [x] **Given** run.py connects to Postgres, **when** it starts, **then** it reads the connection string from `Dev/.env` (POSTGRES_DSN), never hardcoded (verified by grep)
 - [x] **Given** POSTGRES_DSN is unset (the Mac, D-19), **when** a run executes, **then** it behaves exactly as before and imports no Postgres driver (verified by unit test)
@@ -59,8 +59,8 @@ size: M
 - **D-22 (2026-11-12):** the legal raw snapshot can't be deleted as a side effect: the `raw_snapshot → pipeline_run` foreign key no longer cascades on delete (default NO ACTION), and `dnc_archive` is read-only (SELECT) until its detach/export capability is designed in S5 / [[Story - Closed months become read-only]] (e.g. a SECURITY DEFINER function owned by `dnc_owner`; `DETACH PARTITION` needs table ownership, not UPDATE/DELETE). `dnc_writer` keeps UPDATE on `pipeline_run` for the post-stream count and checksum.
 - **D-23 (2026-11-13):** PostgreSQL 17 in its own Docker container on the ITServer (not the existing PG13 server); amends D-19 and D-18.
 - **D-24 (2026-11-13):** raw_snapshot primary key = composite `(snapshot_month, run_id, lead_id, phone)`, no surrogate id (D-24); one index instead of two; downstream tables small.
-- **D-26 (2026-11-19):** the ITServer `.env` uses the same LawRuler, O365 and dncscrub accounts as the Mac for now (typed by hand, `chmod 600`, never committed). D-20 and R2 stay open: the LawRuler user decision is still due at the end of S2. #open-question
-- **ITServer setup progress (2026-11-18/19):** guide Steps 1–9 done and verified (Step 9 structure output matches D-24/D-25 design, both schemas); Step 10 `.env` in progress.
+- **D-26 (2026-11-19):** the ITServer `.env` uses the same LawRuler, O365 and dncscrub accounts as the Mac for now (typed by hand, `chmod 600`, never committed). ✅ 2026-11-20 (D-29): the current LawRuler API user stays until the last sprint (S6), where it is reviewed; R2 stays open until then.
+- **ITServer setup progress:** guide Steps 1–9 done and verified 2026-11-18/19 (Step 9 structure output matches D-24/D-25 design, both schemas); Steps 10–12b done 2026-11-19/20 (see ITServer verification below); guide marked done 2026-11-20. Step 12c (AC4) pending.
 - **Roles:** use the decision note's layout (`dnc_owner`, `dnc_writer`, `dnc_reader`, `dnc_archive`); the earlier `dnc_app`/`dnc_readonly` names are superseded.
 - **Branch:** Merged to main: s2/feat/raw-snapshot-postgres (1bdd6b9), s2/feat/raw-snapshot-pg17 (d6b7454; main 04d42b0), GAP-34 streaming checksum (967308d, squash, 2026-11-17), run_id UUID fix (b35a022, PR #1). No open branch.
 
@@ -70,7 +70,8 @@ size: M
   - AC2: re-run on b35a022 wrote 428,641 rows to `dnc_test.raw_snapshot_202611` in ~9 s; `pipeline_run` row: trigger `dry-run`, `is_dry_run` t, `code_version` b35a022, `snapshot_month` 2026-11-01, `raw_row_count` = actual rows = 428,641.
   - AC3: `tools/verify_raw_snapshot.py --schema dnc_test` recomputed the SHA-256 (`851bcb8b…`) and row count from the stored rows: MATCH, exit 0. Confirms D-25 (Postgres `C` order = Python order, JSONB round-trip byte-exact).
   - AC6: no DSN hardcoded in code (grep); read from `.env`. AC7: covered by unit tests (`tests/test_pg_store.py`, psycopg not imported when POSTGRES_DSN is unset).
-  - Open: AC4 only (AC5 closed 2026-11-20).
+  - AC4 closed 2026-11-20 (below). **Story done 2026-11-20.**
+- **AC4 evidence (2026-11-20, guide § 12c, method B):** writer called directly on dry-run folder `2026-11-19T223911Z` (`.run_id` present) with a row iterator that raises if consumed. Log: `Reusing run_id 2a2b3bbb-… from /data/_dryrun/2026-11-19T223911Z/processed/.run_id`, then `Raw snapshot for run 2a2b3bbb-… already stored; skipping`, `done`. `dnc_test.pipeline_run` identical before and after (1 row; `started_at` 2026-11-19 22:39:11.24354+00, `raw_row_count` 428,641, checksum prefix `851bcb8b32a9a221`). Skip half proven on the server. Failed-mid-write half: unit test `test_failure_mid_copy_rolls_back` (one transaction, nothing partial committed) plus the 2026-11-19 real failure (UUID bug) that rolled back the whole transaction before the full re-run verified MATCH.
 
 ## Open questions
 - [x] #open-question Answer the two questions in the "Open questions" section of [[Epic - PostgreSQL system of record]] (existing DB contents/joins; admin rights) and settle [[Decision - Dedicated PostgreSQL database]].

@@ -7,6 +7,9 @@ gaps: [GAP-13, GAP-25]
 ---
 # Epic: Cutover to the ITServer
 ## Description
+> [!note] Split in two phases (D-32, 2026-11-20)
+> Phase 1, [[Story - Parallel run and early host move to the ITServer]]: one parallel run, then the ITServer takes over the monthly job with today's pipeline, before 2026-12-01. Phase 2, [[Story - Cut over and complete a scheduled run on the ITServer]]: systemd timers and the Postgres pipeline on the same host, at the end of S2.
+
 Move the job and data from `<owner-mac>` to the AlmaLinux ITServer. The old Mac container is retired, and the first scheduled run on the 1st completes successfully on the ITServer. Cutover acceptance criteria are defined collaboratively with `<owner>` before the move (e.g. parallel run comparison, alert verification). The physical cutover is not rushed — this epic closes S2 only after quality is proven.
 
 ## Gaps closed
@@ -46,6 +49,7 @@ Earlier patterns rejected:
 > - [ ] Decide the cutover acceptance criteria. — [[Story - Define cutover acceptance criteria]]
 
 ## Child user stories
+- [[Story - Parallel run and early host move to the ITServer]] (added 2026-11-20, D-32: the one parallel run and the early host move, before 2026-12-01) — done 2026-11-23, ITServer is production
 - [[Story - Backups and restore drill for the dnc database]] (added 2026-10-29, pre-mortem R6; before the cutover)
 - [[Story - Define cutover acceptance criteria]]
 - [[Story - Cut over and complete a scheduled run on the ITServer]]

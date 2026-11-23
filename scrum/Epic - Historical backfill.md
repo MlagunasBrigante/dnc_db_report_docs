@@ -52,6 +52,6 @@ Earlier patterns rejected:
 - [[Story - Backfill compatible legacy runs]]
 
 ## Dependencies / sequencing
-- **Upstream:** Epic - PostgreSQL system of record must land Story - All stages write to Postgres before backfill can run (schema must exist).
+- **Upstream:** Epic - PostgreSQL system of record must land Story - All stages write to Postgres before backfill can run (schema must exist). [[Story - Backups and restore drill for the dnc database]] must be done before the first backfill load (D-28, 2026-11-20).
 - **Internal:** Stories run in order (container-era → profile legacy → load compatible).
 - **Downstream:** S3 (statistics) depends on this epic's history being loaded.

@@ -3,9 +3,9 @@ type: reference
 project: dnc-cron-scrub
 epic: "[[Epic - PostgreSQL system of record]]"
 sprint: S2
-status: draft
+status: done
 created: 2026-11-11
-updated: 2026-11-19
+updated: 2026-11-20
 tags: [project/dnc-cron-scrub, reference, postgresql, itserver, setup, docker]
 ---
 # ITServer PostgreSQL 17 Setup for DNC Pipeline (Docker)
@@ -700,13 +700,16 @@ docker exec -it dnc-postgres psql -U dnc_reader -d dnc -P pager=off -c "$Q"
 
 Expected: `INFO Reusing run_id <run_id> from …/.run_id`, `INFO Raw snapshot for run <run_id> already stored; skipping`, `done`; before/after query identical.
 
-**This run (2026-11-19):** timestamp folder `2026-11-19T223911Z`, report_date `2026-11-19`, code_version `b35a022`.
+**This run (2026-11-19):** timestamp folder `2026-11-19T223911Z`, report_date `2026-11-19`, code_version `b35a022`. Replace all three placeholders (`<sha>`, `<YYYY-MM-DD of the run>`, `<timestamp>`) with these values: a leftover placeholder fails with `ValueError: time data '<YYYY-MM-DD of the run>' …` before any database call, so identical before/after values then prove nothing (seen 2026-11-20).
 
 ---
 
 ## No real runs on the ITServer before cutover
 
+> [!info] Superseded 2026-11-23: the ITServer is the production host (persistent `dnc-scrub` container, [[Story - Parallel run and early host move to the ITServer]]). The rule below now applies to ad-hoc runs: use `once --dry-run` for tests; a real `once` only to recover a missed month. Keep `OUTPUT_DIR` and `LOG_DIR` out of the ITServer `.env` (GAP-37).
+
 > [!warning] Don't run `once` (without `--dry-run`) on the ITServer during S2.
+> **Exception (D-32, 2026-11-20):** the one parallel run in [[Story - Parallel run and early host move to the ITServer]], after which the ITServer becomes the production host.
 > A real run spends dncscrub credits, writes tags to LawRuler and emails business recipients, in addition to the Mac's scheduled run. Writing to the production `dnc` schema starts with the cutover ([[Story - Cut over and complete a scheduled run on the ITServer]]); until then only dry-runs into `dnc_test` are used (D-19, D-21).
 
 ---

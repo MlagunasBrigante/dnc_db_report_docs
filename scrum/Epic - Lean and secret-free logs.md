@@ -50,7 +50,7 @@ Each story delivers value to the compliance/legal owner: INFO logs are lean and 
 > - [ ] Delete the `DNC_LOCALSERVER` repo on GitHub as `<docs-repo-owner>`, after the `git bundle` backup is verified. — [[Story - Rotate exposed credentials and retire the old repo]]
 > - [x] Set the recurring reminders for any credential that can't be rotated yet. Monthly D-08 Outlook reminder, 2026-11-10. — [[Story - Rotate exposed credentials and retire the old repo]]
 > - [x] Approve the summary report before any original log is deleted. Approved and done 2026-11-09 (19 deleted). — [[Story - Scrub secrets from historic run logs]]
-> - [ ] LawRuler API username & password: `<owner>` reports the team's decision at the end of S2 (D-20). — [[Story - Rotate exposed credentials and retire the old repo]]
+> - [x] LawRuler API username & password: `<owner>` reports the team's decision at the end of S2 (D-20). ✅ 2026-11-20 (D-29): kept until the last sprint; reminder moved to [[Epic - Automated soft-deletion]]. — [[Story - Rotate exposed credentials and retire the old repo]]
 
 ## Child user stories
 - [[Story - INFO logs with secret masking]]

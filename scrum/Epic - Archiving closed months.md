@@ -50,6 +50,9 @@ Legal traceability requirements: archived data must have **checksums** (SHA-256)
 ### Split evaluation
 Three stories is appropriate. If Story 1 reveals **multiple retention tiers** (e.g., "keep 12 months live, 24 months archived on disk, 7 years archived in cold cloud, then delete"), split Story 2 by tier: "archive to disk" + "archive to cloud" + "purge after 7 years." If the cloud provider decision is contentious, extract a spike ("evaluate S3 vs Azure Blob vs Backblaze B2 for archived lead data").
 
+> [!note] Backups target Azure cold storage (leaning, 2026-11-20)
+> [[Story - Backups and restore drill for the dnc database]] leans to Azure Blob Storage, probably a cold tier. When closed months or old records are archived or migrated here: (1) the backup copies already in Azure carry a minimum retention (cool 30 / cold 90 / archive 180 days), so moving, overwriting or deleting them earlier is billed as early deletion; (2) reading them back costs per GB and, for the archive tier, needs rehydration of up to 15 hours (copy to an online tier instead of re-tiering to avoid the early-deletion fee); (3) decide whether archived months reuse the backup storage account or get their own, with a lifecycle policy per tier. Source: Microsoft Learn, Access tiers for blob data (checked 2026-11-20).
+
 > [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [ ] Schedule the retention conversation with compliance/Legal. — [[Story - Retention policy for lead data]]
 

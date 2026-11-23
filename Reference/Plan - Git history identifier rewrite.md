@@ -9,6 +9,8 @@ tags: [project/dnc-cron-scrub, plan, git, pii, deferred]
 # Plan — Rewrite git history to remove owner identifiers (deferred)
 
 > **Status:** deferred. The working tree of both repos was masked on 2026-11-19 (placeholders `<owner>`, `<owner-email>`, `<owner-mac>`, `<vault-root>`, `<docs-repo-owner>`). History still carries the original strings. This plan removes them from history when `<owner>` schedules it. Tracked as GAP-35 in [[DNC Update - Scope]].
+>
+> **2026-11-20 (D-30):** two `Docs/` commits made after the masking pass (`922b745` "Masking names", `5a7a868` "S2 handoff 2026-11-20") carry a personal author identity and are already pushed. They stay as they are; this plan covers them if it is ever run. Enforcement from now on: GAP-36.
 
 ## What history still holds
 

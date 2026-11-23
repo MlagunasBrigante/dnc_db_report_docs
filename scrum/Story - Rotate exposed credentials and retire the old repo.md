@@ -43,14 +43,14 @@ size: M
   | `dnctag_local_py` API token and Postgres password | nothing to rotate | DB/service don't exist |
   | LawRuler account key | not pursued | not pursued (`<owner>`, 2026-11-11) |
   | dncscrub login ID | not pursued | not pursued (`<owner>`, 2026-11-11) |
-  | LawRuler API username & password | pending | `<owner>` + team, answer at end of S2 |
+  | LawRuler API username & password | kept as is (D-29) | reviewed in the last sprint (S6); reminder in [[Epic - Automated soft-deletion]] |
 
 - **Carried to S2 (`<owner>`, 2026-11-09):** S1 closes without it (D-08 stays deferred). The rotation still has to cover everything the historic logs exposed, even though the log originals were deleted on 2026-11-09, because they had already synced to OneDrive and some were emailed. Also covers `data/legacy/Scrub_API-2026-11-05/DNC_db_report/.env` (GAP-24). Narrowed 2026-11-11 by D-20.
 - **Deferred 2026-11-02 (`<owner>`, D-08):** the credentials stay as they are for now, because rotating them would break the other flows that share them. Options for later: rotate and update every flow, or create a dedicated account for this pipeline. `<owner>` gets a nudge when [[Epic - No silent data loss]] closes. Narrowed 2026-11-11 by D-20.
 - **LawRuler session cookie (found 2026-10-30):** the value that was hardcoded in `run.py` is in the `dnc_db_report` git history (pushed). It is a session ID, probably long expired; confirm with LawRuler that it is no longer valid, or treat it as rotated once the cookie-free run succeeds. ✅ 2026-11-11: optional; no rotation needed (D-20).
 - **Decided 2026-10-29 (stories interview Q5): option A.** Delete the GitHub repo instead of rewriting its history. The project is deprecated and its full history survives in the local archive and the bundle. **Rotation happens first:** deleting the repo doesn't undo past exposure.
 - **Exposure inventory** (names only):
-  - **LawRuler:** OAuth client secret (✅ 2026-11-11: not rotatable, global/static on LawRuler's side, accepted — D-20), API username/password (pending: `<owner>` discusses with team, answer at end of S2 — D-20) and account key (not pursued, `<owner>` 2026-11-11 — D-20). These were in the committed `.env` of `DNC_LOCALSERVER`, and the client secret is in DEBUG run logs.
+  - **LawRuler:** OAuth client secret (✅ 2026-11-11: not rotatable, global/static on LawRuler's side, accepted — D-20), API username/password (kept as is until the last sprint, D-29 2026-11-20) and account key (not pursued, `<owner>` 2026-11-11 — D-20). These were in the committed `.env` of `DNC_LOCALSERVER`, and the client secret is in DEBUG run logs.
   - **dncscrub:** login ID (not pursued, `<owner>` 2026-11-11 — D-20). It was in the committed `.env`.
   - **Graph/O365 app registration client secret:** the O365/oauthlib DEBUG logging can echo it in token requests. Confirm by counting matches in the historic logs before deleting them ([[Story - Scrub secrets from historic run logs]]). If present, rotate it in Entra. This is M365, so check with the microsoft-learn MCP (vault `CLAUDE.md` §13) and with j.fernandez as needed. ✅ 2026-11-11: rotated, new value in place (reported by `<owner>` — D-20).
   - **`dnctag_local_py` endpoint API token and Postgres password:** the service is retired, so there's nothing to rotate; just make sure no live system reuses those values. ✅ 2026-11-11: nothing to rotate; DB and service don't exist (D-20).
@@ -61,7 +61,7 @@ size: M
 ## Open questions
 - [x] Which other flows and systems use each credential? Answered 2026-11-02: many other flows use the current credentials, so rotating means updating all of them. The alternative is a new dedicated account for this pipeline. (`<owner>`)
 - [x] Who can rotate each credential? Answered 2026-11-02: `<owner>` can rotate them.
-- [ ] #open-question LawRuler API username & password: rotate and update every flow that uses them, or create a dedicated account for this pipeline? `<owner>` discusses with the team and answers at the end of S2 (D-20).
+- [x] LawRuler API username & password: rotate and update every flow that uses them, or create a dedicated account for this pipeline? ✅ 2026-11-20 (`<owner>`, D-29): keep the current user for the time being; reviewed in the last sprint (S6). This story can close without it.
 
 ## Dependencies
 - Rotate before [[Story - Scrub secrets from historic run logs]] deletes the originals, and count the secret matches first so the inventory above is confirmed.

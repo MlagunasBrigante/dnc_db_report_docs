@@ -40,6 +40,7 @@ Today, and through S5, leads to remove (DNC without opt-in, plus litigators) are
 
 > [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [ ] Agree a test lead with the LawRuler account manager; decide D-07 after the spike. — [[Story - Spike LawRuler soft-delete via API]]
+> - [ ] Review the LawRuler API username & password (D-29): rotate and update every flow, or a dedicated account for this pipeline. — [[Story - Rotate exposed credentials and retire the old repo]]
 
 ## Child user stories
 - [[Story - Spike LawRuler soft-delete via API]]

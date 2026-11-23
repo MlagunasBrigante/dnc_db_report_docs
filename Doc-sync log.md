@@ -1,7 +1,7 @@
 ---
 type: log
 project: dnc-cron-scrub
-last_synced_dev_commit: d0f3457b948607bfca70cc793dc07030f43f0af3
+last_synced_dev_commit: b71cf980ae2fe986ee1c254512165ad2098398cf
 tags: [project/dnc-cron-scrub, doc-sync]
 ---
 # Doc-sync log
@@ -40,6 +40,21 @@ Written by the weekday 07:00 CST Hermes cron job "dnc-cron-scrub doc sync". Each
 > Step 4, log: insert a new entry directly under the marker comment in the log note (newest on top), then set last_synced_dev_commit to H. Entry format: a heading '## YYYY-MM-DD: Dev main <short H>', then **Commits since last sync** (one-line list or 'first baseline'), **Auto-fixed** (bullets: file, change, evidence path:line; or none), **Needs `<owner>`** (bullets of judgment items and anything not auto-fixed, each with evidence and a suggested action; or none). Keep it under about 25 lines. Final reply: the entry text.
 
 <!-- entries below, newest first -->
+
+## 2026-11-23: Dev main b71cf98
+**Commits since last sync:** 4 (d0f3457…b71cf98): `b35a022` merge PR #1 run_id UUID fix · `b4cd041` README pre-existing edits (commits the 11-17/18 auto-fixes) · `9dc3b15` mask owner identifiers (README, `.env.example`, 3 code comments) · `b71cf98` merge `s2/chore/mask-owner-pii`. 5 files, +15/−14. Placeholders/comments only; no env var, CLI, Dockerfile or output-layout change.
+**Auto-fixed:**
+- `README.md:42` status table: [[Story - Raw snapshot and run record land in Postgres]] 🔍 In Review → ✅ Done (story frontmatter `status: done`, story:8).
+- `README.md:10` Point line: raw-snapshot story "in review" → "done" (same evidence).
+- `Docs/README.md:23`: GAP-01…35 → GAP-01…36, D-01…27 → D-01…33 (`Docs/scrum/DNC Update - Scope.md:207,244`).
+**Needs `<owner>`:**
+- [[Story - Parallel run and early host move to the ITServer]] is untracked and `to-do`, yet D-33 (`Scope.md:244`) set the run for 2026-11-21 from `main` `b71cf98`. If it ran, record the result and update status.
+- Carried over: `schema/000_roles_and_database.sql:3` still "PostgreSQL 13.23+" vs 17+ (D-23). Fix on the next code branch.
+- Carried over: project `README.md:89-90` § Open Gaps lists D-04 as pending and [[Decision - Dedicated PostgreSQL database]] as "proposed"; D-23…33, GAP-35/36 not mentioned. Edit by hand.
+- Carried over: GAP-31/32/33 still say "fixed on `s1/fix/code-review-findings`" (`Scope.md:200-202`); now on main.
+- Docs repo: 19 modified files + 1 untracked story, uncommitted. Commit when ready (neutral identity, GAP-36).
+- Resolved: `Dev/README.md` auto-fixes now committed (`b4cd041`); Dev working tree clean on `main`.
+- Checks clean: backlog boxes (68) vs `status`, 14 epics / 54 stories matches Backlog intro, other 23 status rows, wikilinks resolve, no new TODO/FIXME in the diff.
 
 ## 2026-11-20: Dev main d0f3457
 **Commits since last sync:** 1 (967308d…d0f3457): `d0f3457` Fix run_id UUID handling: psycopg 3 returns `uuid.UUID` for `RETURNING` (`dnc/pg_store.py`, `tests/test_pg_store.py`). 2 files, +20/−5. No env var, CLI, Dockerfile or output-layout change.

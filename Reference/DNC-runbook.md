@@ -13,6 +13,37 @@ tags: [project/dnc-cron-scrub, reference, runbook, operations]
 
 ---
 
+## 0. Production host (since 2026-11-23)
+
+The monthly job runs on the **ITServer** in the persistent `dnc-scrub` container (02:00 UTC on the 1st). Host paths there: data `/home/it.admin/dnc/data`, clone and `.env` `/home/it.admin/dnc/git_container/dnc_db_report`. Below, `data/` and `Dev/.env` mean these paths on the ITServer. The Mac's `dnc-scrub` is stopped (rollback only).
+
+**Recreate the ITServer container** (after an `.env` change or an image rebuild; confirm with `<owner>` first):
+```bash
+docker rm -f dnc-scrub
+docker run -d --name dnc-scrub --restart unless-stopped \
+  --env-file /home/it.admin/dnc/git_container/dnc_db_report/.env \
+  -v /home/it.admin/dnc/data:/data \
+  -v dnc-pgsocket:/var/run/postgresql \
+  dnc-scrub:latest
+docker logs dnc-scrub
+```
+The `.env` must not set `OUTPUT_DIR` or `LOG_DIR` (GAP-37).
+
+**Rollback to the Mac** (only one host may schedule):
+```bash
+docker stop dnc-scrub
+docker update --restart=no dnc-scrub
+```
+on the ITServer, then on the Mac:
+```bash
+docker update --restart=unless-stopped dnc-scrub
+docker start dnc-scrub
+docker logs dnc-scrub | tail -3
+```
+If the 1st already passed without a run, run `once` on the Mac (§ 2, Manual re-run). The Mac container still runs its pre-Postgres image: no `dnc` writes there.
+
+---
+
 ## Alert Routing and Response Times
 
 | Alert Type | Owner | Backup | Response Time | Channels |
