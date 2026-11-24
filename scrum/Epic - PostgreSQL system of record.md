@@ -61,7 +61,7 @@ Earlier patterns rejected:
 > [!check] Before closing this epic, verify `<owner>`'s actions were actually done
 > - [x] Answer the two database questions in the epic and settle the dedicated-DB decision. (2026-11-10, D-18) — [[Story - Raw snapshot and run record land in Postgres]]
 > - [x] Create the database objects on the ITServer using the DDL guide. (2026-11-20, guide Steps 1–11, both schemas, dry-run + verify) — [[Story - Raw snapshot and run record land in Postgres]]
-> - [ ] Push the order-2 merge and decide whether `dnc-scrub` is recreated with the order-2 image before 2026-12-01. — [[Story - All stages write to Postgres with lineage]]
+> - [ ] (Pushed 2026-11-24, PR #3.) Decide whether `dnc-scrub` is recreated with the order-2 image before 2026-12-01. — [[Story - All stages write to Postgres with lineage]]
 
 ## Child user stories
 - [[Story - Raw snapshot and run record land in Postgres]]

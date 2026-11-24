@@ -12,7 +12,7 @@ size: M
 ---
 # Story: All stages write to Postgres with lineage
 > [!todo] `<owner>` — action needed
-> - [ ] Push `main` (merge commit `4deb614`, code `ca85ebd`); delete the merged branch `s2/feat/all-stages-postgres` afterwards.
+> - [x] Push `main` ✅ 2026-11-24: merged via PR #3 (`4979639`; direct push is refused by the branch rule, PR merge works). Delete the merged branch `s2/feat/all-stages-postgres` when convenient.
 > - [ ] Decide before 2026-12-01: recreate `dnc-scrub` on the ITServer with the order-2 image (the 2026-12-01 run then writes all stage tables to `dnc`), or keep the current image until the remaining ACs close. #open-question
 > - [ ] ITServer clone back on `main` (step 7 of the order-2 test commands).
 
@@ -42,7 +42,7 @@ size: M
 - **Grants:** `dnc_writer` gets INSERT/SELECT only on every new table (no UPDATE/DELETE; nothing is modified mid-run). `pipeline_run` keeps UPDATE for `status`/`finished_at`.
 - **Fixture loader:** the copy code must also run against an existing run's SQLite files (needed to load 2026-11-21 into `dnc_test` for verification).
 
-## Delivered (2026-11-24, merged as `4deb614`, code `ca85ebd`)
+## Delivered (2026-11-24, merged 2026-11-24 via PR #3 as `4979639`, code `ca85ebd`)
 - **Schema:** `Dev/schema/002_stage_tables.sql` adds `cleaned_phones`, `scrub_batches`, `scrub_results`, `scrub_results_translated`, `leads_with_tags`, `tag_updates`, `run_stage_metrics`, each with an `ensure_<table>_partition()` function and INSERT/SELECT-only grants for `dnc_writer` (D-36). Phone-format links: `raw_snapshot`/`leads_with_tags` store `+1` and 10 digits, `cleaned_phones`/`scrub_results_translated` 10 digits; the nullable link columns `raw_phone`/`cleaned_phone` are resolved at insert.
 - **Copy code:** `dnc/pg_store.py` copies each stage's SQLite output by COPY into a temp table, then INSERT…SELECT; temp tables are analyzed before joining. A copy failure is logged and alerted as a warning and the run continues (D-36). Failures in the writes that only happen after Stage 6 (run status, stage metrics) send a short follow-up warning email + Teams alert. `pipeline_run.status`/`finished_at` are now set at the end of the run (closes the 2026-11-13 finding #13 note).
 - **Fixture loader:** `Dev/tools/load_sqlite_fixture.py --run-date <date> --data-dir /data --target-schema dnc_test` loads an existing run's SQLite files; it keeps its run id in a temp dir (the data mount is read-only) and exits non-zero if any stage fails.
