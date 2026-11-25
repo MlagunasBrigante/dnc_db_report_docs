@@ -13,8 +13,9 @@ size: M
 # Story: All stages write to Postgres with lineage
 > [!todo] `<owner>` — action needed
 > - [x] Push `main` ✅ 2026-11-24: merged via PR #3 (`4979639`; direct push is refused by the branch rule, PR merge works). Delete the merged branch `s2/feat/all-stages-postgres` when convenient.
-> - [ ] Decide before 2026-12-01: recreate `dnc-scrub` on the ITServer with the order-2 image (the 2026-12-01 run then writes all stage tables to `dnc`), or keep the current image until the remaining ACs close. #open-question
-> - [ ] ITServer clone back on `main` (step 7 of the order-2 test commands).
+> - [x] Decide before 2026-12-01: recreate `dnc-scrub` with the order-2 image, or keep the current image ✅ 2026-11-25 (D-37): keep the current image; don't rebuild from the clone until the run ends.
+> - [x] ITServer clone back on `main` ✅ 2026-11-25: fast-forward `b71cf98..4979639`. The local branch `s2/feat/all-stages-postgres` in the clone can be deleted.
+> - [ ] After the 2026-12-01 run finishes: apply `002_stage_tables.sql` to `dnc`, then load the run with `tools/load_sqlite_fixture.py --target-schema dnc` (D-37).
 
 ## User Story
 **As** `<owner>` (pipeline owner), **I want** every pipeline stage (cleaned phones, scrub batches/results, interpreted results, tag updates) to write to Postgres with foreign keys back to the raw snapshot, **so that** I can trace any lead's final tag back through every transformation to the original LawRuler row.
