@@ -22,15 +22,15 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 - Labels live in each story's `moscow` property.
 
 ### S1 — Gap-closing
-| Order | Must (12) |
-|---|---|
-| 0 | [[Story - Dry-run never calls paid APIs or touches real data]] (dry-runs currently pay for scrubs and can poison real run data) |
-| 1 | [[Story - Rotate exposed credentials and retire the old repo]] (exposure is live; dependent flows → reminders) — **deferred 2026-11-02 (D-08)**, revisit at the close of *No silent data loss* |
-| 2 | [[Story - INFO logs with secret masking]] · [[Story - Remove the hardcoded LawRuler session cookie]] |
-| 3 | [[Story - One retry policy for every API call]] |
-| 4 | [[Story - Lead download never truncates silently]] · [[Story - Failed scrub batches are retried and reported]] |
-| 5 | [[Story - Config validated before any API call]] · [[Story - Report labels and unmatched warning fixed]] |
-| 6 | [[Story - Warning and error emails always arrive]] · [[Story - Monthly report email as a summary table]] · [[Story - Soft-deletion request to the LawRuler team]] · [[Story - Alert delivery failure raises an alert]] |
+| Order | Must (12) | Status |
+|---|---|---|
+| 0 | [[Story - Dry-run never calls paid APIs or touches real data]] (dry-runs currently pay for scrubs and can poison real run data) | done |
+| 1 | [[Story - Rotate exposed credentials and retire the old repo]] (exposure is live; dependent flows → reminders) — **deferred 2026-11-02 (D-08)**, revisit at the close of *No silent data loss* | to-do (carried to S2, order 14) |
+| 2 | [[Story - INFO logs with secret masking]] · [[Story - Remove the hardcoded LawRuler session cookie]] | done · done |
+| 3 | [[Story - One retry policy for every API call]] | done |
+| 4 | [[Story - Lead download never truncates silently]] · [[Story - Failed scrub batches are retried and reported]] | done · done |
+| 5 | [[Story - Config validated before any API call]] · [[Story - Report labels and unmatched warning fixed]] | done · done |
+| 6 | [[Story - Warning and error emails always arrive]] · [[Story - Monthly report email as a summary table]] · [[Story - Soft-deletion request to the LawRuler team]] · [[Story - Alert delivery failure raises an alert]] | done · merged, awaiting run · done · done |
 
 **Should (7, all approved):**
 - [[Story - Spike Teams posting through Graph]] → [[Story - Teams alert channel]]
@@ -48,7 +48,7 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 **Re-run:** 2026-11-11
 
 > [!info] Where S2 stands (updated 2026-11-23)
-> Order 1 ([[Story - Raw snapshot and run record land in Postgres]]) done 2026-11-20 (AC4 passed on the ITServer, guide § 12c). Order 0 ([[Story - Parallel run and early host move to the ITServer]]) done 2026-11-23: comparison identical, the ITServer is the production host. Order 2 ([[Story - All stages write to Postgres with lineage]]) merged 2026-11-24 after a green ITServer test (2026-11-21 baseline matches SQLite on all 8 tables); remaining ACs 3, 4, 6, 7, 8 keep it open. Next by order = order 3. Orders 2–3 decided 2026-11-23 (D-36): copy pattern, 2026-11-21 baseline in `dnc_test`, read-only via permissions. 2026-11-23 (D-35, path B): pulling systemd + backups ahead of order 2 was considered and rejected; the in-container scheduler runs 2026-12-01.
+> Order 1 ([[Story - Raw snapshot and run record land in Postgres]]) done 2026-11-20 (AC4 passed on the ITServer, guide § 12c). Order 0 ([[Story - Parallel run and early host move to the ITServer]]) done 2026-11-23: comparison identical, the ITServer is the production host. Order 2 ([[Story - All stages write to Postgres with lineage]]) merged 2026-11-24 after a green ITServer test (2026-11-21 baseline matches SQLite on all 8 tables); remaining ACs 4, 6, 7, 8 keep it open (2026-11-25, D-38: AC3 moved to order 4, GAP-40 deferred beyond this project). Next by order = order 3. Orders 2–3 decided 2026-11-23 (D-36): copy pattern, 2026-11-21 baseline in `dnc_test`, read-only via permissions. 2026-11-23 (D-35, path B): pulling systemd + backups ahead of order 2 was considered and rejected; the in-container scheduler runs 2026-12-01.
 > Open owner items: (a2) ✅ 2026-11-25 (D-37): `dnc-scrub` keeps the current image for 2026-12-01; the run is loaded into `dnc` with the order-2 loader afterwards. (b) systemd unit install not yet exercised on the ITServer (R20; sudo and Docker confirmed). (c) Backup target decided 2026-11-23 (D-35: external SSD mounted only during the backup; key in Vaultwarden + sealed offline copy); storing the key is still to do.
 > Settled 2026-11-20: (a) backups moved before the backfills (D-28); (e) LawRuler API username/password kept until the last sprint (D-29); (f) Outlook reminder for the PostgreSQL 17 upgrade set.
 > Housekeeping (owner's call): local branches `verify/tmp`, `verify/y`, `verify/s1-merge`, the merged `s2/feat/raw-snapshot-postgres`, `s2/feat/raw-snapshot-pg17`, `s2/feat/all-stages-postgres` (merged via PR #3, 2026-11-24) and the merged `s1/*` branches can be deleted. The 2026-12-01 02:00 UTC run is on the ITServer (`dnc-scrub`); the Mac container stays stopped (rollback only).
@@ -56,23 +56,23 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 **MoSCoW confirmation:** All 17 stories are `moscow: must` (no changes proposed). 2026-11-20: +1 Must, order 0 (D-32).
 
 **Order table:**
-| Order | Must (18) |
-|---|---|
-| 0 | [[Story - Parallel run and early host move to the ITServer]] (added 2026-11-20, D-32; before 2026-12-01, ahead of every other S2 story) |
-| 1 | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; `<owner>` creates DB + roles) |
-| 2 | [[Story - All stages write to Postgres with lineage]] (foundation for failures & backfill) |
-| 3 | [[Story - Closed months become read-only]] · [[Story - Report generated from Postgres]] (parallel after 2) |
-| 4 | [[Story - Failed items captured per stage]] (after all stages in PG) |
-| 5 | [[Story - Patch pass reprocesses a run's failed items]] (enables scheduling) |
-| 6 | [[Story - Unresolved items reach the alerts]] (completes failure epic) |
-| 7 | [[Story - Monthly run from versioned systemd units]] (systemd foundation + install script) |
-| 8 | [[Story - Scheduled patch pass on the 3rd]] · [[Story - Watchdog on the 5th]] · [[Story - Backups and restore drill for the dnc database]] (parallel after 7; backups before any backfill, D-28; R6/R7 mitigation) |
-| 9 | [[Story - Backfill the container-era runs]] (after backups) |
-| 10 | [[Story - Profile legacy runs against the stage contract]] (learning story) |
-| 11 | [[Story - Backfill compatible legacy runs]] (after profiling) |
-| 12 | [[Story - Define cutover acceptance criteria]] (decision before cutover prep) — ✅ done 2026-11-20 (D-31, D-32) |
-| 13 | [[Story - Cut over and complete a scheduled run on the ITServer]] (last; physical move) |
-| 14 | [[Story - Rotate exposed credentials and retire the old repo]] (unblocked: GitHub deletion, archive redaction; LR API username/password kept until the last sprint, D-29) |
+| Order | Must (18) | Status |
+|---|---|---|
+| 0 | [[Story - Parallel run and early host move to the ITServer]] (added 2026-11-20, D-32; before 2026-12-01, ahead of every other S2 story) | done |
+| 1 | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; `<owner>` creates DB + roles) | done |
+| 2 | [[Story - All stages write to Postgres with lineage]] (foundation for failures & backfill) | merged, ACs open |
+| 3 | [[Story - Closed months become read-only]] · [[Story - Report generated from Postgres]] (parallel after 2) | to-do · to-do |
+| 4 | [[Story - Failed items captured per stage]] (after all stages in PG) | to-do |
+| 5 | [[Story - Patch pass reprocesses a run's failed items]] (enables scheduling) | to-do |
+| 6 | [[Story - Unresolved items reach the alerts]] (completes failure epic) | to-do |
+| 7 | [[Story - Monthly run from versioned systemd units]] (systemd foundation + install script) | to-do |
+| 8 | [[Story - Scheduled patch pass on the 3rd]] · [[Story - Watchdog on the 5th]] · [[Story - Backups and restore drill for the dnc database]] (parallel after 7; backups before any backfill, D-28; R6/R7 mitigation) | to-do · to-do · to-do |
+| 9 | [[Story - Backfill the container-era runs]] (after backups) | to-do |
+| 10 | [[Story - Profile legacy runs against the stage contract]] (learning story) | to-do |
+| 11 | [[Story - Backfill compatible legacy runs]] (after profiling) | to-do |
+| 12 | [[Story - Define cutover acceptance criteria]] (decision before cutover prep) — ✅ done 2026-11-20 (D-31, D-32) | done |
+| 13 | [[Story - Cut over and complete a scheduled run on the ITServer]] (last; physical move) | to-do |
+| 14 | [[Story - Rotate exposed credentials and retire the old repo]] (unblocked: GitHub deletion, archive redaction; LR API username/password kept until the last sprint, D-29) | to-do |
 
 ### S3–S6
 `moscow: tbd`, prioritized at each sprint start.

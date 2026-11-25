@@ -27,6 +27,8 @@ size: S
 - **Performance:** Partition pruning ensures the query only scans one month's data; verify with EXPLAIN
 - **Verification dataset:** Use 2026-11-21 (the parallel run proven identical on both hosts, order 0) as the gold standard for comparison (D-36; was 2026-10-28)
 
+- **2026-11-25 (D-38 (2)):** AC1 also covers the "Stage 5 reads from `leads_with_tags`" half split off order 2's AC4.
+
 ## Dependencies
 - [[Story - All stages write to Postgres with lineage]] (leads_with_tags_YYYYMM must exist)
 - S1 GAP-16 fix (misleading report labels corrected)

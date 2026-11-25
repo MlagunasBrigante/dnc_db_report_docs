@@ -19,6 +19,7 @@ size: M
 - [ ] **Given** the script works, **when** a systemd timer (unit files `dnc-archive.service` and `dnc-archive.timer`) is created, **then** the timer runs the script monthly (e.g., on the 15th, after the DNC scrub's monthly run and patch pass are done) with logging to `/var/log/dnc-archive.log` or similar, and the unit files are versioned in `Dev/deploy/` so the setup is reproducible.
 - [ ] **Given** the timer is installed, **when** tested (trigger the timer manually with `systemctl start dnc-archive.service` or wait for the next scheduled run), **then** the archiving completes successfully, the log shows no errors, and the manifest is updated.
 - [ ] **Given** archiving fails (e.g., archive target is unreachable, checksum mismatch, `pg_dump` errors), **when** the error is logged, **then** an alert is raised (email or Teams, reusing the S1 alert channels) so IT knows to investigate, and the original partition is **not dropped** (failure = safe, don't delete data).
+- [ ] **Given** closed months are read-only (S2), **when** this story starts, **then** `dnc_archive` gets UPDATE/DELETE on the stage tables (and the partition rights the archive script needs) by a versioned migration, and an UPDATE/DELETE as `dnc_archive` on a closed partition succeeds while the same statement as `dnc_writer` is still rejected. (Moved from [[Story - Closed months become read-only]] AC3, D-38 (6), 2026-11-25.)
 
 ## Notes
 - This story automates the **real archival** — unlike Story 2's drill, this one drops partitions from production (if the retention policy allows).

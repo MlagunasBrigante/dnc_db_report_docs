@@ -28,6 +28,8 @@ size: S
 - **Resolved vs unresolved:** `resolved_at IS NULL` means still failing; `resolved_at IS NOT NULL` means a later retry succeeded
 - **GAP-08 fix:** The S1 fix to `run.py:819-838` (recording status as DONE even on failure) is replaced by checking the failed_items table: if the lead is in failed_items with resolved_at=NULL, it's not DONE
 
+- **Absorbs order 2's former AC3 (D-38 (1), 2026-11-25):** under the copy pattern SQLite `batch_status` holds successful batches only, so a failed Stage 2 batch is proven here through `failed_items` (AC2), not through `scrub_batches`.
+
 ## Dependencies
 - [[Story - One retry policy for every API call]] (S1). This story persists its events; no per-stage capture logic is written here.
 - [[Story - All stages write to Postgres with lineage]] (run_id and stage tables must exist)
