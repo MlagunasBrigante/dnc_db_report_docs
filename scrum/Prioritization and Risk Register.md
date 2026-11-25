@@ -56,23 +56,24 @@ Backlog: [[Backlog - dnc-cron-scrub]] · Scope: [[DNC Update - Scope]]
 **MoSCoW confirmation:** All 17 stories are `moscow: must` (no changes proposed). 2026-11-20: +1 Must, order 0 (D-32).
 
 **Order table:**
-| Order | Must (18) | Status |
-|---|---|---|
-| 0 | [[Story - Parallel run and early host move to the ITServer]] (added 2026-11-20, D-32; before 2026-12-01, ahead of every other S2 story) | done |
-| 1 | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; `<owner>` creates DB + roles) | done |
-| 2 | [[Story - All stages write to Postgres with lineage]] (foundation for failures & backfill) | merged, ACs open |
-| 3 | [[Story - Closed months become read-only]] · [[Story - Report generated from Postgres]] (parallel after 2) | to-do · to-do |
-| 4 | [[Story - Failed items captured per stage]] (after all stages in PG) | to-do |
-| 5 | [[Story - Patch pass reprocesses a run's failed items]] (enables scheduling) | to-do |
-| 6 | [[Story - Unresolved items reach the alerts]] (completes failure epic) | to-do |
-| 7 | [[Story - Monthly run from versioned systemd units]] (systemd foundation + install script) | to-do |
-| 8 | [[Story - Scheduled patch pass on the 3rd]] · [[Story - Watchdog on the 5th]] · [[Story - Backups and restore drill for the dnc database]] (parallel after 7; backups before any backfill, D-28; R6/R7 mitigation) | to-do · to-do · to-do |
-| 9 | [[Story - Backfill the container-era runs]] (after backups) | to-do |
-| 10 | [[Story - Profile legacy runs against the stage contract]] (learning story) | to-do |
-| 11 | [[Story - Backfill compatible legacy runs]] (after profiling) | to-do |
-| 12 | [[Story - Define cutover acceptance criteria]] (decision before cutover prep) — ✅ done 2026-11-20 (D-31, D-32) | done |
-| 13 | [[Story - Cut over and complete a scheduled run on the ITServer]] (last; physical move) | to-do |
-| 14 | [[Story - Rotate exposed credentials and retire the old repo]] (unblocked: GitHub deletion, archive redaction; LR API username/password kept until the last sprint, D-29) | to-do |
+
+| Order | Must (18)                                                                                                                                                                                                          | Status                |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| 0     | [[Story - Parallel run and early host move to the ITServer]] (added 2026-11-20, D-32; before 2026-12-01, ahead of every other S2 story)                                                                            | done                  |
+| 1     | [[Story - Raw snapshot and run record land in Postgres]] (schema + DDL guide; `<owner>` creates DB + roles)                                                                                                        | done                  |
+| 2     | [[Story - All stages write to Postgres with lineage]] (foundation for failures & backfill)                                                                                                                         | merged, ACs open      |
+| 3     | [[Story - Closed months become read-only]] · [[Story - Report generated from Postgres]] (parallel after 2)                                                                                                         | to-do · to-do         |
+| 4     | [[Story - Failed items captured per stage]] (after all stages in PG)                                                                                                                                               | to-do                 |
+| 5     | [[Story - Patch pass reprocesses a run's failed items]] (enables scheduling)                                                                                                                                       | to-do                 |
+| 6     | [[Story - Unresolved items reach the alerts]] (completes failure epic)                                                                                                                                             | to-do                 |
+| 7     | [[Story - Monthly run from versioned systemd units]] (systemd foundation + install script)                                                                                                                         | to-do                 |
+| 8     | [[Story - Scheduled patch pass on the 3rd]] · [[Story - Watchdog on the 5th]] · [[Story - Backups and restore drill for the dnc database]] (parallel after 7; backups before any backfill, D-28; R6/R7 mitigation) | to-do · to-do · to-do |
+| 9     | [[Story - Backfill the container-era runs]] (after backups)                                                                                                                                                        | to-do                 |
+| 10    | [[Story - Profile legacy runs against the stage contract]] (learning story)                                                                                                                                        | to-do                 |
+| 11    | [[Story - Backfill compatible legacy runs]] (after profiling)                                                                                                                                                      | to-do                 |
+| 12    | [[Story - Define cutover acceptance criteria]] (decision before cutover prep) — ✅ done 2026-11-20 (D-31, D-32)                                                                                                     | done                  |
+| 13    | [[Story - Cut over and complete a scheduled run on the ITServer]] (last; physical move)                                                                                                                            | to-do                 |
+| 14    | [[Story - Rotate exposed credentials and retire the old repo]] (unblocked: GitHub deletion, archive redaction; LR API username/password kept until the last sprint, D-29)                                          | to-do                 |
 
 ### S3–S6
 `moscow: tbd`, prioritized at each sprint start.
